@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PS5 Payloads</title>
+<style>
+  :root { color-scheme: light dark; --bg: #fff; --fg: #1d1d1f; --muted: #6e6e73; --line: #e5e5ea; --accent: #0a66d8; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #111; --fg: #f2f2f7; --muted: #9a9aa0; --line: #2c2c2e; --accent: #5aa2ff; } }
+  body { margin: 0; padding: 2rem 1rem; background: var(--bg); color: var(--fg); font: 15px/1.5 system-ui, sans-serif; }
+  main { max-width: 860px; margin: 0 auto; }
+  h1 { margin: 0 0 .25rem; font-size: 1.6rem; }
+  .muted { color: var(--muted); }
+  .source { display: flex; gap: .5rem; margin: 1.25rem 0 2rem; flex-wrap: wrap; }
+  .source input { flex: 1; min-width: 0; padding: .5rem .6rem; border: 1px solid var(--line); border-radius: 6px; background: transparent; color: inherit; font: 13px ui-monospace, monospace; }
+  button { padding: .5rem .9rem; border: 1px solid var(--line); border-radius: 6px; background: transparent; color: inherit; cursor: pointer; }
+  article { padding: 1rem 0; border-top: 1px solid var(--line); }
+  article h2 { margin: 0; font-size: 1.05rem; }
+  .meta { font-size: 13px; }
+  .tag { display: inline-block; padding: 0 .45rem; border: 1px solid var(--line); border-radius: 999px; font-size: 12px; }
+  code { font: 12px ui-monospace, monospace; word-break: break-all; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <h1>PS5 Payloads</h1>
+  <p class="muted">A custom source for <a href="https://github.com/itsPLK/ps5-payload-manager">PS5 Payload Manager</a>. Add the URL below under <b>Settings → Manage Sources</b>.</p>
+
+  <div class="source">
+    <input id="src" readonly aria-label="Source URL">
+    <button id="copy" type="button">Copy</button>
+  </div>
+
+  <p id="status" class="muted">Loading…</p>
+  <section id="list"></section>
+
+  <p class="muted meta">Generated from <a href="https://github.com/avoidik/ps5-payloads">avoidik/ps5-payloads</a>.</p>
+</main>
+
+<script>
+  const srcUrl = new URL('payloads.json', location.href).href;
+  const src = document.getElementById('src');
+  src.value = srcUrl;
+  document.getElementById('copy').addEventListener('click', async (e) => {
+    try { await navigator.clipboard.writeText(srcUrl); e.target.textContent = 'Copied'; }
+    catch { src.select(); }
+  });
+
+  function el(tag, props = {}, ...children) {
+    const n = Object.assign(document.createElement(tag), props);
+    n.append(...children.filter((c) => c != null));
+    return n;
+  }
+
+  fetch('payloads.json', { cache: 'no-cache' })
+    .then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
+    .then((data) => {
+      const status = document.getElementById('status');
+      const when = data.generated_at ? new Date(data.generated_at).toLocaleString() : 'unknown';
+      status.textContent = `${data.payloads.length} payloads · last updated ${when}`;
+      const list = document.getElementById('list');
+      for (const p of data.payloads) {
+        list.append(el('article', {},
+          el('h2', {}, el('a', { href: p.url, textContent: p.name }), ' ',
+            el('span', { className: 'tag', textContent: p.category })),
+          el('div', { className: 'meta muted', textContent: `${p.version} · ${p.filename}` }),
+          p.description ? el('p', { textContent: p.description }) : null,
+          el('div', { className: 'meta muted' }, 'SHA-256: ', el('code', { textContent: p.checksum })),
+        ));
+      }
+    })
+    .catch((err) => { document.getElementById('status').textContent = `Could not load payloads.json (${err.message}).`; });
+</script>
+</body>
+</html>

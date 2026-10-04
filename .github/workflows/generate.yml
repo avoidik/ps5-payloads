@@ -1,4 +1,4 @@
-name: Generate payloads.json
+name: Generate and publish payloads.json
 
 on:
   push:
@@ -8,6 +8,7 @@ on:
       - generate.mjs
       - package.json
       - package-lock.json
+      - site/**
       - .github/workflows/generate.yml
   pull_request:
     paths:
@@ -15,6 +16,7 @@ on:
       - generate.mjs
       - package.json
       - package-lock.json
+      - site/**
       - .github/workflows/generate.yml
   schedule:
     # Daily, to pick up new upstream releases
@@ -79,3 +81,28 @@ jobs:
           git add payloads.json
           git commit -m "Update payloads.json"
           git push
+
+      - name: Build site
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        run: |
+          mkdir -p _site
+          cp site/* payloads.json _site/
+
+      - uses: actions/upload-pages-artifact@v5
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        with:
+          path: _site
+
+  deploy:
+    needs: generate
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
