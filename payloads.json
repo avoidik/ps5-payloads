@@ -1,0 +1,35 @@
+{
+  "name": "PS5 Payloads",
+  "generated_at": "2026-10-04T23:16:10.104Z",
+  "_pldmgr_parser_guard": {},
+  "payloads": [
+    {
+      "name": "LegacyJB",
+      "filename": "LegacyJB.elf",
+      "url": "https://github.com/Phoenixx1202/LegacyJB/releases/download/1.2.1/LegacyJB.elf",
+      "description": "Jailbreak service (TCP 9028) for supported apps such as Homebrew Store and Itemzflow.",
+      "version": "1.2.1",
+      "category": "Jailbreak",
+      "checksum": "7633372f39a7a6e460f3990b02cd07026f4e5591aefd2509f8c6338f03b8440b"
+    },
+    {
+      "name": "Spectrum Library",
+      "filename": "SpectrumLibrary_1.4.8.elf",
+      "url": "https://github.com/Phoenixx1202/Spectrum-Library/releases/download/1.4.8/SpectrumLibrary_1.4.8.elf",
+      "description": "Native content manager for browsing and downloading supported game files. Requires: LegacyJB.",
+      "version": "1.4.8",
+      "category": "Content Managers",
+      "checksum": "5d1372d48f76167e3f9e24b335cf571ea6e4b3960e6b7202d2802b0f78c3a519",
+      "requires": "LegacyJB"
+    },
+    {
+      "name": "Pegasus DL",
+      "filename": "pegasus_dl.elf",
+      "url": "https://github.com/pegasus-ps5/pegasus-dl/releases/download/v1.10.1/pegasus_dl.elf",
+      "description": "Direct package downloading on the PS5 with a web interface on port 6970.",
+      "version": "v1.10.1",
+      "category": "Downloaders",
+      "checksum": "b24fdc62fc6cad14684b214a9c5be6c1221585afbf9493e387ab90f9dee21138"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "ps5-payloads",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Custom PS5 Payload Manager source: catalog.yaml -> payloads.json",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node generate.mjs"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  }
+}

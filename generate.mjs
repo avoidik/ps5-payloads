@@ -1,0 +1,292 @@
+#!/usr/bin/env node
+// Generate a PS5 Payload Manager (pldmgr) source file from catalog.yaml.
+//
+// Usage: node generate.mjs [catalog.yaml] [--out payloads.json] [--dry-run]
+//
+// pldmgr does not use a real JSON parser: it scans each '{' to the next '}'
+// and looks up keys with strstr. The output is therefore shaped to survive
+// that scanner (see README.md), and every value is checked against its limits.
+
+import fs from 'node:fs';
+import path from 'node:path';
+import crypto from 'node:crypto';
+import { Readable } from 'node:stream';
+import yaml from 'js-yaml';
+
+// Field buffer sizes in pldmgr's RepoPayload struct, minus the NUL terminator.
+const LIMITS = { name: 127, filename: 255, url: 1023, description: 1023, version: 63, category: 127 };
+const SOURCE_NAME_LIMIT = 255;
+const PAYLOAD_KEYS = ['name', 'filename', 'url', 'description', 'version', 'category', 'checksum', 'requires'];
+const RELEASES_PER_PAGE = 20;
+
+class CatalogError extends Error {}
+
+function fail(msg) {
+  throw new CatalogError(msg);
+}
+
+function parseArgs(argv) {
+  const opts = { catalog: 'catalog.yaml', out: null, dryRun: false };
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    if (a === '--dry-run') opts.dryRun = true;
+    else if (a === '--out') {
+      if (!argv[i + 1]) fail('--out requires a path');
+      opts.out = argv[++i];
+    } else if (a === '-h' || a === '--help') {
+      console.log('Usage: node generate.mjs [catalog.yaml] [--out payloads.json] [--dry-run]');
+      process.exit(0);
+    } else if (a.startsWith('-')) fail(`unknown option: ${a}`);
+    else opts.catalog = a;
+  }
+  return opts;
+}
+
+// ── Catalog loading and validation ──────────────────────────
+
+function loadCatalog(file) {
+  let doc;
+  try {
+    doc = yaml.load(fs.readFileSync(file, 'utf8'));
+  } catch (e) {
+    fail(`cannot read ${file}: ${e.message}`);
+  }
+  if (!doc || typeof doc !== 'object') fail(`${file}: expected a mapping at top level`);
+  if (typeof doc.name !== 'string' || !doc.name.trim()) fail(`${file}: top-level "name" is required`);
+  if (!Array.isArray(doc.payloads) || doc.payloads.length === 0) fail(`${file}: "payloads" must be a non-empty list`);
+
+  const ids = new Set();
+  doc.payloads.forEach((p, i) => {
+    const where = `payloads[${i}]${p?.id ? ` (${p.id})` : ''}`;
+    if (!p || typeof p !== 'object') fail(`${where}: expected a mapping`);
+    for (const key of ['id', 'name']) {
+      if (typeof p[key] !== 'string' || !p[key].trim()) fail(`${where}: "${key}" is required`);
+    }
+    if (ids.has(p.id)) fail(`${where}: duplicate id "${p.id}"`);
+    ids.add(p.id);
+
+    if (p.requires !== undefined && !(Array.isArray(p.requires) && p.requires.every((r) => typeof r === 'string'))) {
+      fail(`${where}: "requires" must be a list of ids`);
+    }
+    for (const key of ['description', 'category', 'filename', 'version']) {
+      if (p[key] !== undefined && typeof p[key] !== 'string') fail(`${where}: "${key}" must be a string`);
+    }
+
+    const src = p.source;
+    if (!src || typeof src !== 'object') fail(`${where}: "source" is required`);
+    if (src.type === 'github') {
+      if (typeof src.repo !== 'string' || !/^[\w.-]+\/[\w.-]+$/.test(src.repo)) fail(`${where}: source.repo must be "owner/name"`);
+      if (typeof src.asset !== 'string') fail(`${where}: source.asset (regex) is required`);
+      try {
+        src.assetRe = new RegExp(src.asset);
+      } catch (e) {
+        fail(`${where}: invalid source.asset regex: ${e.message}`);
+      }
+      if (src.tag !== undefined) src.tag = String(src.tag);
+    } else if (src.type === 'url') {
+      if (typeof src.url !== 'string' || !/^https?:\/\//.test(src.url)) fail(`${where}: source.url must be an http(s) URL`);
+      if (src.version !== undefined) src.version = String(src.version);
+    } else {
+      fail(`${where}: source.type must be "github" or "url"`);
+    }
+  });
+
+  for (const p of doc.payloads) {
+    for (const r of p.requires ?? []) {
+      if (!ids.has(r)) fail(`${p.id}: requires unknown id "${r}"`);
+      if (r === p.id) fail(`${p.id}: requires itself`);
+    }
+  }
+  return doc;
+}
+
+// Dependencies first; otherwise keep catalog order. Rejects cycles.
+function orderByDependencies(payloads) {
+  const byId = new Map(payloads.map((p) => [p.id, p]));
+  const state = new Map(); // id -> 'visiting' | 'done'
+  const ordered = [];
+  const visit = (p, trail) => {
+    const s = state.get(p.id);
+    if (s === 'done') return;
+    if (s === 'visiting') fail(`dependency cycle: ${[...trail, p.id].join(' -> ')}`);
+    state.set(p.id, 'visiting');
+    for (const r of p.requires ?? []) visit(byId.get(r), [...trail, p.id]);
+    state.set(p.id, 'done');
+    ordered.push(p);
+  };
+  for (const p of payloads) visit(p, []);
+  return ordered;
+}
+
+// ── Upstream resolution ─────────────────────────────────────
+
+function githubHeaders() {
+  const h = { Accept: 'application/vnd.github+json', 'User-Agent': 'ps5-payloads-generator' };
+  if (process.env.GITHUB_TOKEN) h.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+  return h;
+}
+
+async function githubGet(url) {
+  const res = await fetch(url, { headers: githubHeaders() });
+  if (!res.ok) {
+    const hint = res.status === 403 || res.status === 429 ? ' (rate limited? set GITHUB_TOKEN)' : '';
+    fail(`GitHub API ${res.status} for ${url}${hint}`);
+  }
+  return res.json();
+}
+
+async function resolveGithub(p) {
+  const { repo, tag, assetRe } = p.source;
+  const releases = tag
+    ? [await githubGet(`https://api.github.com/repos/${repo}/releases/tags/${encodeURIComponent(tag)}`)]
+    : await githubGet(`https://api.github.com/repos/${repo}/releases?per_page=${RELEASES_PER_PAGE}`);
+
+  for (const rel of releases) {
+    if (!tag && (rel.draft || rel.prerelease)) continue;
+    const matches = rel.assets.filter((a) => assetRe.test(a.name));
+    if (matches.length > 1) fail(`${p.id}: regex matches several assets in ${repo}@${rel.tag_name}: ${matches.map((a) => a.name).join(', ')}`);
+    if (matches.length === 1) {
+      const a = matches[0];
+      return {
+        url: a.browser_download_url,
+        filename: a.name,
+        version: rel.tag_name,
+        size: a.size,
+        digest: a.digest?.startsWith('sha256:') ? a.digest.slice(7).toLowerCase() : null,
+      };
+    }
+  }
+  const scope = tag ? `release ${tag}` : `the last ${RELEASES_PER_PAGE} releases`;
+  fail(`${p.id}: no asset matching /${p.source.asset}/ in ${scope} of ${repo}`);
+}
+
+function resolveUrl(p) {
+  const { url, version } = p.source;
+  const filename = decodeURIComponent(new URL(url).pathname.split('/').pop() || '');
+  return { url, filename, version: version ?? '', size: null, digest: null };
+}
+
+async function sha256OfUrl(url) {
+  const res = await fetch(url, { redirect: 'follow', headers: { 'User-Agent': 'ps5-payloads-generator' } });
+  if (!res.ok || !res.body) fail(`download failed (HTTP ${res.status}): ${url}`);
+  const hash = crypto.createHash('sha256');
+  let size = 0;
+  for await (const chunk of Readable.fromWeb(res.body)) {
+    hash.update(chunk);
+    size += chunk.length;
+  }
+  return { checksum: hash.digest('hex'), size };
+}
+
+async function resolvePayload(p) {
+  const up = p.source.type === 'github' ? await resolveGithub(p) : resolveUrl(p);
+  const { checksum, size } = await sha256OfUrl(up.url);
+  if (size === 0) fail(`${p.id}: downloaded file is empty: ${up.url}`);
+  if (up.size != null && size !== up.size) fail(`${p.id}: size mismatch for ${up.url} (expected ${up.size}, got ${size})`);
+  if (up.digest && up.digest !== checksum) fail(`${p.id}: checksum mismatch for ${up.url} (GitHub ${up.digest}, computed ${checksum})`);
+  return { ...up, checksum, size };
+}
+
+// ── pldmgr-compatible output ────────────────────────────────
+
+function checkValue(id, key, value, limit) {
+  // The scanner ends an object at the first '}', ignores escapes and stops at '"'.
+  if (/[{}"\\\u0000-\u001f\u007f]/.test(value)) fail(`${id}: "${key}" contains a character pldmgr cannot parse ({ } " \\ or control): ${JSON.stringify(value)}`);
+  // strstr would match a value that looks like a key before the real key.
+  if (PAYLOAD_KEYS.includes(value)) fail(`${id}: "${key}" value "${value}" collides with a JSON key name`);
+  if (limit && Buffer.byteLength(value, 'utf8') > limit) fail(`${id}: "${key}" is longer than pldmgr's ${limit}-byte limit`);
+}
+
+function buildEntry(p, up, nameById) {
+  const requires = (p.requires ?? []).map((r) => nameById.get(r));
+  let description = (p.description ?? '').trim();
+  if (requires.length) description = `${description}${description ? ' ' : ''}Requires: ${requires.join(', ')}.`;
+
+  const entry = {
+    name: p.name.trim(),
+    filename: p.filename ?? up.filename,
+    url: up.url,
+    description,
+    version: p.version ?? up.version,
+    category: p.category ?? 'Uncategorized',
+    checksum: up.checksum,
+  };
+  if (requires.length) entry.requires = requires.join(', ');
+
+  const fn = entry.filename;
+  if (!fn || fn.includes('/') || fn.includes('..')) fail(`${p.id}: invalid filename "${fn}"`);
+  if (!/^[0-9a-f]{64}$/.test(entry.checksum)) fail(`${p.id}: bad checksum "${entry.checksum}"`);
+  for (const [key, value] of Object.entries(entry)) checkValue(p.id, key, value, LIMITS[key]);
+  return entry;
+}
+
+// The empty guard object closes pldmgr's first '{'..'}' scan window before
+// "payloads", so the top-level "name" is not mistaken for the first payload's
+// name. sources_add still finds "name" ahead of the "payloads" key.
+function render(sourceName, entries) {
+  const s = JSON.stringify;
+  const items = entries.map((e) => {
+    const fields = Object.entries(e).map(([k, v]) => `      ${s(k)}: ${s(v)}`);
+    return `    {\n${fields.join(',\n')}\n    }`;
+  });
+  return [
+    '{',
+    `  "name": ${s(sourceName)},`,
+    `  "generated_at": ${s(new Date().toISOString())},`,
+    '  "_pldmgr_parser_guard": {},',
+    '  "payloads": [',
+    items.join(',\n'),
+    '  ]',
+    '}',
+    '',
+  ].join('\n');
+}
+
+// ── Main ────────────────────────────────────────────────────
+
+async function main() {
+  const opts = parseArgs(process.argv.slice(2));
+  const catalog = loadCatalog(opts.catalog);
+
+  const sourceName = catalog.name.trim();
+  if (/[{}"\\\u0000-\u001f]/.test(sourceName) || Buffer.byteLength(sourceName) > SOURCE_NAME_LIMIT) {
+    fail(`top-level name must be <= ${SOURCE_NAME_LIMIT} bytes without { } " \\ or control characters`);
+  }
+
+  const ordered = orderByDependencies(catalog.payloads);
+  const nameById = new Map(catalog.payloads.map((p) => [p.id, p.name.trim()]));
+
+  const resolved = await Promise.all(
+    ordered.map(async (p) => {
+      const up = await resolvePayload(p);
+      console.error(`  ${p.id}: ${up.filename} ${up.version} (${up.size} bytes) sha256=${up.checksum}`);
+      return buildEntry(p, up, nameById);
+    }),
+  );
+
+  const filenames = new Set();
+  for (const e of resolved) {
+    if (filenames.has(e.filename)) fail(`duplicate filename "${e.filename}"`);
+    filenames.add(e.filename);
+  }
+
+  const out = render(sourceName, resolved);
+  JSON.parse(out); // sanity check: must remain valid JSON
+
+  if (opts.dryRun) {
+    process.stdout.write(out);
+    return;
+  }
+  const outPath = opts.out
+    ? path.resolve(opts.out)
+    : path.resolve(path.dirname(opts.catalog), catalog.output ?? 'payloads.json');
+  const tmp = `${outPath}.tmp`;
+  fs.writeFileSync(tmp, out);
+  fs.renameSync(tmp, outPath);
+  console.error(`Wrote ${resolved.length} payloads to ${outPath}`);
+}
+
+main().catch((e) => {
+  console.error(`error: ${e instanceof CatalogError ? e.message : e.stack}`);
+  process.exit(1);
+});

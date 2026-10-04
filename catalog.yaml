@@ -1,0 +1,49 @@
+# Payload catalog for a custom PS5 Payload Manager (pldmgr) source.
+# Run `npm run build` to regenerate payloads.json from this file.
+#
+# Per-entry fields:
+#   id           unique key, referenced by `requires`
+#   name         display name                        (required)
+#   category     grouping in the dashboard            (default: Uncategorized)
+#   description  shown in the dashboard
+#   requires     list of ids that must be loaded first
+#   filename     override the upstream asset name
+#   version      override the release tag
+#   source:
+#     type: github -> repo: owner/name, asset: regex matched against release
+#                     asset names, tag: (optional) pin a specific release
+#     type: url    -> url: direct download link, version: (optional)
+#
+# Values must not contain { } " \ characters (pldmgr's parser can't handle them).
+
+name: PS5 Payloads
+output: payloads.json
+
+payloads:
+  - id: legacyjb
+    name: LegacyJB
+    category: Jailbreak
+    description: Jailbreak service (TCP 9028) for supported apps such as Homebrew Store and Itemzflow.
+    source:
+      type: github
+      repo: Phoenixx1202/LegacyJB
+      asset: '^LegacyJB(_[\d.]+)?\.elf$'
+
+  - id: spectrum-library
+    name: Spectrum Library
+    category: Content Managers
+    description: Native content manager for browsing and downloading supported game files.
+    requires: [legacyjb]
+    source:
+      type: github
+      repo: Phoenixx1202/Spectrum-Library
+      asset: '^SpectrumLibrary_[\d.]+\.elf$'
+
+  - id: pegasus-dl
+    name: Pegasus DL
+    category: Downloaders
+    description: Direct package downloading on the PS5 with a web interface on port 6970.
+    source:
+      type: github
+      repo: pegasus-ps5/pegasus-dl
+      asset: '^pegasus_dl\.elf$'
