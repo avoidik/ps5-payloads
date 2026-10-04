@@ -52,8 +52,12 @@ jobs:
       - name: Check for changes
         id: diff
         run: |
+          # git diff ignores untracked files, so a missing payloads.json must be caught separately
+          if ! git ls-files --error-unmatch payloads.json >/dev/null 2>&1; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "payloads.json is not tracked yet; it will be added."
           # generated_at changes on every run; ignore it so only real updates are committed
-          if git diff --quiet -I '"generated_at"' -- payloads.json; then
+          elif git diff --quiet -I '"generated_at"' -- payloads.json; then
             git checkout -- payloads.json
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "No payload changes."

@@ -18,6 +18,9 @@ const LIMITS = { name: 127, filename: 255, url: 1023, description: 1023, version
 const SOURCE_NAME_LIMIT = 255;
 const PAYLOAD_KEYS = ['name', 'filename', 'url', 'description', 'version', 'category', 'checksum', 'requires'];
 const RELEASES_PER_PAGE = 20;
+// The scanner ends an object at the first '}', ignores escapes and stops at '"'.
+// eslint-disable-next-line no-control-regex -- control characters are exactly what we reject
+const UNSAFE_CHARS = /[{}"\\\u0000-\u001f\u007f]/;
 
 class CatalogError extends Error {}
 
@@ -157,7 +160,7 @@ async function resolveGithub(p) {
     }
   }
   const scope = tag ? `release ${tag}` : `the last ${RELEASES_PER_PAGE} releases`;
-  fail(`${p.id}: no asset matching /${p.source.asset}/ in ${scope} of ${repo}`);
+  throw new CatalogError(`${p.id}: no asset matching /${p.source.asset}/ in ${scope} of ${repo}`);
 }
 
 function resolveUrl(p) {
@@ -190,8 +193,7 @@ async function resolvePayload(p) {
 // ── pldmgr-compatible output ────────────────────────────────
 
 function checkValue(id, key, value, limit) {
-  // The scanner ends an object at the first '}', ignores escapes and stops at '"'.
-  if (/[{}"\\\u0000-\u001f\u007f]/.test(value)) fail(`${id}: "${key}" contains a character pldmgr cannot parse ({ } " \\ or control): ${JSON.stringify(value)}`);
+  if (UNSAFE_CHARS.test(value)) fail(`${id}: "${key}" contains a character pldmgr cannot parse ({ } " \\ or control): ${JSON.stringify(value)}`);
   // strstr would match a value that looks like a key before the real key.
   if (PAYLOAD_KEYS.includes(value)) fail(`${id}: "${key}" value "${value}" collides with a JSON key name`);
   if (limit && Buffer.byteLength(value, 'utf8') > limit) fail(`${id}: "${key}" is longer than pldmgr's ${limit}-byte limit`);
@@ -249,7 +251,7 @@ async function main() {
   const catalog = loadCatalog(opts.catalog);
 
   const sourceName = catalog.name.trim();
-  if (/[{}"\\\u0000-\u001f]/.test(sourceName) || Buffer.byteLength(sourceName) > SOURCE_NAME_LIMIT) {
+  if (UNSAFE_CHARS.test(sourceName) || Buffer.byteLength(sourceName) > SOURCE_NAME_LIMIT) {
     fail(`top-level name must be <= ${SOURCE_NAME_LIMIT} bytes without { } " \\ or control characters`);
   }
 
