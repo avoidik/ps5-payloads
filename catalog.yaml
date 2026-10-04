@@ -47,3 +47,12 @@ payloads:
       type: github
       repo: pegasus-ps5/pegasus-dl
       asset: '^pegasus_dl\.elf$'
+
+  - id: ps5-account-tools
+    name: PS5 Account Tools
+    category: Utilities
+    description: Local account manager with a web interface on port 6769. Offline activation, fake PSN sign-in for features like Remote Play, and avatar changes.
+    source:
+      type: github
+      repo: MangoScango/ps5-account-tools
+      asset: '^ps5-account-tools-v[\d.]+\.elf$'
