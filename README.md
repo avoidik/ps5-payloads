@@ -39,3 +39,15 @@ Payload Manager doesn't use a real JSON parser. It reads from each `{` to the ne
 ## Hosting
 
 Host `payloads.json` on any static host (GitHub Pages, a raw GitHub URL, etc.) and add its URL as a source. Payload Manager downloads the file from the console itself, so you don't need CORS headers.
+
+## CI
+
+`.github/workflows/generate.yml` runs the generator:
+
+- **Pushes to `main`** that touch the catalog, the generator or the npm files: regenerates `payloads.json` and commits it if any payload changed.
+- **Daily schedule** (04:17 UTC): picks up new upstream releases and commits them the same way.
+- **Manual run:** from the Actions tab (`workflow_dispatch`).
+- **Pull requests:** check that the catalog builds and upload the result as an artifact, without committing.
+
+A file that differs only in `generated_at` is not committed. The published source URL is
+`https://raw.githubusercontent.com/avoidik/ps5-payloads/main/payloads.json`.
