@@ -18,7 +18,8 @@
 #   source:
 #     type: github -> repo: owner/name, asset: regex matched against release
 #                     asset names, tag: (optional) pin a specific release
-#     type: url    -> url: direct download link, version: (optional)
+#     type: url    -> url: direct download link, version: (optional),
+#                     homepage: (optional) project page linked from the site
 #
 # Values must not contain { } " \ characters (pldmgr's parser can't handle them).
 

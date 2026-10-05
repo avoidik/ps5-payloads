@@ -5,37 +5,68 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PS5 Payloads</title>
 <style>
-  :root { color-scheme: light dark; --bg: #fff; --fg: #1d1d1f; --muted: #6e6e73; --line: #e5e5ea; --accent: #0a66d8; }
-  @media (prefers-color-scheme: dark) { :root { --bg: #111; --fg: #f2f2f7; --muted: #9a9aa0; --line: #2c2c2e; --accent: #5aa2ff; } }
-  body { margin: 0; padding: 2rem 1rem; background: var(--bg); color: var(--fg); font: 15px/1.5 system-ui, sans-serif; }
-  main { max-width: 860px; margin: 0 auto; }
-  h1 { margin: 0 0 .25rem; font-size: 1.6rem; }
-  .muted { color: var(--muted); }
-  .source { display: flex; gap: .5rem; margin: 1.25rem 0 2rem; flex-wrap: wrap; }
-  .source input { flex: 1; min-width: 0; padding: .5rem .6rem; border: 1px solid var(--line); border-radius: 6px; background: transparent; color: inherit; font: 13px ui-monospace, monospace; }
-  button { padding: .5rem .9rem; border: 1px solid var(--line); border-radius: 6px; background: transparent; color: inherit; cursor: pointer; }
-  article { padding: 1rem 0; border-top: 1px solid var(--line); }
-  article h2 { margin: 0; font-size: 1.05rem; }
-  .meta { font-size: 13px; }
-  .tag { display: inline-block; padding: 0 .45rem; border: 1px solid var(--line); border-radius: 999px; font-size: 12px; }
-  code { font: 12px ui-monospace, monospace; word-break: break-all; }
-  a { color: var(--accent); }
+  :root {
+    color-scheme: light dark;
+    --bg: #f6f7f9; --card: #fff; --fg: #17181c; --muted: #6b6f7a; --line: #e4e6eb;
+    --accent: #2563eb; --accent-soft: #e8efff; --chip: #f0f1f4;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1115; --card: #171a21; --fg: #eceef3; --muted: #9298a5; --line: #262a33;
+      --accent: #6c9bff; --accent-soft: #1c2740; --chip: #20242d;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 2.5rem 1rem 3rem; background: var(--bg); color: var(--fg); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 900px; margin: 0 auto; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  header h1 { margin: 0; font-size: 1.75rem; letter-spacing: -0.01em; }
+  header p { margin: .35rem 0 0; color: var(--muted); }
+  .source { display: flex; gap: .5rem; margin: 1.25rem 0 .5rem; }
+  .source input { flex: 1; min-width: 0; padding: .6rem .75rem; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: inherit; font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .btn { padding: .6rem 1rem; border: 0; border-radius: 8px; background: var(--accent); color: #fff; font: inherit; font-weight: 600; cursor: pointer; }
+  .status { margin: 0 0 1.5rem; color: var(--muted); font-size: 13px; }
+
+  .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); }
+  .card { display: flex; flex-direction: column; gap: .6rem; padding: 1.1rem 1.2rem; background: var(--card); border: 1px solid var(--line); border-radius: 12px; scroll-margin-top: 1rem; transition: box-shadow .2s, border-color .2s; }
+  .card:target { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .top { display: flex; align-items: baseline; justify-content: space-between; gap: .75rem; }
+  .card h2 { margin: 0; font-size: 1.05rem; }
+  .version { color: var(--muted); font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; white-space: nowrap; }
+  .category { align-self: flex-start; padding: .1rem .55rem; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 12px; font-weight: 600; }
+  .card p { margin: 0; color: var(--muted); }
+
+  .requires { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; font-size: 13px; }
+  .requires span { color: var(--muted); }
+  .requires a { padding: .1rem .55rem; border: 1px solid var(--line); border-radius: 999px; background: var(--chip); color: var(--fg); }
+  .requires a::before { content: "↳ "; color: var(--muted); }
+
+  .foot { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1rem; margin-top: auto; padding-top: .6rem; border-top: 1px solid var(--line); font-size: 13px; }
+  .file { color: var(--muted); font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; word-break: break-all; }
+  .links { display: flex; gap: 1rem; margin-left: auto; }
+  .sum { width: 100%; color: var(--muted); font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; word-break: break-all; }
+
+  footer { margin-top: 2rem; color: var(--muted); font-size: 13px; text-align: center; }
 </style>
 </head>
 <body>
 <main>
-  <h1>PS5 Payloads</h1>
-  <p class="muted">A custom source for <a href="https://github.com/itsPLK/ps5-payload-manager">PS5 Payload Manager</a>. Add the URL below under <b>Settings → Manage Sources</b>.</p>
+  <header>
+    <h1>PS5 Payloads</h1>
+    <p>A custom source for <a href="https://github.com/itsPLK/ps5-payload-manager">PS5 Payload Manager</a>. Add this URL under <b>Settings → Manage Sources</b>.</p>
+  </header>
 
   <div class="source">
     <input id="src" readonly aria-label="Source URL">
-    <button id="copy" type="button">Copy</button>
+    <button id="copy" class="btn" type="button">Copy</button>
   </div>
+  <p id="status" class="status">Loading…</p>
 
-  <p id="status" class="muted">Loading…</p>
-  <section id="list"></section>
+  <section id="list" class="grid"></section>
 
-  <p class="muted meta">Generated from <a href="https://github.com/avoidik/ps5-payloads">avoidik/ps5-payloads</a>.</p>
+  <footer>Generated from <a href="https://github.com/avoidik/ps5-payloads">avoidik/ps5-payloads</a>. Payloads belong to their authors.</footer>
 </main>
 
 <script>
@@ -53,22 +84,38 @@
     return n;
   }
 
+  const slug = (name) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+  function card(p) {
+    const requires = p.requires ? p.requires.split(', ') : [];
+    // The generator appends "Requires: …." for Payload Manager's UI; shown as chips here instead
+    const description = requires.length ? p.description.replace(/\s*Requires: [^.]*\.$/, '') : p.description;
+
+    return el('article', { className: 'card', id: slug(p.name) },
+      el('div', { className: 'top' },
+        el('h2', { textContent: p.name }),
+        el('span', { className: 'version', textContent: p.version })),
+      el('span', { className: 'category', textContent: p.category }),
+      description ? el('p', { textContent: description }) : null,
+      requires.length
+        ? el('div', { className: 'requires' }, el('span', { textContent: 'Requires' }),
+            ...requires.map((r) => el('a', { href: `#${slug(r)}`, textContent: r })))
+        : null,
+      el('div', { className: 'foot' },
+        el('span', { className: 'file', textContent: p.filename }),
+        el('span', { className: 'links' },
+          el('a', { href: p.url, textContent: 'Download' }),
+          p.homepage ? el('a', { href: p.homepage, target: '_blank', rel: 'noopener', textContent: 'Upstream ↗' }) : null),
+        el('span', { className: 'sum', title: 'SHA-256', textContent: `sha256 ${p.checksum}` })),
+    );
+  }
+
   fetch('payloads.json', { cache: 'no-cache' })
     .then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
     .then((data) => {
-      const status = document.getElementById('status');
       const when = data.generated_at ? new Date(data.generated_at).toLocaleString() : 'unknown';
-      status.textContent = `${data.payloads.length} payloads · last updated ${when}`;
-      const list = document.getElementById('list');
-      for (const p of data.payloads) {
-        list.append(el('article', {},
-          el('h2', {}, el('a', { href: p.url, textContent: p.name }), ' ',
-            el('span', { className: 'tag', textContent: p.category })),
-          el('div', { className: 'meta muted', textContent: `${p.version} · ${p.filename}` }),
-          p.description ? el('p', { textContent: p.description }) : null,
-          el('div', { className: 'meta muted' }, 'SHA-256: ', el('code', { textContent: p.checksum })),
-        ));
-      }
+      document.getElementById('status').textContent = `${data.payloads.length} payloads · updated ${when}`;
+      document.getElementById('list').append(...data.payloads.map(card));
     })
     .catch((err) => { document.getElementById('status').textContent = `Could not load payloads.json (${err.message}).`; });
 </script>

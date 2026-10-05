@@ -16,7 +16,7 @@ import { load as loadYaml } from 'js-yaml';
 // Field buffer sizes in pldmgr's RepoPayload struct, minus the NUL terminator.
 const LIMITS = { name: 127, filename: 255, url: 1023, description: 1023, version: 63, category: 127 };
 const SOURCE_NAME_LIMIT = 255;
-const PAYLOAD_KEYS = ['name', 'filename', 'url', 'description', 'version', 'category', 'checksum', 'requires'];
+const PAYLOAD_KEYS = ['name', 'filename', 'url', 'description', 'version', 'category', 'checksum', 'requires', 'homepage'];
 const RELEASES_PER_PAGE = 20;
 // pldmgr only launches these (is_supported_extension in payload_mgr.c)
 const SUPPORTED_EXTENSIONS = ['.elf', '.bin'];
@@ -95,6 +95,9 @@ function loadCatalog(file) {
     } else if (src.type === 'url') {
       if (typeof src.url !== 'string' || !/^https?:\/\//.test(src.url)) fail(`${where}: source.url must be an http(s) URL`);
       if (src.version !== undefined) src.version = String(src.version);
+      if (src.homepage !== undefined && (typeof src.homepage !== 'string' || !/^https?:\/\//.test(src.homepage))) {
+        fail(`${where}: source.homepage must be an http(s) URL`);
+      }
     } else {
       fail(`${where}: source.type must be "github" or "url"`);
     }
@@ -160,6 +163,7 @@ async function resolveGithub(p) {
         url: a.browser_download_url,
         filename: a.name,
         version: rel.tag_name,
+        homepage: `https://github.com/${repo}`,
         size: a.size,
         digest: a.digest?.startsWith('sha256:') ? a.digest.slice(7).toLowerCase() : null,
       };
@@ -170,9 +174,9 @@ async function resolveGithub(p) {
 }
 
 function resolveUrl(p) {
-  const { url, version } = p.source;
+  const { url, version, homepage } = p.source;
   const filename = decodeURIComponent(new URL(url).pathname.split('/').pop() || '');
-  return { url, filename, version: version ?? '', size: null, digest: null };
+  return { url, filename, version: version ?? '', homepage, size: null, digest: null };
 }
 
 async function sha256OfUrl(url) {
@@ -220,6 +224,8 @@ function buildEntry(p, up, nameById) {
     checksum: up.checksum,
   };
   if (requires.length) entry.requires = requires.join(', ');
+  // Not used by pldmgr; the landing page links to it
+  if (up.homepage) entry.homepage = up.homepage;
 
   const fn = entry.filename;
   if (!fn || fn.includes('/') || fn.includes('..')) fail(`${p.id}: invalid filename "${fn}"`);

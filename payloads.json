@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-05T12:09:25.613Z",
+  "generated_at": "2026-10-05T12:19:23.484Z",
   "_pldmgr_parser_guard": {},
   "payloads": [
     {
@@ -10,7 +10,8 @@
       "description": "Jailbreak service (TCP 9028) for supported apps such as Homebrew Store and Itemzflow.",
       "version": "1.2.1",
       "category": "Jailbreak",
-      "checksum": "7633372f39a7a6e460f3990b02cd07026f4e5591aefd2509f8c6338f03b8440b"
+      "checksum": "7633372f39a7a6e460f3990b02cd07026f4e5591aefd2509f8c6338f03b8440b",
+      "homepage": "https://github.com/Phoenixx1202/LegacyJB"
     },
     {
       "name": "Spectrum Library",
@@ -20,7 +21,8 @@
       "version": "1.4.8",
       "category": "Content Managers",
       "checksum": "5d1372d48f76167e3f9e24b335cf571ea6e4b3960e6b7202d2802b0f78c3a519",
-      "requires": "LegacyJB"
+      "requires": "LegacyJB",
+      "homepage": "https://github.com/Phoenixx1202/Spectrum-Library"
     },
     {
       "name": "Pegasus DL",
@@ -29,7 +31,8 @@
       "description": "Direct package downloading on the PS5 with a web interface on port 6970.",
       "version": "v1.10.1",
       "category": "Downloaders",
-      "checksum": "b24fdc62fc6cad14684b214a9c5be6c1221585afbf9493e387ab90f9dee21138"
+      "checksum": "b24fdc62fc6cad14684b214a9c5be6c1221585afbf9493e387ab90f9dee21138",
+      "homepage": "https://github.com/pegasus-ps5/pegasus-dl"
     },
     {
       "name": "PS5 Account Tools",
@@ -38,7 +41,8 @@
       "description": "Local account manager with a web interface on port 6769. Offline activation, fake PSN sign-in for features like Remote Play, and avatar changes.",
       "version": "v1.2",
       "category": "Utilities",
-      "checksum": "2e1402d8c088afda55280b28fcc66ccb870528ec948d10ea586088f60f723f2a"
+      "checksum": "2e1402d8c088afda55280b28fcc66ccb870528ec948d10ea586088f60f723f2a",
+      "homepage": "https://github.com/MangoScango/ps5-account-tools"
     },
     {
       "name": "APR Emu Updater",
@@ -47,7 +51,8 @@
       "description": "Choose which APR Emu (libSceAmpr.sprx) build each installed game uses, from a web interface on port 6971. Needs NanoDNS on first run and ShadowMountPlus for image-installed games.",
       "version": "v2.0.6",
       "category": "Utilities",
-      "checksum": "4f04464283a6a551883e40e36b59134ecad0e38ecbb7ea89cbec3f91a3bd9122"
+      "checksum": "4f04464283a6a551883e40e36b59134ecad0e38ecbb7ea89cbec3f91a3bd9122",
+      "homepage": "https://github.com/tsuramatsu1/apr-emu-updater"
     },
     {
       "name": "PS5SX2 Helper",
@@ -56,7 +61,8 @@
       "description": "OnionHEN-based helper that jailbreaks the PS5SX2 emulator at start and gives it access to /data. Load with kstuff, ideally from autoload.",
       "version": "vk-285-128",
       "category": "Emulators",
-      "checksum": "737d95a8a1545447c4166b094005704465e420f79f54e882e30e7f9e4cde6210"
+      "checksum": "737d95a8a1545447c4166b094005704465e420f79f54e882e30e7f9e4cde6210",
+      "homepage": "https://github.com/Swordpdf/PS5SX2"
     },
     {
       "name": "PS5SX2 Installer",
@@ -66,7 +72,8 @@
       "version": "vk-285-128",
       "category": "Emulators",
       "checksum": "6b1be3ea24ec8144b27b2a1f3e279cd17574f3093e9431abf8579dcc6c0bfae9",
-      "requires": "PS5SX2 Helper"
+      "requires": "PS5SX2 Helper",
+      "homepage": "https://github.com/Swordpdf/PS5SX2"
     }
   ]
 }
