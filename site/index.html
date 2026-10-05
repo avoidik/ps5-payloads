@@ -46,7 +46,12 @@
   .foot { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1rem; margin-top: auto; padding-top: .6rem; border-top: 1px solid var(--line); font-size: 13px; }
   .file { color: var(--muted); font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; word-break: break-all; }
   .links { display: flex; gap: 1rem; margin-left: auto; }
-  .sum { width: 100%; color: var(--muted); font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; word-break: break-all; }
+  .sum { display: flex; align-items: center; gap: .4rem; width: 100%; }
+  .sum label { color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+  .sum input { flex: 1; min-width: 0; padding: .3rem .5rem; border: 1px solid var(--line); border-radius: 6px; background: var(--chip); color: var(--muted); font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; text-overflow: ellipsis; }
+  .icon-btn { display: grid; place-items: center; flex: none; width: 28px; height: 28px; padding: 0; border: 1px solid var(--line); border-radius: 6px; background: var(--card); color: var(--muted); cursor: pointer; transition: color .15s, border-color .15s; }
+  .icon-btn:hover, .icon-btn.done { color: var(--accent); border-color: var(--accent); }
+  .icon-btn svg { width: 14px; height: 14px; }
 
   footer { margin-top: 2rem; color: var(--muted); font-size: 13px; text-align: center; }
 </style>
@@ -69,55 +74,6 @@
   <footer>Generated from <a href="https://github.com/avoidik/ps5-payloads">avoidik/ps5-payloads</a>. Payloads belong to their authors.</footer>
 </main>
 
-<script>
-  const srcUrl = new URL('payloads.json', location.href).href;
-  const src = document.getElementById('src');
-  src.value = srcUrl;
-  document.getElementById('copy').addEventListener('click', async (e) => {
-    try { await navigator.clipboard.writeText(srcUrl); e.target.textContent = 'Copied'; }
-    catch { src.select(); }
-  });
-
-  function el(tag, props = {}, ...children) {
-    const n = Object.assign(document.createElement(tag), props);
-    n.append(...children.filter((c) => c != null));
-    return n;
-  }
-
-  const slug = (name) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-
-  function card(p) {
-    const requires = p.requires ? p.requires.split(', ') : [];
-    // The generator appends "Requires: …." for Payload Manager's UI; shown as chips here instead
-    const description = requires.length ? p.description.replace(/\s*Requires: [^.]*\.$/, '') : p.description;
-
-    return el('article', { className: 'card', id: slug(p.name) },
-      el('div', { className: 'top' },
-        el('h2', { textContent: p.name }),
-        el('span', { className: 'version', textContent: p.version })),
-      el('span', { className: 'category', textContent: p.category }),
-      description ? el('p', { textContent: description }) : null,
-      requires.length
-        ? el('div', { className: 'requires' }, el('span', { textContent: 'Requires' }),
-            ...requires.map((r) => el('a', { href: `#${slug(r)}`, textContent: r })))
-        : null,
-      el('div', { className: 'foot' },
-        el('span', { className: 'file', textContent: p.filename }),
-        el('span', { className: 'links' },
-          el('a', { href: p.url, textContent: 'Download' }),
-          p.homepage ? el('a', { href: p.homepage, target: '_blank', rel: 'noopener', textContent: 'Upstream ↗' }) : null),
-        el('span', { className: 'sum', title: 'SHA-256', textContent: `sha256 ${p.checksum}` })),
-    );
-  }
-
-  fetch('payloads.json', { cache: 'no-cache' })
-    .then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
-    .then((data) => {
-      const when = data.generated_at ? new Date(data.generated_at).toLocaleString() : 'unknown';
-      document.getElementById('status').textContent = `${data.payloads.length} payloads · updated ${when}`;
-      document.getElementById('list').append(...data.payloads.map(card));
-    })
-    .catch((err) => { document.getElementById('status').textContent = `Could not load payloads.json (${err.message}).`; });
-</script>
+<script src="app.js"></script>
 </body>
 </html>
