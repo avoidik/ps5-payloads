@@ -1,6 +1,10 @@
 # Payload catalog for a custom PS5 Payload Manager (pldmgr) source.
 # Run `npm run build` to regenerate payloads.json from this file.
 #
+# Top-level fields:
+#   name         source name shown in pldmgr          (required)
+#   output       generated file                       (default: payloads.json)
+#
 # Per-entry fields:
 #   id           unique key, referenced by `requires`
 #   name         display name                        (required)
@@ -9,6 +13,8 @@
 #   requires     list of ids that must be loaded first
 #   filename     override the upstream asset name
 #   version      override the release tag
+#   extension    the one file type this provider ships: .elf or .bin (required;
+#                pldmgr can't launch anything else, and any other file fails the build)
 #   source:
 #     type: github -> repo: owner/name, asset: regex matched against release
 #                     asset names, tag: (optional) pin a specific release
@@ -24,6 +30,7 @@ payloads:
     name: LegacyJB
     category: Jailbreak
     description: Jailbreak service (TCP 9028) for supported apps such as Homebrew Store and Itemzflow.
+    extension: .elf
     source:
       type: github
       repo: Phoenixx1202/LegacyJB
@@ -34,6 +41,7 @@ payloads:
     category: Content Managers
     description: Native content manager for browsing and downloading supported game files.
     requires: [legacyjb]
+    extension: .elf
     source:
       type: github
       repo: Phoenixx1202/Spectrum-Library
@@ -43,6 +51,7 @@ payloads:
     name: Pegasus DL
     category: Downloaders
     description: Direct package downloading on the PS5 with a web interface on port 6970.
+    extension: .elf
     source:
       type: github
       repo: pegasus-ps5/pegasus-dl
@@ -52,7 +61,18 @@ payloads:
     name: PS5 Account Tools
     category: Utilities
     description: Local account manager with a web interface on port 6769. Offline activation, fake PSN sign-in for features like Remote Play, and avatar changes.
+    extension: .elf
     source:
       type: github
       repo: MangoScango/ps5-account-tools
       asset: '^ps5-account-tools-v[\d.]+\.elf$'
+
+  - id: apr-emu-updater
+    name: APR Emu Updater
+    category: Utilities
+    description: Choose which APR Emu (libSceAmpr.sprx) build each installed game uses, from a web interface on port 6971. Needs NanoDNS on first run and ShadowMountPlus for image-installed games.
+    extension: .elf
+    source:
+      type: github
+      repo: tsuramatsu1/apr-emu-updater
+      asset: '^apr_emu_updater(_v[\d.]+)?\.elf$'

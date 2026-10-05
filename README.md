@@ -10,6 +10,7 @@ npm install
 npm run build                      # writes payloads.json
 node generate.mjs --dry-run        # print the result without writing it
 node generate.mjs other.yaml --out dist/payloads.json
+npm run lint                       # ESLint (also runs in CI before generating)
 ```
 
 For each GitHub entry, the generator:

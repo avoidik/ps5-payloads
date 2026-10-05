@@ -11,13 +11,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { Readable } from 'node:stream';
-import yaml from 'js-yaml';
+import { load as loadYaml } from 'js-yaml';
 
 // Field buffer sizes in pldmgr's RepoPayload struct, minus the NUL terminator.
 const LIMITS = { name: 127, filename: 255, url: 1023, description: 1023, version: 63, category: 127 };
 const SOURCE_NAME_LIMIT = 255;
 const PAYLOAD_KEYS = ['name', 'filename', 'url', 'description', 'version', 'category', 'checksum', 'requires'];
 const RELEASES_PER_PAGE = 20;
+// pldmgr only launches these (is_supported_extension in payload_mgr.c)
+const SUPPORTED_EXTENSIONS = ['.elf', '.bin'];
 // The scanner ends an object at the first '}', ignores escapes and stops at '"'.
 // eslint-disable-next-line no-control-regex -- control characters are exactly what we reject
 const UNSAFE_CHARS = /[{}"\\\u0000-\u001f\u007f]/;
@@ -50,13 +52,14 @@ function parseArgs(argv) {
 function loadCatalog(file) {
   let doc;
   try {
-    doc = yaml.load(fs.readFileSync(file, 'utf8'));
+    doc = loadYaml(fs.readFileSync(file, 'utf8'));
   } catch (e) {
     fail(`cannot read ${file}: ${e.message}`);
   }
   if (!doc || typeof doc !== 'object') fail(`${file}: expected a mapping at top level`);
   if (typeof doc.name !== 'string' || !doc.name.trim()) fail(`${file}: top-level "name" is required`);
   if (!Array.isArray(doc.payloads) || doc.payloads.length === 0) fail(`${file}: "payloads" must be a non-empty list`);
+
 
   const ids = new Set();
   doc.payloads.forEach((p, i) => {
@@ -66,6 +69,9 @@ function loadCatalog(file) {
       if (typeof p[key] !== 'string' || !p[key].trim()) fail(`${where}: "${key}" is required`);
     }
     if (ids.has(p.id)) fail(`${where}: duplicate id "${p.id}"`);
+    if (!SUPPORTED_EXTENSIONS.includes(p.extension)) {
+      fail(`${where}: "extension" must be one of ${SUPPORTED_EXTENSIONS.join(', ')}`);
+    }
     ids.add(p.id);
 
     if (p.requires !== undefined && !(Array.isArray(p.requires) && p.requires.every((r) => typeof r === 'string'))) {
@@ -217,6 +223,9 @@ function buildEntry(p, up, nameById) {
 
   const fn = entry.filename;
   if (!fn || fn.includes('/') || fn.includes('..')) fail(`${p.id}: invalid filename "${fn}"`);
+  if (path.extname(fn).toLowerCase() !== p.extension) {
+    fail(`${p.id}: "${fn}" does not have the expected ${p.extension} extension`);
+  }
   if (!/^[0-9a-f]{64}$/.test(entry.checksum)) fail(`${p.id}: bad checksum "${entry.checksum}"`);
   for (const [key, value] of Object.entries(entry)) checkValue(p.id, key, value, LIMITS[key]);
   return entry;

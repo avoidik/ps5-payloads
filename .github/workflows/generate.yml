@@ -6,6 +6,7 @@ on:
     paths:
       - catalog.yaml
       - generate.mjs
+      - eslint.config.js
       - package.json
       - package-lock.json
       - site/**
@@ -14,6 +15,7 @@ on:
     paths:
       - catalog.yaml
       - generate.mjs
+      - eslint.config.js
       - package.json
       - package-lock.json
       - site/**
@@ -45,6 +47,8 @@ jobs:
           cache: npm
 
       - run: npm ci
+
+      - run: npm run lint
 
       - name: Generate payloads.json
         env:
