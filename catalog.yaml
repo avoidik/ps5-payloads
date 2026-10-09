@@ -111,3 +111,14 @@ payloads:
       repo: phantomptr/ps5upload
       asset: '^ps5upload-[\d.]+\.elf$'
       prerelease: true
+
+  - id: shadowmountplus
+    name: ShadowMountPlus
+    category: Utilities
+    description: Background auto-mounter that detects, mounts and installs game dumps and images from internal or external storage (UFS, exFAT, PFS). Needs kstuff-lite 1.07 or newer; load at every boot. Settings in /data/shadowmount/config.ini.
+    extension: .elf
+    source:
+      type: github
+      repo: drakmor/ShadowMountPlus
+      asset: '^shadowmountplus\.elf$'
+      prerelease: true
