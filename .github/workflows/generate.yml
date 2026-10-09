@@ -21,8 +21,8 @@ on:
       - site/**
       - .github/workflows/generate.yml
   schedule:
-    # Daily, to pick up new upstream releases
-    - cron: '17 4 * * *'
+    # Every 6 hours, to pick up new upstream releases
+    - cron: '17 */6 * * *'
   workflow_dispatch:
 
 permissions:

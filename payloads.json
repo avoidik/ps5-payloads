@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-06T11:17:50.639Z",
+  "generated_at": "2026-10-09T06:13:34.265Z",
   "_pldmgr_parser_guard": {},
   "payloads": [
     {
@@ -57,9 +57,9 @@
     {
       "name": "PS5SX2 Helper",
       "filename": "PS5SXHelper.elf",
-      "url": "https://github.com/Swordpdf/PS5SX2/releases/download/vk-285-130/PS5SXHelper.elf",
+      "url": "https://github.com/Swordpdf/PS5SX2/releases/download/vk-285-139/PS5SXHelper.elf",
       "description": "OnionHEN-based helper that jailbreaks the PS5SX2 emulator at start and gives it access to /data. Load with kstuff, ideally from autoload.",
-      "version": "vk-285-130",
+      "version": "vk-285-139",
       "category": "Emulators",
       "checksum": "737d95a8a1545447c4166b094005704465e420f79f54e882e30e7f9e4cde6210",
       "homepage": "https://github.com/Swordpdf/PS5SX2"
@@ -67,9 +67,9 @@
     {
       "name": "PS5SX2 Installer",
       "filename": "PS5SX2Installer.elf",
-      "url": "https://github.com/Swordpdf/PS5SX2/releases/download/vk-285-130/PS5SX2Installer.elf",
+      "url": "https://github.com/Swordpdf/PS5SX2/releases/download/vk-285-139/PS5SX2Installer.elf",
       "description": "Installs or updates PS5SX2, a PCSX2 port for PS5, from GitHub and launches it. Needs ShadowMountPlus, plus your own PS2 BIOS in /data/PCSX2/bios and games in /data/PCSX2/games. Requires: PS5SX2 Helper.",
-      "version": "vk-285-130",
+      "version": "vk-285-139",
       "category": "Emulators",
       "checksum": "6b1be3ea24ec8144b27b2a1f3e279cd17574f3093e9431abf8579dcc6c0bfae9",
       "requires": "PS5SX2 Helper",

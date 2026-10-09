@@ -17,7 +17,7 @@ import { load as loadYaml } from 'js-yaml';
 const LIMITS = { name: 127, filename: 255, url: 1023, description: 1023, version: 63, category: 127 };
 const SOURCE_NAME_LIMIT = 255;
 const PAYLOAD_KEYS = ['name', 'filename', 'url', 'description', 'version', 'category', 'checksum', 'requires', 'homepage'];
-const RELEASES_PER_PAGE = 20;
+const RELEASES_PER_PAGE = 100; // GitHub's maximum
 // pldmgr only launches these (is_supported_extension in payload_mgr.c)
 const SUPPORTED_EXTENSIONS = ['.elf', '.bin'];
 // The scanner ends an object at the first '}', ignores escapes and stops at '"'.
@@ -92,6 +92,7 @@ function loadCatalog(file) {
         fail(`${where}: invalid source.asset regex: ${e.message}`);
       }
       if (src.tag !== undefined) src.tag = String(src.tag);
+      if (src.prerelease !== undefined && typeof src.prerelease !== 'boolean') fail(`${where}: source.prerelease must be true or false`);
     } else if (src.type === 'url') {
       if (typeof src.url !== 'string' || !/^https?:\/\//.test(src.url)) fail(`${where}: source.url must be an http(s) URL`);
       if (src.version !== undefined) src.version = String(src.version);
@@ -148,13 +149,15 @@ async function githubGet(url) {
 }
 
 async function resolveGithub(p) {
-  const { repo, tag, assetRe } = p.source;
+  const { repo, tag, assetRe, prerelease = false } = p.source;
   const releases = tag
     ? [await githubGet(`https://api.github.com/repos/${repo}/releases/tags/${encodeURIComponent(tag)}`)]
-    : await githubGet(`https://api.github.com/repos/${repo}/releases?per_page=${RELEASES_PER_PAGE}`);
+    : (await githubGet(`https://api.github.com/repos/${repo}/releases?per_page=${RELEASES_PER_PAGE}`))
+        .filter((rel) => !rel.draft && (prerelease || !rel.prerelease))
+        // The API orders releases by creation date, which can differ from when they were published
+        .sort((a, b) => Date.parse(b.published_at) - Date.parse(a.published_at));
 
   for (const rel of releases) {
-    if (!tag && (rel.draft || rel.prerelease)) continue;
     const matches = rel.assets.filter((a) => assetRe.test(a.name));
     if (matches.length > 1) fail(`${p.id}: regex matches several assets in ${repo}@${rel.tag_name}: ${matches.map((a) => a.name).join(', ')}`);
     if (matches.length === 1) {
@@ -169,7 +172,8 @@ async function resolveGithub(p) {
       };
     }
   }
-  const scope = tag ? `release ${tag}` : `the last ${RELEASES_PER_PAGE} releases`;
+  const kinds = prerelease ? 'releases and pre-releases' : 'releases';
+  const scope = tag ? `release ${tag}` : `the last ${RELEASES_PER_PAGE} ${kinds}`;
   throw new CatalogError(`${p.id}: no asset matching /${p.source.asset}/ in ${scope} of ${repo}`);
 }
 

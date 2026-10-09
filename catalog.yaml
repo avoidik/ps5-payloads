@@ -17,7 +17,9 @@
 #                pldmgr can't launch anything else, and any other file fails the build)
 #   source:
 #     type: github -> repo: owner/name, asset: regex matched against release
-#                     asset names, tag: (optional) pin a specific release
+#                     asset names, tag: (optional) pin a specific release,
+#                     prerelease: (optional) true to also consider pre-releases
+#                     (default: false, stable releases only)
 #     type: url    -> url: direct download link, version: (optional),
 #                     homepage: (optional) project page linked from the site
 #

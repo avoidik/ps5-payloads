@@ -15,7 +15,7 @@ npm run lint                       # ESLint (also runs in CI before generating)
 
 For each GitHub entry, the generator:
 
-1. looks up the newest non-prerelease release that has an asset matching `source.asset`, or the release named in `source.tag`;
+1. looks up the most recently published release that has an asset matching `source.asset`, or the release named in `source.tag`. Pre-releases are skipped unless the entry sets `source.prerelease: true`;
 2. downloads the asset and computes its SHA-256 checksum;
 3. compares that checksum against GitHub's own `digest` for the asset, and the size against the published size.
 
@@ -53,7 +53,7 @@ Payload Manager downloads the file from the console itself, so you don't need CO
 `.github/workflows/generate.yml` runs the generator and deploys the site:
 
 - **Pushes to `main`** that touch the catalog, the generator, the npm files or `site/`: regenerates `payloads.json`, commits it if any payload changed, and deploys to Pages.
-- **Daily schedule** (04:17 UTC): picks up new upstream releases, then commits and deploys the same way.
+- **Every 6 hours** (at :17 past 00, 06, 12 and 18 UTC): picks up new upstream releases, then commits and deploys the same way.
 - **Manual run:** from the Actions tab (`workflow_dispatch`).
 - **Pull requests:** check that the catalog builds and upload the result as an artifact, without committing.
 
