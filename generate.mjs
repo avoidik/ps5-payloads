@@ -16,7 +16,7 @@ import { load as loadYaml } from 'js-yaml';
 // Field buffer sizes in pldmgr's RepoPayload struct, minus the NUL terminator.
 const LIMITS = { name: 127, filename: 255, url: 1023, description: 1023, version: 63, category: 127 };
 const SOURCE_NAME_LIMIT = 255;
-const PAYLOAD_KEYS = ['name', 'filename', 'url', 'description', 'version', 'category', 'checksum', 'requires', 'homepage'];
+const PAYLOAD_KEYS = ['name', 'filename', 'url', 'description', 'version', 'category', 'checksum', 'requires', 'homepage', 'release_type'];
 const RELEASES_PER_PAGE = 100; // GitHub's maximum
 // pldmgr only launches these (is_supported_extension in payload_mgr.c)
 const SUPPORTED_EXTENSIONS = ['.elf', '.bin'];
@@ -167,6 +167,7 @@ async function resolveGithub(p) {
         filename: a.name,
         version: rel.tag_name,
         homepage: `https://github.com/${repo}`,
+        releaseType: rel.prerelease ? 'pre-release' : 'stable',
         size: a.size,
         digest: a.digest?.startsWith('sha256:') ? a.digest.slice(7).toLowerCase() : null,
       };
@@ -230,6 +231,8 @@ function buildEntry(p, up, nameById) {
   if (requires.length) entry.requires = requires.join(', ');
   // Not used by pldmgr; the landing page links to it
   if (up.homepage) entry.homepage = up.homepage;
+  // Not used by pldmgr; the landing page shows it as a badge (unknown for plain URL sources)
+  if (up.releaseType) entry.release_type = up.releaseType;
 
   const fn = entry.filename;
   if (!fn || fn.includes('/') || fn.includes('..')) fail(`${p.id}: invalid filename "${fn}"`);

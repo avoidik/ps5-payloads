@@ -9,11 +9,13 @@
     color-scheme: light dark;
     --bg: #f6f7f9; --card: #fff; --fg: #17181c; --muted: #6b6f7a; --line: #e4e6eb;
     --accent: #2563eb; --accent-soft: #e8efff; --chip: #f0f1f4;
+    --ok: #15803d; --ok-soft: #e6f6ec; --warn: #b45309; --warn-soft: #fdf1e2;
   }
   @media (prefers-color-scheme: dark) {
     :root {
       --bg: #0f1115; --card: #171a21; --fg: #eceef3; --muted: #9298a5; --line: #262a33;
       --accent: #6c9bff; --accent-soft: #1c2740; --chip: #20242d;
+      --ok: #4ade80; --ok-soft: #14291c; --warn: #fbbf24; --warn-soft: #2e2412;
     }
   }
   * { box-sizing: border-box; }
@@ -34,7 +36,10 @@
   .card:target { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
   .top { display: flex; align-items: baseline; justify-content: space-between; gap: .75rem; }
   .card h2 { margin: 0; font-size: 1.05rem; }
-  .version { color: var(--muted); font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; white-space: nowrap; }
+  .version { display: inline-flex; align-items: center; gap: .4rem; color: var(--muted); font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; white-space: nowrap; }
+  .release { padding: .05rem .45rem; border-radius: 999px; font: 600 11px system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .release.stable { background: var(--ok-soft); color: var(--ok); }
+  .release.pre-release { background: var(--warn-soft); color: var(--warn); }
   .category { align-self: flex-start; padding: .1rem .55rem; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 12px; font-weight: 600; }
   .card p { margin: 0; color: var(--muted); }
 

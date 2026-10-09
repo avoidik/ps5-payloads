@@ -47,7 +47,9 @@ function card(p) {
   return el('article', { className: 'card', id: slug(p.name) },
     el('div', { className: 'top' },
       el('h2', { textContent: p.name }),
-      el('span', { className: 'version', textContent: p.version })),
+      el('span', { className: 'version' },
+        p.version,
+        p.release_type ? el('span', { className: `release ${p.release_type}`, textContent: p.release_type }) : null)),
     el('span', { className: 'category', textContent: p.category }),
     description ? el('p', { textContent: description }) : null,
     requires.length
