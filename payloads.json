@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-09T06:13:34.265Z",
+  "generated_at": "2026-10-09T06:18:34.145Z",
   "_pldmgr_parser_guard": {},
   "payloads": [
     {
@@ -74,6 +74,16 @@
       "checksum": "6b1be3ea24ec8144b27b2a1f3e279cd17574f3093e9431abf8579dcc6c0bfae9",
       "requires": "PS5SX2 Helper",
       "homepage": "https://github.com/Swordpdf/PS5SX2"
+    },
+    {
+      "name": "PS5 Upload Helper",
+      "filename": "ps5upload-6.5.2.elf",
+      "url": "https://github.com/phantomptr/ps5upload/releases/download/v6.5.2/ps5upload-6.5.2.elf",
+      "description": "Console-side helper for the PS5 Upload app on PC, Mac, Android or web. Resumable uploads, package installs, file and game management on port 9120. Enter the 6-digit code it shows in the app to pair. Keep the app and helper on the same version.",
+      "version": "v6.5.2",
+      "category": "Utilities",
+      "checksum": "bc95c23288272cfd669a062affc0e6886f0008dd0d869cc1f7f87ab2c6af3481",
+      "homepage": "https://github.com/phantomptr/ps5upload"
     }
   ]
 }

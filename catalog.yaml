@@ -100,3 +100,14 @@ payloads:
       type: github
       repo: Swordpdf/PS5SX2
       asset: '^PS5SX2Installer\.elf$'
+
+  - id: ps5upload
+    name: PS5 Upload Helper
+    category: Utilities
+    description: Console-side helper for the PS5 Upload app on PC, Mac, Android or web. Resumable uploads, package installs, file and game management on port 9120. Enter the 6-digit code it shows in the app to pair. Keep the app and helper on the same version.
+    extension: .elf
+    source:
+      type: github
+      repo: phantomptr/ps5upload
+      asset: '^ps5upload-[\d.]+\.elf$'
+      prerelease: true
