@@ -7,6 +7,8 @@
 #   external     other catalogs' payloads.json files, included as published:
 #                  - name: catalog name, used as its section title on the site (required)
 #                    url: link to the payloads.json   (required)
+#                    homepage: project page for the Upstream link (default: the GitHub
+#                              repo of each file's URL, else of the catalog's URL)
 #                Files are still downloaded and checksummed; entries that are not
 #                .elf/.bin or fail a check are skipped with a warning.
 #
@@ -36,6 +38,7 @@ output: payloads.json
 external:
   - name: Orbit Store
     url: https://raw.githubusercontent.com/saawant12/orbit-store-ps5/refs/heads/main/payloads.json
+    homepage: https://github.com/saawant12/orbit-store-ps5
 
 payloads:
   - id: legacyjb

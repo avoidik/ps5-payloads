@@ -69,6 +69,9 @@ function loadCatalog(file) {
     if (typeof c.name !== 'string' || !c.name.trim() || UNSAFE_CHARS.test(c.name)) {
       fail(`external[${i}]: "name" is required, without { } " \\ or control characters`);
     }
+    if (c.homepage !== undefined && (typeof c.homepage !== 'string' || !/^https?:\/\//.test(c.homepage))) {
+      fail(`external[${i}]: "homepage" must be an http(s) URL`);
+    }
   });
 
 
@@ -223,6 +226,14 @@ function warn(msg) {
   console.error(process.env.GITHUB_ACTIONS ? `::warning::${msg}` : `warning: ${msg}`);
 }
 
+// Project page for a file hosted on GitHub in any form (release asset, raw, blob, ...)
+function githubRepoPage(url) {
+  const { hostname, pathname } = new URL(url);
+  if (hostname !== 'github.com' && hostname !== 'raw.githubusercontent.com') return null;
+  const [owner, repo] = pathname.split('/').filter(Boolean);
+  return owner && repo ? `https://github.com/${owner}/${repo}` : null;
+}
+
 async function loadExternal(ext) {
   const res = await fetch(ext.url, { headers: { 'User-Agent': 'ps5-payloads-generator' } });
   if (!res.ok) fail(`external catalog ${ext.url}: HTTP ${res.status}`);
@@ -234,7 +245,7 @@ async function loadExternal(ext) {
   }
   const items = Array.isArray(doc) ? doc : doc?.payloads;
   if (!Array.isArray(items)) fail(`external catalog ${ext.url}: no "payloads" list`);
-  return { name: ext.name.trim(), url: ext.url, items };
+  return { name: ext.name.trim(), url: ext.url, homepage: ext.homepage, items };
 }
 
 // Takes an entry as published, but still downloads and hashes the file. Entries we
@@ -258,8 +269,8 @@ async function resolveExternalEntry(cat, item) {
     }
     entry.checksum = checksum;
     entry.category ||= 'Uncategorized';
-    const gh = entry.url.match(/^https:\/\/github\.com\/([^/]+\/[^/]+)\/releases\/download\//);
-    if (gh) entry.homepage = `https://github.com/${gh[1]}`;
+    const homepage = cat.homepage ?? githubRepoPage(entry.url) ?? githubRepoPage(cat.url);
+    if (homepage) entry.homepage = homepage;
     entry.catalog = cat.name;
     entry.catalog_url = cat.url;
     for (const [key, value] of Object.entries(entry)) checkValue('entry', key, value, LIMITS[key]);
