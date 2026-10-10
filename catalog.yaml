@@ -20,6 +20,8 @@
 #   requires     list of ids that must be loaded first
 #   filename     override the upstream asset name
 #   version      override the release tag
+#   enabled      false to leave the entry out without deleting it; it is not looked up
+#                or downloaded until re-enabled (default: true)
 #   extension    the one file type this provider ships: .elf or .bin (required;
 #                pldmgr can't launch anything else, and any other file fails the build)
 #   source:
@@ -42,6 +44,7 @@ external:
 
 payloads:
   - id: legacyjb
+    enabled: false  # not working at the moment; re-enable once updated
     name: LegacyJB
     category: Jailbreak
     description: Jailbreak service (TCP 9028) for supported apps such as Homebrew Store and Itemzflow.
@@ -52,6 +55,7 @@ payloads:
       asset: '^LegacyJB(_[\d.]+)?\.elf$'
 
   - id: spectrum-library
+    enabled: false  # not working at the moment; re-enable once updated
     name: Spectrum Library
     category: Content Managers
     description: Native content manager for browsing and downloading supported game files.

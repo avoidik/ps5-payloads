@@ -71,7 +71,8 @@ function card(p) {
 
   // External entries get the catalog in their id, so names can't clash with ours
   const id = p.catalog ? `${slug(p.catalog)}-${slug(p.name)}` : slug(p.name);
-  return el('article', { className: 'card', id },
+  const inactive = p.release_type === 'inactive';
+  return el('article', { className: inactive ? 'card inactive' : 'card', id },
     el('div', { className: 'top' },
       el('h2', { textContent: p.name }),
       el('span', { className: 'version' },
@@ -84,12 +85,13 @@ function card(p) {
       ? el('div', { className: 'requires' }, el('span', { textContent: 'Requires' }),
           ...requires.map((r) => el('a', { href: `#${slug(r)}`, textContent: r })))
       : null,
+    // Inactive entries have no file to download, only the upstream link
     el('div', { className: 'foot' },
-      el('span', { className: 'file', textContent: p.filename }),
+      inactive ? null : el('span', { className: 'file', textContent: p.filename }),
       el('span', { className: 'links' },
-        el('a', { href: p.url, textContent: 'Download' }),
+        inactive ? null : el('a', { href: p.url, textContent: 'Download' }),
         p.homepage ? el('a', { href: p.homepage, target: '_blank', rel: 'noopener', textContent: 'Upstream ↗' }) : null),
-      checksumField(p.checksum, `sum-${id}`)),
+      inactive ? null : checksumField(p.checksum, `sum-${id}`)),
   );
 }
 
@@ -97,9 +99,11 @@ fetch('payloads.json', { cache: 'no-cache' })
   .then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
   .then((data) => {
     const when = data.generated_at ? new Date(data.generated_at).toLocaleString() : 'unknown';
-    document.getElementById('status').textContent = `${data.payloads.length} payloads · updated ${when}`;
+    const inactive = data.inactive ?? [];
+    const counts = `${data.payloads.length} payloads${inactive.length ? ` (+${inactive.length} inactive)` : ''}`;
+    document.getElementById('status').textContent = `${counts} · updated ${when}`;
 
-    const own = data.payloads.filter((p) => !p.catalog);
+    const own = [...data.payloads.filter((p) => !p.catalog), ...inactive];
     document.getElementById('list').append(...own.map(card));
 
     // Payloads included from other catalogs, one group per catalog

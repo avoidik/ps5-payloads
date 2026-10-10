@@ -83,6 +83,7 @@ function loadCatalog(file) {
       if (typeof p[key] !== 'string' || !p[key].trim()) fail(`${where}: "${key}" is required`);
     }
     if (ids.has(p.id)) fail(`${where}: duplicate id "${p.id}"`);
+    if (p.enabled !== undefined && typeof p.enabled !== 'boolean') fail(`${where}: "enabled" must be true or false`);
     if (!SUPPORTED_EXTENSIONS.includes(p.extension)) {
       fail(`${where}: "extension" must be one of ${SUPPORTED_EXTENSIONS.join(', ')}`);
     }
@@ -353,19 +354,35 @@ function buildEntry(p, up, nameById) {
 // The empty guard object closes pldmgr's first '{'..'}' scan window before
 // "payloads", so the top-level "name" is not mistaken for the first payload's
 // name. sources_add still finds "name" ahead of the "payloads" key.
-function render(sourceName, entries) {
+// Disabled entries are listed for the site only. Payload Manager's parser skips any
+// object without "filename" and "url", so these can't be installed from the source.
+function buildInactiveEntry(p, nameById) {
+  const requires = (p.requires ?? []).map((r) => nameById.get(r));
+  const entry = { name: p.name.trim(), description: (p.description ?? '').trim(), category: p.category ?? 'Uncategorized' };
+  if (p.version) entry.version = p.version;
+  if (requires.length) entry.requires = requires.join(', ');
+  const homepage = p.source.type === 'github' ? `https://github.com/${p.source.repo}` : p.source.homepage;
+  if (homepage) entry.homepage = homepage;
+  entry.release_type = 'inactive';
+  for (const [key, value] of Object.entries(entry)) checkValue(p.id, key, value, LIMITS[key]);
+  return entry;
+}
+
+function render(sourceName, entries, inactive) {
   const s = JSON.stringify;
-  const items = entries.map((e) => {
+  const items = (list) => list.map((e) => {
     const fields = Object.entries(e).map(([k, v]) => `      ${s(k)}: ${s(v)}`);
     return `    {\n${fields.join(',\n')}\n    }`;
-  });
+  }).join(',\n');
   return [
     '{',
     `  "name": ${s(sourceName)},`,
     `  "generated_at": ${s(new Date().toISOString())},`,
     '  "_pldmgr_parser_guard": {},',
     '  "payloads": [',
-    items.join(',\n'),
+    items(entries),
+    // After "payloads": tools that read only that list, like Payload Manager, ignore these
+    ...(inactive.length ? ['  ],', '  "inactive": [', items(inactive)] : []),
     '  ]',
     '}',
     '',
@@ -383,7 +400,15 @@ async function main() {
     fail(`top-level name must be <= ${SOURCE_NAME_LIMIT} bytes without { } " \\ or control characters`);
   }
 
-  const ordered = orderByDependencies(catalog.payloads);
+  // Disabled entries are validated above but never looked up or downloaded
+  const active = catalog.payloads.filter((p) => p.enabled !== false);
+  const activeIds = new Set(active.map((p) => p.id));
+  for (const p of catalog.payloads) if (!activeIds.has(p.id)) console.error(`  ${p.id}: disabled, skipped`);
+  for (const p of active) {
+    for (const r of p.requires ?? []) if (!activeIds.has(r)) fail(`${p.id}: requires "${r}", which is disabled`);
+  }
+
+  const ordered = orderByDependencies(active);
   const nameById = new Map(catalog.payloads.map((p) => [p.id, p.name.trim()]));
 
   const resolved = await Promise.all(
@@ -414,7 +439,11 @@ async function main() {
     }
   }
 
-  const out = render(sourceName, resolved);
+  // Payload Manager rejects a source without payloads
+  if (resolved.length === 0) fail('no enabled payloads to write');
+
+  const inactive = catalog.payloads.filter((p) => !activeIds.has(p.id)).map((p) => buildInactiveEntry(p, nameById));
+  const out = render(sourceName, resolved, inactive);
   JSON.parse(out); // sanity check: must remain valid JSON
 
   if (opts.dryRun) {

@@ -21,6 +21,8 @@ For each GitHub entry, the generator:
 
 The script doesn't write anything if any of these steps fails. Set `GITHUB_TOKEN` to avoid API rate limits.
 
+To leave an entry out temporarily, for example while it's broken upstream, set `enabled: false` on it in `catalog.yaml`. It isn't looked up or downloaded, and Payload Manager no longer offers it. The site still lists it with an **inactive** badge and its upstream link but no download. That entry lives in a separate `inactive` list in `payloads.json`, without a file or URL, so Payload Manager's parser skips it. An enabled entry can't `require` a disabled one.
+
 ## Dependencies
 
 `requires: [other-id]` lists payloads that must be loaded first. Payload Manager has no dependency field, so the generator does three things instead:
