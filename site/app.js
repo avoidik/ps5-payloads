@@ -50,6 +50,14 @@ function releasedDate(iso) {
   });
 }
 
+// Same look as the source URL row at the top of the page: wide input and a Copy button
+function sourceRow(url, label) {
+  const input = el('input', { readOnly: true, value: url, ariaLabel: label });
+  const btn = el('button', { type: 'button', className: 'btn', textContent: 'Copy' });
+  btn.addEventListener('click', () => copy(url, input, () => { btn.textContent = 'Copied'; }));
+  return el('div', { className: 'source' }, input, btn);
+}
+
 function checksumField(sum, id) {
   return copyField('SHA-256', sum, id, `${sum.slice(0, 8)}...${sum.slice(-8)}`);
 }
@@ -106,7 +114,7 @@ fetch('payloads.json', { cache: 'no-cache' })
       external.append(
         el('div', { className: 'group-head' },
           el('h3', { textContent: name }),
-          copyField('Source', items[0].catalog_url, `src-${slug(name)}`)),
+          sourceRow(items[0].catalog_url, `${name} source URL`)),
         el('div', { className: 'grid' }, ...items.map(card)),
       );
     }

@@ -35,7 +35,7 @@
   .section-note { margin: 0 0 1rem; color: var(--muted); font-size: 13px; }
   .group-head { display: flex; flex-direction: column; gap: .4rem; margin: 1.25rem 0 .75rem; }
   .group-head h3 { margin: 0; font-size: 1rem; }
-  .group-head .field { max-width: 640px; }
+  .group-head .source { margin: 0; max-width: 720px; }
   .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr)); }
   .card { display: flex; flex-direction: column; gap: .6rem; padding: 1.1rem 1.2rem; background: var(--card); border: 1px solid var(--line); border-radius: 12px; scroll-margin-top: 1rem; transition: box-shadow .2s, border-color .2s; }
   .card:target { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
@@ -58,11 +58,11 @@
   .file { color: var(--muted); font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; word-break: break-all; }
   .links { display: flex; gap: 1rem; margin-left: auto; }
   .field { display: flex; align-items: center; gap: .4rem; width: 100%; }
-  .field label { color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
-  .field input { flex: 1; min-width: 0; padding: .3rem .5rem; border: 1px solid var(--line); border-radius: 6px; background: var(--chip); color: var(--muted); font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; text-overflow: ellipsis; }
-  .icon-btn { display: grid; place-items: center; flex: none; width: 28px; height: 28px; padding: 0; border: 1px solid var(--line); border-radius: 6px; background: var(--card); color: var(--muted); cursor: pointer; transition: color .15s, border-color .15s; }
+  .field label { flex: none; white-space: nowrap; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+  .field input { flex: 1; min-width: 0; height: 28px; margin: 0; padding: 0 .5rem; -webkit-appearance: none; appearance: none; box-shadow: none; border: 1px solid var(--line); border-radius: 6px; background: var(--chip); color: var(--muted); font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; line-height: 26px; text-overflow: ellipsis; }
+  .icon-btn { display: grid; place-items: center; flex: none; width: 28px; height: 28px; margin: 0; padding: 0; -webkit-appearance: none; appearance: none; line-height: 0; border: 1px solid var(--line); border-radius: 6px; background: var(--card); color: var(--muted); cursor: pointer; transition: color .15s, border-color .15s; }
   .icon-btn:hover, .icon-btn.done { color: var(--accent); border-color: var(--accent); }
-  .icon-btn svg { width: 14px; height: 14px; }
+  .icon-btn svg { display: block; width: 14px; height: 14px; }
 
   footer { margin-top: 2rem; color: var(--muted); font-size: 13px; text-align: center; }
 </style>
