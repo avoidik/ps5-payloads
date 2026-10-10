@@ -103,8 +103,11 @@ fetch('payloads.json', { cache: 'no-cache' })
     const counts = `${data.payloads.length} payloads${inactive.length ? ` (+${inactive.length} inactive)` : ''}`;
     document.getElementById('status').textContent = `${counts} · updated ${when}`;
 
-    const own = [...data.payloads.filter((p) => !p.catalog), ...inactive];
-    document.getElementById('list').append(...own.map(card));
+    document.getElementById('list').append(...data.payloads.filter((p) => !p.catalog).map(card));
+
+    // Disabled entries, at the bottom of the page
+    document.getElementById('inactive').hidden = inactive.length === 0;
+    document.getElementById('inactive-list').append(...inactive.map(card));
 
     // Payloads included from other catalogs, one group per catalog
     const groups = new Map();
