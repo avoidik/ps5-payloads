@@ -44,7 +44,6 @@ external:
 
 payloads:
   - id: legacyjb
-    enabled: false  # not working at the moment; re-enable once updated
     name: LegacyJB
     category: Jailbreak
     description: Jailbreak service (TCP 9028) for supported apps such as Homebrew Store and Itemzflow.
