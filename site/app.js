@@ -44,7 +44,9 @@ function card(p) {
   // The generator appends "Requires: …." for Payload Manager's UI; shown as chips here instead
   const description = requires.length ? p.description.replace(/\s*Requires: [^.]*\.$/, '') : p.description;
 
-  return el('article', { className: 'card', id: slug(p.name) },
+  // External entries get the catalog in their id, so names can't clash with ours
+  const id = p.catalog ? `${slug(p.catalog)}-${slug(p.name)}` : slug(p.name);
+  return el('article', { className: 'card', id },
     el('div', { className: 'top' },
       el('h2', { textContent: p.name }),
       el('span', { className: 'version' },
@@ -61,7 +63,7 @@ function card(p) {
       el('span', { className: 'links' },
         el('a', { href: p.url, textContent: 'Download' }),
         p.homepage ? el('a', { href: p.homepage, target: '_blank', rel: 'noopener', textContent: 'Upstream ↗' }) : null),
-      checksumField(p.checksum, `sum-${slug(p.name)}`)),
+      checksumField(p.checksum, `sum-${id}`)),
   );
 }
 
@@ -70,6 +72,25 @@ fetch('payloads.json', { cache: 'no-cache' })
   .then((data) => {
     const when = data.generated_at ? new Date(data.generated_at).toLocaleString() : 'unknown';
     document.getElementById('status').textContent = `${data.payloads.length} payloads · updated ${when}`;
-    document.getElementById('list').append(...data.payloads.map(card));
+
+    const own = data.payloads.filter((p) => !p.catalog);
+    document.getElementById('list').append(...own.map(card));
+
+    // Payloads included from other catalogs, one group per catalog
+    const groups = new Map();
+    for (const p of data.payloads.filter((x) => x.catalog)) {
+      if (!groups.has(p.catalog)) groups.set(p.catalog, []);
+      groups.get(p.catalog).push(p);
+    }
+    const external = document.getElementById('external');
+    external.hidden = groups.size === 0;
+    for (const [name, items] of groups) {
+      external.append(
+        el('div', { className: 'group-head' },
+          el('h3', { textContent: name }),
+          el('a', { href: items[0].catalog_url, target: '_blank', rel: 'noopener', textContent: 'payloads.json ↗' })),
+        el('div', { className: 'grid' }, ...items.map(card)),
+      );
+    }
   })
   .catch((err) => { document.getElementById('status').textContent = `Could not load payloads.json (${err.message}).`; });

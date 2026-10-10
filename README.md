@@ -29,6 +29,18 @@ The script doesn't write anything if any of these steps fails. Set `GITHUB_TOKEN
 - appends `Requires: <Name>.` to the description;
 - adds a `requires` string field, which Payload Manager ignores.
 
+## External catalogs
+
+Projects that publish their own Payload Manager `payloads.json` can be included as they are, under `external:` in `catalog.yaml`:
+
+```yaml
+external:
+  - name: Orbit Store
+    url: https://raw.githubusercontent.com/saawant12/orbit-store-ps5/refs/heads/main/payloads.json
+```
+
+Their payloads are added after ours, tagged with the catalog's `name`, and the site shows them in a separate "From other catalogs" section. Each file is still downloaded and SHA-256 checked, and must match the catalog's own checksum if it gives one. Entries that aren't `.elf`/`.bin`, fail a check, or reuse a filename are skipped with a warning. A catalog that can't be downloaded fails the build.
+
 ## Why the output looks the way it does
 
 Payload Manager doesn't use a real JSON parser. It reads from each `{` to the next `}` and finds keys by plain substring search. That leads to these rules for the output:

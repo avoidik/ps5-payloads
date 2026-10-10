@@ -16,7 +16,9 @@ import { load as loadYaml } from 'js-yaml';
 // Field buffer sizes in pldmgr's RepoPayload struct, minus the NUL terminator.
 const LIMITS = { name: 127, filename: 255, url: 1023, description: 1023, version: 63, category: 127 };
 const SOURCE_NAME_LIMIT = 255;
-const PAYLOAD_KEYS = ['name', 'filename', 'url', 'description', 'version', 'category', 'checksum', 'requires', 'homepage', 'release_type'];
+const PAYLOAD_KEYS = ['name', 'filename', 'url', 'description', 'version', 'category', 'checksum', 'requires', 'homepage', 'release_type', 'catalog', 'catalog_url'];
+// Fields taken from external catalogs; anything else they carry is dropped
+const PLDMGR_FIELDS = ['name', 'filename', 'url', 'description', 'version', 'category', 'checksum'];
 const RELEASES_PER_PAGE = 100; // GitHub's maximum
 // pldmgr only launches these (is_supported_extension in payload_mgr.c)
 const SUPPORTED_EXTENSIONS = ['.elf', '.bin'];
@@ -59,6 +61,15 @@ function loadCatalog(file) {
   if (!doc || typeof doc !== 'object') fail(`${file}: expected a mapping at top level`);
   if (typeof doc.name !== 'string' || !doc.name.trim()) fail(`${file}: top-level "name" is required`);
   if (!Array.isArray(doc.payloads) || doc.payloads.length === 0) fail(`${file}: "payloads" must be a non-empty list`);
+
+  doc.external ??= [];
+  if (!Array.isArray(doc.external)) fail(`${file}: "external" must be a list`);
+  doc.external.forEach((c, i) => {
+    if (!c || typeof c.url !== 'string' || !/^https?:\/\//.test(c.url)) fail(`external[${i}]: "url" must be an http(s) URL`);
+    if (typeof c.name !== 'string' || !c.name.trim() || UNSAFE_CHARS.test(c.name)) {
+      fail(`external[${i}]: "name" is required, without { } " \\ or control characters`);
+    }
+  });
 
 
   const ids = new Set();
@@ -205,6 +216,63 @@ async function resolvePayload(p) {
   return { ...up, checksum, size };
 }
 
+// ── External catalogs ───────────────────────────────────────
+
+function warn(msg) {
+  // Shown as an annotation in GitHub Actions
+  console.error(process.env.GITHUB_ACTIONS ? `::warning::${msg}` : `warning: ${msg}`);
+}
+
+async function loadExternal(ext) {
+  const res = await fetch(ext.url, { headers: { 'User-Agent': 'ps5-payloads-generator' } });
+  if (!res.ok) fail(`external catalog ${ext.url}: HTTP ${res.status}`);
+  let doc;
+  try {
+    doc = await res.json();
+  } catch (e) {
+    fail(`external catalog ${ext.url}: invalid JSON (${e.message})`);
+  }
+  const items = Array.isArray(doc) ? doc : doc?.payloads;
+  if (!Array.isArray(items)) fail(`external catalog ${ext.url}: no "payloads" list`);
+  return { name: ext.name.trim(), url: ext.url, items };
+}
+
+// Takes an entry as published, but still downloads and hashes the file. Entries we
+// can't serve safely are skipped, so one bad third-party entry doesn't block the build.
+async function resolveExternalEntry(cat, item) {
+  const entry = {};
+  for (const key of PLDMGR_FIELDS) if (typeof item?.[key] === 'string') entry[key] = item[key].trim();
+  try {
+    for (const key of ['name', 'filename', 'url']) if (!entry[key]) fail(`missing "${key}"`);
+    if (!/^https?:\/\//.test(entry.url)) fail('url must be http(s)');
+    const fn = entry.filename;
+    if (fn.includes('/') || fn.includes('..')) fail(`invalid filename "${fn}"`);
+    if (!SUPPORTED_EXTENSIONS.includes(path.extname(fn).toLowerCase())) {
+      fail(`"${fn}" is not one of ${SUPPORTED_EXTENSIONS.join(', ')}`);
+    }
+
+    const { checksum, size } = await sha256OfUrl(entry.url);
+    if (size === 0) fail('downloaded file is empty');
+    if (entry.checksum && entry.checksum.toLowerCase() !== checksum) {
+      fail(`checksum mismatch (catalog ${entry.checksum}, computed ${checksum})`);
+    }
+    entry.checksum = checksum;
+    entry.category ||= 'Uncategorized';
+    const gh = entry.url.match(/^https:\/\/github\.com\/([^/]+\/[^/]+)\/releases\/download\//);
+    if (gh) entry.homepage = `https://github.com/${gh[1]}`;
+    entry.catalog = cat.name;
+    entry.catalog_url = cat.url;
+    for (const [key, value] of Object.entries(entry)) checkValue('entry', key, value, LIMITS[key]);
+
+    console.error(`  [${cat.name}] ${fn} ${entry.version ?? ''} (${size} bytes) sha256=${checksum}`);
+    return entry;
+  } catch (e) {
+    if (!(e instanceof CatalogError)) throw e;
+    warn(`skipping ${cat.name} / ${entry.name ?? '(unnamed)'}: ${e.message}`);
+    return null;
+  }
+}
+
 // ── pldmgr-compatible output ────────────────────────────────
 
 function checkValue(id, key, value, limit) {
@@ -292,6 +360,20 @@ async function main() {
   for (const e of resolved) {
     if (filenames.has(e.filename)) fail(`duplicate filename "${e.filename}"`);
     filenames.add(e.filename);
+  }
+
+  // External catalogs come after our own payloads, in catalog order
+  for (const ext of catalog.external) {
+    const cat = await loadExternal(ext);
+    const entries = await Promise.all(cat.items.map((item) => resolveExternalEntry(cat, item)));
+    for (const e of entries.filter(Boolean)) {
+      if (filenames.has(e.filename)) {
+        warn(`skipping ${cat.name} / ${e.name}: filename "${e.filename}" is already used`);
+        continue;
+      }
+      filenames.add(e.filename);
+      resolved.push(e);
+    }
   }
 
   const out = render(sourceName, resolved);
