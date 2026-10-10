@@ -71,8 +71,8 @@ Payload Manager downloads the file from the console itself, so you don't need CO
 
 A file that differs only in `generated_at` is not committed.
 
-After generating, the workflow checks the new `payloads.json` with Payload Manager's own code (`tools/pldmgr-verify/verify.sh`, built from its latest `main` branch). The check covers adding the source, every parsed field, the list its web UI receives, and the install checks, including verifying each downloaded file's SHA-256. The check is informational: if it fails, the run shows a warning, but `payloads.json` is still committed and deployed. To run it locally (needs `gcc`, `git`, `curl` and Node):
+A separate `verify` job then checks the generated `payloads.json` with Payload Manager's own code. `tools/pldmgr-verify/verify.mjs` builds Payload Manager's unmodified source handling (pinned to a release, `PLDMGR_REF`) together with a small command-line wrapper (`harness.c`). It then adds the file as a source over HTTP, compares the list its web UI receives field by field, and installs every payload, which downloads it, verifies its checksum and writes it to disk. It also flags two payloads that would install into the same folder. The job is informational: a failure shows as a warning, but never fails the run or blocks the deploy. To run it locally (needs `git`, `gcc`, `python3` and the libcurl headers, e.g. `libcurl4-openssl-dev`):
 
 ```sh
-tools/pldmgr-verify/verify.sh payloads.json
+node tools/pldmgr-verify/verify.mjs payloads.json
 ```

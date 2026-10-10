@@ -40,8 +40,14 @@ jobs:
     timeout-minutes: 15
     permissions:
       contents: write
+    outputs:
+      # Commit holding the published payloads.json (the bot's commit, if it made one)
+      sha: ${{ steps.published.outputs.sha }}
     steps:
       - uses: actions/checkout@v7
+        with:
+          # The branch itself, not a detached commit, so the bot can push to it
+          ref: ${{ github.ref }}
 
       - uses: actions/setup-node@v7
         with:
@@ -56,15 +62,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node generate.mjs
-
-      - name: Verify with Payload Manager's own code
-        # Informational: a failure is reported as a warning but never blocks the commit or deploy
-        continue-on-error: true
-        run: |
-          tools/pldmgr-verify/verify.sh payloads.json || {
-            echo "::warning::Payload Manager verification failed; see the 'Verify with Payload Manager's own code' step"
-            exit 1
-          }
 
       - name: Check for changes
         id: diff
@@ -97,6 +94,10 @@ jobs:
           git commit -m "Update payloads.json"
           git push
 
+      - name: Record published commit
+        id: published
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
       - name: Build site
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         run: |
@@ -107,6 +108,36 @@ jobs:
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         with:
           path: _site
+
+  verify:
+    needs: generate
+    # Informational: a failure is reported as a warning but never fails the run or blocks the deploy
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.generate.outputs.sha }}
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: payloads.json
+          path: generated
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: Install libcurl headers
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq libcurl4-openssl-dev
+
+      - name: Verify with Payload Manager's own code
+        run: |
+          node tools/pldmgr-verify/verify.mjs generated/payloads.json || {
+            echo "::warning::Payload Manager could not process payloads.json; see the verify job"
+            exit 1
+          }
 
   deploy:
     needs: generate
