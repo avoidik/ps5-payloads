@@ -70,3 +70,9 @@ Payload Manager downloads the file from the console itself, so you don't need CO
 - **Pull requests:** check that the catalog builds and upload the result as an artifact, without committing.
 
 A file that differs only in `generated_at` is not committed.
+
+After generating, the workflow checks the new `payloads.json` with Payload Manager's own code (`tools/pldmgr-verify/verify.sh`, built from its latest `main` branch). The check covers adding the source, every parsed field, the list its web UI receives, and the install checks, including verifying each downloaded file's SHA-256. The check is informational: if it fails, the run shows a warning, but `payloads.json` is still committed and deployed. To run it locally (needs `gcc`, `git`, `curl` and Node):
+
+```sh
+tools/pldmgr-verify/verify.sh payloads.json
+```

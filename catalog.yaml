@@ -75,7 +75,9 @@ payloads:
   - id: ps5-account-tools
     name: PS5 Account Tools
     category: Utilities
-    description: Local account manager with a web interface on port 6769. Offline activation, fake PSN sign-in for features like Remote Play, and avatar changes.
+    description: >-
+      Local account manager with a web interface on port 6769. Offline activation, fake PSN sign-in
+      for features like Remote Play, and avatar changes.
     extension: .elf
     source:
       type: github
@@ -85,7 +87,9 @@ payloads:
   - id: apr-emu-updater
     name: APR Emu Updater
     category: Utilities
-    description: Choose which APR Emu (libSceAmpr.sprx) build each installed game uses, from a web interface on port 6971. Needs NanoDNS on first run and ShadowMountPlus for image-installed games.
+    description: >-
+      Choose which APR Emu (libSceAmpr.sprx) build each installed game uses, from a web interface on
+      port 6971. Needs NanoDNS on first run and ShadowMountPlus for image-installed games.
     extension: .elf
     source:
       type: github
@@ -95,7 +99,9 @@ payloads:
   - id: ps5sx2-helper
     name: PS5SX2 Helper
     category: Emulators
-    description: OnionHEN-based helper that jailbreaks the PS5SX2 emulator at start and gives it access to /data. Load with kstuff, ideally from autoload.
+    description: >-
+      OnionHEN-based helper that jailbreaks the PS5SX2 emulator at start and gives it access to
+      /data. Load with kstuff, ideally from autoload.
     extension: .elf
     source:
       type: github
@@ -105,7 +111,9 @@ payloads:
   - id: ps5sx2-installer
     name: PS5SX2 Installer
     category: Emulators
-    description: Installs or updates PS5SX2, a PCSX2 port for PS5, from GitHub and launches it. Needs ShadowMountPlus, plus your own PS2 BIOS in /data/PCSX2/bios and games in /data/PCSX2/games.
+    description: >-
+      Installs or updates PS5SX2, a PCSX2 port for PS5, from GitHub and launches it. Needs
+      ShadowMountPlus, plus your own PS2 BIOS in /data/PCSX2/bios and games in /data/PCSX2/games.
     requires: [ps5sx2-helper]
     extension: .elf
     source:
@@ -116,7 +124,10 @@ payloads:
   - id: ps5upload
     name: PS5 Upload Helper
     category: Utilities
-    description: Console-side helper for the PS5 Upload app on PC, Mac, Android or web. Resumable uploads, package installs, file and game management on port 9120. Enter the 6-digit code it shows in the app to pair. Keep the app and helper on the same version.
+    description: >-
+      Console-side helper for the PS5 Upload app on PC, Mac, Android or web. Resumable uploads,
+      package installs, file and game management on port 9120. Enter the 6-digit code it shows in
+      the app to pair. Keep the app and helper on the same version.
     extension: .elf
     source:
       type: github
@@ -127,7 +138,10 @@ payloads:
   - id: shadowmountplus
     name: ShadowMountPlus
     category: Utilities
-    description: Background auto-mounter that detects, mounts and installs game dumps and images from internal or external storage (UFS, exFAT, PFS). Needs kstuff-lite 1.07 or newer; load at every boot. Settings in /data/shadowmount/config.ini.
+    description: >-
+      Background auto-mounter that detects, mounts and installs game dumps and images from internal
+      or external storage (UFS, exFAT, PFS). Needs kstuff-lite 1.07 or newer; load at every boot.
+      Settings in /data/shadowmount/config.ini.
     extension: .elf
     source:
       type: github

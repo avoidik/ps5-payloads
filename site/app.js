@@ -27,7 +27,7 @@ const DONE_ICON = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" st
 
 // Labelled read-only value with a copy button; `shown` may be shorter than the copied value
 function copyField(label, value, id, shown = value) {
-  const input = el('input', { id, readOnly: true, value: shown, title: value });
+  const input = el('input', { id, type: 'text', readOnly: true, value: shown, title: value });
   const btn = el('button', { type: 'button', className: 'icon-btn', title: `Copy ${label}`, ariaLabel: `Copy ${label}` });
   btn.innerHTML = COPY_ICON;
   btn.addEventListener('click', () => copy(value, input, () => {
@@ -52,7 +52,7 @@ function releasedDate(iso) {
 
 // Same look as the source URL row at the top of the page: wide input and a Copy button
 function sourceRow(url, label) {
-  const input = el('input', { readOnly: true, value: url, ariaLabel: label });
+  const input = el('input', { type: 'text', readOnly: true, value: url, ariaLabel: label });
   const btn = el('button', { type: 'button', className: 'btn', textContent: 'Copy' });
   btn.addEventListener('click', () => copy(url, input, () => { btn.textContent = 'Copied'; }));
   return el('div', { className: 'source' }, input, btn);

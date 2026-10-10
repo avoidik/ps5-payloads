@@ -7,6 +7,7 @@ on:
       - catalog.yaml
       - generate.mjs
       - eslint.config.js
+      - tools/**
       - package.json
       - package-lock.json
       - site/**
@@ -16,6 +17,7 @@ on:
       - catalog.yaml
       - generate.mjs
       - eslint.config.js
+      - tools/**
       - package.json
       - package-lock.json
       - site/**
@@ -54,6 +56,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node generate.mjs
+
+      - name: Verify with Payload Manager's own code
+        # Informational: a failure is reported as a warning but never blocks the commit or deploy
+        continue-on-error: true
+        run: |
+          tools/pldmgr-verify/verify.sh payloads.json || {
+            echo "::warning::Payload Manager verification failed; see the 'Verify with Payload Manager's own code' step"
+            exit 1
+          }
 
       - name: Check for changes
         id: diff
