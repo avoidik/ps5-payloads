@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-10T13:05:10.578Z",
+  "generated_at": "2026-10-10T14:04:34.064Z",
   "_pldmgr_parser_guard": {},
   "payloads": [
     {
@@ -52,29 +52,16 @@
       "released": "2026-08-29T09:54:19Z"
     },
     {
-      "name": "PS5SX2 Helper",
-      "filename": "PS5SXHelper.elf",
-      "url": "https://github.com/Swordpdf/PS5SX2/releases/download/vk-285-139/PS5SXHelper.elf",
-      "description": "OnionHEN-based helper that jailbreaks the PS5SX2 emulator at start and gives it access to /data. Load with kstuff, ideally from autoload.",
-      "version": "vk-285-139",
+      "name": "PS5SX2",
+      "filename": "ps5sx2-aio.elf",
+      "url": "https://github.com/Swordpdf/PS5SX2/releases/download/vk-285-161/ps5sx2-aio.elf",
+      "description": "All-in-one payload for PS5SX2, a PCSX2 port for PS5. It combines the helper that jailbreaks the emulator, the installer that keeps it up to date from GitHub, and the disc auto-launcher. Needs kstuff and ShadowMountPlus, plus your own PS2 BIOS in /data/PCSX2/bios and games in /data/PCSX2/games.",
+      "version": "vk-285-161",
       "category": "Emulators",
-      "checksum": "737d95a8a1545447c4166b094005704465e420f79f54e882e30e7f9e4cde6210",
+      "checksum": "b52c7a70c266826974314417bc059063b6e8ab0b8cc9537471f65f0e4915560d",
       "homepage": "https://github.com/Swordpdf/PS5SX2",
       "release_type": "stable",
-      "released": "2026-10-08T19:15:49Z"
-    },
-    {
-      "name": "PS5SX2 Installer",
-      "filename": "PS5SX2Installer.elf",
-      "url": "https://github.com/Swordpdf/PS5SX2/releases/download/vk-285-139/PS5SX2Installer.elf",
-      "description": "Installs or updates PS5SX2, a PCSX2 port for PS5, from GitHub and launches it. Needs ShadowMountPlus, plus your own PS2 BIOS in /data/PCSX2/bios and games in /data/PCSX2/games. Requires: PS5SX2 Helper.",
-      "version": "vk-285-139",
-      "category": "Emulators",
-      "checksum": "6b1be3ea24ec8144b27b2a1f3e279cd17574f3093e9431abf8579dcc6c0bfae9",
-      "requires": "PS5SX2 Helper",
-      "homepage": "https://github.com/Swordpdf/PS5SX2",
-      "release_type": "stable",
-      "released": "2026-10-08T19:15:49Z"
+      "released": "2026-10-10T09:44:47Z"
     },
     {
       "name": "PS5 Upload Helper",
