@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-10T00:20:20.290Z",
+  "generated_at": "2026-10-10T00:27:36.375Z",
   "_pldmgr_parser_guard": {},
   "payloads": [
     {
@@ -12,7 +12,8 @@
       "category": "Jailbreak",
       "checksum": "7633372f39a7a6e460f3990b02cd07026f4e5591aefd2509f8c6338f03b8440b",
       "homepage": "https://github.com/Phoenixx1202/LegacyJB",
-      "release_type": "stable"
+      "release_type": "stable",
+      "released": "2026-09-29T21:35:25Z"
     },
     {
       "name": "Spectrum Library",
@@ -24,7 +25,8 @@
       "checksum": "5d1372d48f76167e3f9e24b335cf571ea6e4b3960e6b7202d2802b0f78c3a519",
       "requires": "LegacyJB",
       "homepage": "https://github.com/Phoenixx1202/Spectrum-Library",
-      "release_type": "stable"
+      "release_type": "stable",
+      "released": "2026-10-01T05:09:22Z"
     },
     {
       "name": "Pegasus DL",
@@ -35,7 +37,8 @@
       "category": "Downloaders",
       "checksum": "32b69c2089bb545abfabd04d5827444698f9c4f1bc4915d72247cb781e8c23d9",
       "homepage": "https://github.com/pegasus-ps5/pegasus-dl",
-      "release_type": "stable"
+      "release_type": "stable",
+      "released": "2026-10-09T22:57:31Z"
     },
     {
       "name": "PS5 Account Tools",
@@ -46,7 +49,8 @@
       "category": "Utilities",
       "checksum": "2e1402d8c088afda55280b28fcc66ccb870528ec948d10ea586088f60f723f2a",
       "homepage": "https://github.com/MangoScango/ps5-account-tools",
-      "release_type": "stable"
+      "release_type": "stable",
+      "released": "2026-09-19T15:29:14Z"
     },
     {
       "name": "APR Emu Updater",
@@ -57,7 +61,8 @@
       "category": "Utilities",
       "checksum": "4f04464283a6a551883e40e36b59134ecad0e38ecbb7ea89cbec3f91a3bd9122",
       "homepage": "https://github.com/tsuramatsu1/apr-emu-updater",
-      "release_type": "stable"
+      "release_type": "stable",
+      "released": "2026-08-29T09:54:19Z"
     },
     {
       "name": "PS5SX2 Helper",
@@ -68,7 +73,8 @@
       "category": "Emulators",
       "checksum": "737d95a8a1545447c4166b094005704465e420f79f54e882e30e7f9e4cde6210",
       "homepage": "https://github.com/Swordpdf/PS5SX2",
-      "release_type": "stable"
+      "release_type": "stable",
+      "released": "2026-10-08T19:15:49Z"
     },
     {
       "name": "PS5SX2 Installer",
@@ -80,7 +86,8 @@
       "checksum": "6b1be3ea24ec8144b27b2a1f3e279cd17574f3093e9431abf8579dcc6c0bfae9",
       "requires": "PS5SX2 Helper",
       "homepage": "https://github.com/Swordpdf/PS5SX2",
-      "release_type": "stable"
+      "release_type": "stable",
+      "released": "2026-10-08T19:15:49Z"
     },
     {
       "name": "PS5 Upload Helper",
@@ -91,7 +98,8 @@
       "category": "Utilities",
       "checksum": "468740692643ecef083da7d761169c09accec4f43b199a64df9c394ecd6b5df3",
       "homepage": "https://github.com/phantomptr/ps5upload",
-      "release_type": "stable"
+      "release_type": "stable",
+      "released": "2026-10-09T20:54:45Z"
     },
     {
       "name": "ShadowMountPlus",
@@ -102,7 +110,8 @@
       "category": "Utilities",
       "checksum": "fc4e5f715e76660ce34bde2adb10eaf1d069cb2cdf06f7a380896dfb62bd0c4a",
       "homepage": "https://github.com/drakmor/ShadowMountPlus",
-      "release_type": "pre-release"
+      "release_type": "pre-release",
+      "released": "2026-10-03T11:43:52Z"
     },
     {
       "name": "Orbit Store (Beta)",
@@ -112,6 +121,8 @@
       "version": "v1.0.5",
       "category": "Utilities",
       "checksum": "7883cf64b62252594d58e5558ea29f8de7ed3ca1d9a3182c844f23513eaf7617",
+      "release_type": "stable",
+      "released": "2026-10-09T15:59:12Z",
       "homepage": "https://github.com/saawant12/orbit-store-ps5",
       "catalog": "Orbit Store",
       "catalog_url": "https://raw.githubusercontent.com/saawant12/orbit-store-ps5/refs/heads/main/payloads.json"

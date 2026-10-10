@@ -16,7 +16,7 @@ import { load as loadYaml } from 'js-yaml';
 // Field buffer sizes in pldmgr's RepoPayload struct, minus the NUL terminator.
 const LIMITS = { name: 127, filename: 255, url: 1023, description: 1023, version: 63, category: 127 };
 const SOURCE_NAME_LIMIT = 255;
-const PAYLOAD_KEYS = ['name', 'filename', 'url', 'description', 'version', 'category', 'checksum', 'requires', 'homepage', 'release_type', 'catalog', 'catalog_url'];
+const PAYLOAD_KEYS = ['name', 'filename', 'url', 'description', 'version', 'category', 'checksum', 'requires', 'homepage', 'release_type', 'released', 'catalog', 'catalog_url'];
 // Fields taken from external catalogs; anything else they carry is dropped
 const PLDMGR_FIELDS = ['name', 'filename', 'url', 'description', 'version', 'category', 'checksum'];
 const RELEASES_PER_PAGE = 100; // GitHub's maximum
@@ -182,6 +182,7 @@ async function resolveGithub(p) {
         version: rel.tag_name,
         homepage: `https://github.com/${repo}`,
         releaseType: rel.prerelease ? 'pre-release' : 'stable',
+        released: rel.published_at,
         size: a.size,
         digest: a.digest?.startsWith('sha256:') ? a.digest.slice(7).toLowerCase() : null,
       };
@@ -207,16 +208,37 @@ async function sha256OfUrl(url) {
     hash.update(chunk);
     size += chunk.length;
   }
-  return { checksum: hash.digest('hex'), size };
+  // Release date fallback for files that don't come from a GitHub release lookup
+  const lastModified = Date.parse(res.headers.get('last-modified') ?? '');
+  const modified = Number.isNaN(lastModified) ? null : new Date(lastModified).toISOString().replace('.000Z', 'Z');
+  return { checksum: hash.digest('hex'), size, modified };
+}
+
+// Date and type of the GitHub release a download URL points at, if it points at one
+async function githubReleaseOf(url) {
+  const m = url.match(/^https:\/\/github\.com\/([^/]+\/[^/]+)\/releases\/(?:download\/([^/]+)|latest\/download)\//);
+  if (!m) return null;
+  const [, repo, tag] = m;
+  const api = `https://api.github.com/repos/${repo}/releases/${tag ? `tags/${tag}` : 'latest'}`;
+  try {
+    const rel = await githubGet(api);
+    return { released: rel.published_at, releaseType: rel.prerelease ? 'pre-release' : 'stable' };
+  } catch (e) {
+    if (!(e instanceof CatalogError)) throw e;
+    warn(`no release info for ${url}: ${e.message}`);
+    return null;
+  }
 }
 
 async function resolvePayload(p) {
   const up = p.source.type === 'github' ? await resolveGithub(p) : resolveUrl(p);
-  const { checksum, size } = await sha256OfUrl(up.url);
+  const { checksum, size, modified } = await sha256OfUrl(up.url);
   if (size === 0) fail(`${p.id}: downloaded file is empty: ${up.url}`);
   if (up.size != null && size !== up.size) fail(`${p.id}: size mismatch for ${up.url} (expected ${up.size}, got ${size})`);
   if (up.digest && up.digest !== checksum) fail(`${p.id}: checksum mismatch for ${up.url} (GitHub ${up.digest}, computed ${checksum})`);
-  return { ...up, checksum, size };
+  // Direct URLs: use the GitHub release they point at, else the server's Last-Modified
+  const rel = up.released ? null : await githubReleaseOf(up.url);
+  return { ...up, ...rel, checksum, size, released: up.released ?? rel?.released ?? modified };
 }
 
 // ── External catalogs ───────────────────────────────────────
@@ -262,13 +284,17 @@ async function resolveExternalEntry(cat, item) {
       fail(`"${fn}" is not one of ${SUPPORTED_EXTENSIONS.join(', ')}`);
     }
 
-    const { checksum, size } = await sha256OfUrl(entry.url);
+    const { checksum, size, modified } = await sha256OfUrl(entry.url);
     if (size === 0) fail('downloaded file is empty');
     if (entry.checksum && entry.checksum.toLowerCase() !== checksum) {
       fail(`checksum mismatch (catalog ${entry.checksum}, computed ${checksum})`);
     }
     entry.checksum = checksum;
     entry.category ||= 'Uncategorized';
+    const rel = await githubReleaseOf(entry.url);
+    if (rel) entry.release_type = rel.releaseType;
+    const released = rel?.released ?? modified;
+    if (released) entry.released = released;
     const homepage = cat.homepage ?? githubRepoPage(entry.url) ?? githubRepoPage(cat.url);
     if (homepage) entry.homepage = homepage;
     entry.catalog = cat.name;
@@ -312,6 +338,7 @@ function buildEntry(p, up, nameById) {
   if (up.homepage) entry.homepage = up.homepage;
   // Not used by pldmgr; the landing page shows it as a badge (unknown for plain URL sources)
   if (up.releaseType) entry.release_type = up.releaseType;
+  if (up.released) entry.released = up.released;
 
   const fn = entry.filename;
   if (!fn || fn.includes('/') || fn.includes('..')) fail(`${p.id}: invalid filename "${fn}"`);
