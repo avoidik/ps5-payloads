@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-11T21:58:10.744Z",
+  "generated_at": "2026-10-12T00:00:43.331Z",
   "_pldmgr_parser_guard": {},
   "payloads": [
     {
@@ -53,15 +53,15 @@
     },
     {
       "name": "PS5SX2",
-      "filename": "ps5sx2-aio.elf",
-      "url": "https://github.com/Swordpdf/PS5SX2/releases/download/vk-285-162/ps5sx2-aio.elf",
+      "filename": "ps5sx2-bot.elf",
+      "url": "https://github.com/Swordpdf/PS5SX2/releases/download/vk-285-163/ps5sx2-bot.elf",
       "description": "All-in-one payload for PS5SX2, a PCSX2 port for PS5. It combines the helper that jailbreaks the emulator, the installer that keeps it up to date from GitHub, and the disc auto-launcher. Needs kstuff and ShadowMountPlus, plus your own PS2 BIOS in /data/PCSX2/bios and games in /data/PCSX2/games.",
-      "version": "vk-285-162",
+      "version": "vk-285-163",
       "category": "Emulators",
-      "checksum": "b52c7a70c266826974314417bc059063b6e8ab0b8cc9537471f65f0e4915560d",
+      "checksum": "3420cdb5c826014b22b8ca8fa60a2026f0d9f91d3f5a5b818d4c98373eccb123",
       "homepage": "https://github.com/Swordpdf/PS5SX2",
       "release_type": "stable",
-      "released": "2026-10-10T20:19:45Z"
+      "released": "2026-10-11T20:40:21Z"
     },
     {
       "name": "PS5 Upload Helper",
