@@ -111,7 +111,7 @@ payloads:
     source:
       type: github
       repo: Swordpdf/PS5SX2
-      asset: '^ps5sx2-aio\.elf$'
+      asset: '^ps5sx2-bot\.elf$'
 
   - id: ps5upload
     name: PS5 Upload Helper
