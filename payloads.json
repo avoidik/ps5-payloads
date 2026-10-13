@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-13T14:11:27.936Z",
+  "generated_at": "2026-10-13T22:44:42.646Z",
   "_pldmgr_parser_guard": {},
   "payloads": [
     {
@@ -90,25 +90,25 @@
     {
       "name": "PS4Mount",
       "filename": "ps4mount.elf",
-      "url": "https://github.com/gasb07/ps4mount/releases/download/v0.4.1/ps4mount.elf",
+      "url": "https://github.com/gasb07/ps4mount/releases/download/v0.4.4/ps4mount.elf",
       "description": "Plays PS4 fake PKGs straight from an exFAT USB drive without installing them. Put the game and update .pkg files in the drive root; it adds them to the home screen. Web panel on port 8770 and in the Media tab. Needs fake PKG support (e.g. etaHEN with kstuff) and kernel log access (klogsrv on port 3232, or no other payload reading /dev/klog). Load after every boot. Tested on firmware 13.20.",
-      "version": "v0.4.1",
+      "version": "v0.4.4",
       "category": "Utilities",
-      "checksum": "c4c24a5c1e03cf9f8edf752567041270f6e99fa73af98bce8e884a7e20286c7d",
+      "checksum": "338c325b5a237e6ecee6aeda4dd0e50e5bc5676aef7a59a4c9079308048f3680",
       "homepage": "https://github.com/gasb07/ps4mount",
       "release_type": "stable",
-      "released": "2026-10-13T02:06:42Z"
+      "released": "2026-10-13T21:17:27Z"
     },
     {
       "name": "Orbit Store (Beta)",
       "filename": "orbit_store.elf",
-      "url": "https://github.com/saawant12/orbit-store-ps5/releases/download/v1.2.0/orbit_store.elf",
+      "url": "https://github.com/saawant12/orbit-store-ps5/releases/download/v1.3.0/orbit_store.elf",
       "description": "A modern PS5 download manager with a native TV app, resumable downloads and phone controls.",
-      "version": "v1.2.0",
+      "version": "v1.3.0",
       "category": "Utilities",
-      "checksum": "86778d4fa830b1ff46379d167568c32294764cb05bc06ce6b05edc9db2a91691",
+      "checksum": "553b39e7503ec141f6a015b7939c83e93fe8f05dee176e42c7e3bc026b0ea519",
       "release_type": "stable",
-      "released": "2026-10-11T19:47:53Z",
+      "released": "2026-10-13T20:46:16Z",
       "homepage": "https://github.com/saawant12/orbit-store-ps5",
       "catalog": "Orbit Store",
       "catalog_url": "https://raw.githubusercontent.com/saawant12/orbit-store-ps5/refs/heads/main/payloads.json"
