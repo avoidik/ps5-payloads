@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-15T04:38:34.602Z",
+  "generated_at": "2026-10-15T11:29:20.206Z",
   "_pldmgr_parser_guard": {},
   "payloads": [
     {
@@ -65,15 +65,15 @@
     },
     {
       "name": "PS5 Upload Helper",
-      "filename": "ps5upload-7.0.22.elf",
-      "url": "https://github.com/phantomptr/ps5upload/releases/download/v7.0.22/ps5upload-7.0.22.elf",
+      "filename": "ps5upload-7.0.23.elf",
+      "url": "https://github.com/phantomptr/ps5upload/releases/download/v7.0.23/ps5upload-7.0.23.elf",
       "description": "Console-side helper for the PS5 Upload app on PC, Mac, Android or web. Resumable uploads, package installs, file and game management on port 9120. Enter the 6-digit code it shows in the app to pair. Keep the app and helper on the same version.",
-      "version": "v7.0.22",
+      "version": "v7.0.23",
       "category": "Utilities",
-      "checksum": "e382353612fdf85b2fdbfea75f4f5ebad260c767faa51b0446118646a6db0267",
+      "checksum": "419b56a10336dda8f4a28672271dfb635e74b05966cc08d44305e70f862dc110",
       "homepage": "https://github.com/phantomptr/ps5upload",
       "release_type": "stable",
-      "released": "2026-10-12T09:47:07Z"
+      "released": "2026-10-15T07:48:16Z"
     },
     {
       "name": "ShadowMountPlus",
