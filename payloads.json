@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-14T21:41:00.487Z",
+  "generated_at": "2026-10-15T04:38:34.602Z",
   "_pldmgr_parser_guard": {},
   "payloads": [
     {
@@ -90,14 +90,14 @@
     {
       "name": "PS4Mount",
       "filename": "ps4mount.elf",
-      "url": "https://github.com/gasb07/ps4mount/releases/download/v0.5.0/ps4mount.elf",
+      "url": "https://github.com/gasb07/ps4mount/releases/download/v0.5.1/ps4mount.elf",
       "description": "Plays PS4 fake PKGs straight from an exFAT USB drive without installing them. Put the game and update .pkg files in the drive root; it adds them to the home screen. Web panel on port 8770 and in the Media tab. Needs fake PKG support (e.g. etaHEN with kstuff) and kernel log access (klogsrv on port 3232, or no other payload reading /dev/klog). Load after every boot. Tested on firmware 13.20.",
-      "version": "v0.5.0",
+      "version": "v0.5.1",
       "category": "Utilities",
-      "checksum": "656988c71c6057207986498083c1fd219b17a94d7d98f94dde50162680c33787",
+      "checksum": "23ef99696af8da139fafd13e97e0d1f94968f2e745cb79e45a6aa71bc6391549",
       "homepage": "https://github.com/gasb07/ps4mount",
       "release_type": "stable",
-      "released": "2026-10-14T17:04:46Z"
+      "released": "2026-10-15T01:40:13Z"
     },
     {
       "name": "Orbit Store (Beta)",
