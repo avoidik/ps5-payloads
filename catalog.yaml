@@ -99,19 +99,31 @@ payloads:
       repo: tsuramatsu1/apr-emu-updater
       asset: '^apr_emu_updater(_v[\d.]+)?\.elf$'
 
-  - id: ps5sx2
-    name: PS5SX2
+  - id: ps5sx2-helper
+    name: PS5SX2 Helper
     category: Emulators
     description: >-
-      All-in-one payload for PS5SX2, a PCSX2 port for PS5. It combines the helper that jailbreaks the
-      emulator, the installer that keeps it up to date from GitHub, and the disc auto-launcher. Needs
-      kstuff and ShadowMountPlus, plus your own PS2 BIOS in /data/PCSX2/bios and games in
-      /data/PCSX2/games.
+      Helper for PS5SX2, a PCSX2 port for PS5. It jailbreaks the emulator, mounts /data into it, and
+      shows PS2 discs as tiles on the home screen. After every restart load ShadowMountPlus first, then
+      this helper. Load only one helper.
     extension: .elf
     source:
       type: github
       repo: Swordpdf/PS5SX2
-      asset: '^ps5sx2-bot\.elf$'
+      asset: '^PS5SXHelper\.elf$'
+
+  - id: ps5sx2-installer
+    name: PS5SX2 Installer
+    category: Emulators
+    description: >-
+      Installs or updates PS5SX2, a PCSX2 port for PS5, from GitHub and launches it. Needs your own
+      PS2 BIOS in /data/PCSX2/bios and games in /data/PCSX2/games.
+    requires: [ps5sx2-helper]
+    extension: .elf
+    source:
+      type: github
+      repo: Swordpdf/PS5SX2
+      asset: '^PS5SX2Installer\.elf$'
 
   - id: ps5upload
     name: PS5 Upload Helper
