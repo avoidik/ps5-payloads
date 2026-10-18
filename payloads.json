@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-18T20:42:42.090Z",
+  "generated_at": "2026-10-18T23:57:06.307Z",
   "_pldmgr_parser_guard": {},
   "payloads": [
     {
@@ -52,28 +52,41 @@
       "released": "2026-08-29T09:54:19Z"
     },
     {
-      "name": "PS5SX2",
-      "filename": "ps5sx2-bot.elf",
-      "url": "https://github.com/Swordpdf/PS5SX2/releases/download/vk-285-163/ps5sx2-bot.elf",
-      "description": "All-in-one payload for PS5SX2, a PCSX2 port for PS5. It combines the helper that jailbreaks the emulator, the installer that keeps it up to date from GitHub, and the disc auto-launcher. Needs kstuff and ShadowMountPlus, plus your own PS2 BIOS in /data/PCSX2/bios and games in /data/PCSX2/games.",
-      "version": "vk-285-163",
+      "name": "PS5SX2 Helper",
+      "filename": "PS5SXHelper.elf",
+      "url": "https://github.com/Swordpdf/PS5SX2/releases/download/vk-285-171/PS5SXHelper.elf",
+      "description": "Helper for PS5SX2, a PCSX2 port for PS5. It jailbreaks the emulator, mounts /data into it, and shows PS2 discs as tiles on the home screen. After every restart load ShadowMountPlus first, then this helper. Load only one helper.",
+      "version": "vk-285-171",
       "category": "Emulators",
-      "checksum": "3420cdb5c826014b22b8ca8fa60a2026f0d9f91d3f5a5b818d4c98373eccb123",
+      "checksum": "9fa809eb10e1fe5149b2d031f55497d7b050e950ec5aec38bac7ebe1ef6da153",
       "homepage": "https://github.com/Swordpdf/PS5SX2",
       "release_type": "stable",
-      "released": "2026-10-11T20:40:21Z"
+      "released": "2026-10-14T02:12:24Z"
+    },
+    {
+      "name": "PS5SX2 Installer",
+      "filename": "PS5SX2Installer.elf",
+      "url": "https://github.com/Swordpdf/PS5SX2/releases/download/vk-285-171/PS5SX2Installer.elf",
+      "description": "Installs or updates PS5SX2, a PCSX2 port for PS5, from GitHub and launches it. Needs your own PS2 BIOS in /data/PCSX2/bios and games in /data/PCSX2/games. Requires: PS5SX2 Helper.",
+      "version": "vk-285-171",
+      "category": "Emulators",
+      "checksum": "6b1be3ea24ec8144b27b2a1f3e279cd17574f3093e9431abf8579dcc6c0bfae9",
+      "requires": "PS5SX2 Helper",
+      "homepage": "https://github.com/Swordpdf/PS5SX2",
+      "release_type": "stable",
+      "released": "2026-10-14T02:12:24Z"
     },
     {
       "name": "PS5 Upload Helper",
-      "filename": "ps5upload-7.1.4.elf",
-      "url": "https://github.com/phantomptr/ps5upload/releases/download/v7.1.4/ps5upload-7.1.4.elf",
+      "filename": "ps5upload-7.1.5.elf",
+      "url": "https://github.com/phantomptr/ps5upload/releases/download/v7.1.5/ps5upload-7.1.5.elf",
       "description": "Console-side helper for the PS5 Upload app on PC, Mac, Android or web. Resumable uploads, package installs, file and game management on port 9120. Enter the 6-digit code it shows in the app to pair. Keep the app and helper on the same version.",
-      "version": "v7.1.4",
+      "version": "v7.1.5",
       "category": "Utilities",
-      "checksum": "71398d65f2f7cd3d0a35ab16f7aee1f51f0f2d2d5b8ab3a184a62b68805cf775",
+      "checksum": "1d72cb537e93546168a9a6dabd1c535fb96f997d4d921c99b3f8fe32d91a471c",
       "homepage": "https://github.com/phantomptr/ps5upload",
       "release_type": "stable",
-      "released": "2026-10-18T19:54:48Z"
+      "released": "2026-10-18T22:43:54Z"
     },
     {
       "name": "ShadowMountPlus",
