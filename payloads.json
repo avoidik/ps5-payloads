@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-21T04:46:06.636Z",
+  "generated_at": "2026-10-21T17:12:12.163Z",
   "_pldmgr_parser_guard": {},
   "payloads": [
     {
@@ -85,20 +85,20 @@
       "category": "Utilities",
       "checksum": "d82120553ab8826f64e1ce3fa3137a51dc28e8ee99711ebbe783d5b86bf7f814",
       "homepage": "https://github.com/phantomptr/ps5upload",
-      "release_type": "pre-release",
+      "release_type": "stable",
       "released": "2026-10-21T04:39:43Z"
     },
     {
       "name": "ShadowMountPlus",
       "filename": "shadowmountplus.elf",
-      "url": "https://github.com/drakmor/ShadowMountPlus/releases/download/1.7beta6-fix2/shadowmountplus.elf",
+      "url": "https://github.com/drakmor/ShadowMountPlus/releases/download/1.7beta7/shadowmountplus.elf",
       "description": "Background auto-mounter that detects, mounts and installs game dumps and images from internal or external storage (UFS, exFAT, PFS). Needs kstuff-lite 1.07 or newer; load at every boot. Settings in /data/shadowmount/config.ini.",
-      "version": "1.7beta6-fix2",
+      "version": "1.7beta7",
       "category": "Utilities",
-      "checksum": "ec87ad20f78be2d7cb82e9d77e72352b079e049baac3c1a211960ccd6f252e62",
+      "checksum": "a8f9d7f76e8749912508ade0cd5c78076b5bbf1271813c78c80c3d3d9d4777ee",
       "homepage": "https://github.com/drakmor/ShadowMountPlus",
-      "release_type": "pre-release",
-      "released": "2026-10-21T01:21:50Z"
+      "release_type": "stable",
+      "released": "2026-10-21T11:56:24Z"
     },
     {
       "name": "PS4Mount",
