@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-22T11:52:11.292Z",
+  "generated_at": "2026-10-22T21:35:41.350Z",
   "_pldmgr_parser_guard": {},
   "payloads": [
     {
@@ -78,15 +78,15 @@
     },
     {
       "name": "PS5 Upload Helper",
-      "filename": "ps5upload-7.1.16.elf",
-      "url": "https://github.com/phantomptr/ps5upload/releases/download/v7.1.16/ps5upload-7.1.16.elf",
+      "filename": "ps5upload-7.1.18.elf",
+      "url": "https://github.com/phantomptr/ps5upload/releases/download/v7.1.18/ps5upload-7.1.18.elf",
       "description": "Console-side helper for the PS5 Upload app on PC, Mac, Android or web. Resumable uploads, package installs, file and game management on port 9120. Enter the 6-digit code it shows in the app to pair. Keep the app and helper on the same version.",
-      "version": "v7.1.16",
+      "version": "v7.1.18",
       "category": "Utilities",
-      "checksum": "df095f4492602e5824297fb2cb45802ca4d415006b2ce8222b9940cb942bd880",
+      "checksum": "360529ccbd9f00b9341f8ca72ed15851e3324ff69341304b7e93e12977aa7470",
       "homepage": "https://github.com/phantomptr/ps5upload",
-      "release_type": "pre-release",
-      "released": "2026-10-22T10:47:03Z"
+      "release_type": "stable",
+      "released": "2026-10-22T16:51:13Z"
     },
     {
       "name": "ShadowMountPlus",
@@ -115,13 +115,13 @@
     {
       "name": "Orbit Store (Beta)",
       "filename": "orbit_store.elf",
-      "url": "https://github.com/saawant12/orbit-store-ps5/releases/download/v1.3.5/orbit_store.elf",
+      "url": "https://github.com/saawant12/orbit-store-ps5/releases/download/v1.4.0/orbit_store.elf",
       "description": "A modern PS5 download manager with a native TV app, resumable downloads and phone controls.",
-      "version": "v1.3.5",
+      "version": "v1.4.0",
       "category": "Utilities",
-      "checksum": "561a8e8015d9564d44e32b58a84e1294ea7043e96146110801a9f62ad99ac93b",
+      "checksum": "e43c6272b3519fc2ec8b9373a484f2c2adb9669d7652567661149da741ab6d94",
       "release_type": "stable",
-      "released": "2026-10-14T21:17:34Z",
+      "released": "2026-10-22T21:11:50Z",
       "homepage": "https://github.com/saawant12/orbit-store-ps5",
       "catalog": "Orbit Store",
       "catalog_url": "https://raw.githubusercontent.com/saawant12/orbit-store-ps5/refs/heads/main/payloads.json"
