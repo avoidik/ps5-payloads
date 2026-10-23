@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-23T11:38:42.550Z",
+  "generated_at": "2026-10-23T17:06:49.647Z",
   "_pldmgr_parser_guard": {},
   "payloads": [
     {
@@ -85,7 +85,7 @@
       "category": "Utilities",
       "checksum": "c5e68afd6c3101a50b6a425350a7d3fec9ab5049cf8bed9ced53f4548598da07",
       "homepage": "https://github.com/phantomptr/ps5upload",
-      "release_type": "pre-release",
+      "release_type": "stable",
       "released": "2026-10-23T09:58:44Z"
     },
     {
