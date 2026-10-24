@@ -1,6 +1,7 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-24T08:14:24.752Z",
+  "generated_at": "2026-10-24T08:40:06.256Z",
+  "files_url": "https://avoidik.github.io/ps5-payloads/files/",
   "_pldmgr_parser_guard": {},
   "payloads": [
     {
@@ -125,6 +126,78 @@
       "released": "2025-03-09T14:25:13Z"
     },
     {
+      "name": "Fan Target 85C",
+      "filename": "fan_target_85c.elf",
+      "url": "https://avoidik.github.io/ps5-payloads/files/fan_target_85c.elf",
+      "description": "Sets the fan controller's target temperature to 85C instead of the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one version only: installing another temperature replaces this one.",
+      "version": "0.1",
+      "category": "Utilities",
+      "checksum": "c37019c351c1c5b05b43adbac29d85bfd25f8c0ab9d94371cacab1945d8e0fd0",
+      "homepage": "https://github.com/drakmor/fan_target",
+      "release_type": "stable",
+      "released": "2026-08-04T17:00:21Z"
+    },
+    {
+      "name": "Fan Target 80C",
+      "filename": "fan_target_80c.elf",
+      "url": "https://avoidik.github.io/ps5-payloads/files/fan_target_80c.elf",
+      "description": "Sets the fan controller's target temperature to 80C instead of the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one version only: installing another temperature replaces this one.",
+      "version": "0.1",
+      "category": "Utilities",
+      "checksum": "ccf2e709218f31cd9e6a0705c99646b8f030b877687df8377982a2f6ca10216e",
+      "homepage": "https://github.com/drakmor/fan_target",
+      "release_type": "stable",
+      "released": "2026-08-04T17:00:21Z"
+    },
+    {
+      "name": "Fan Target 75C",
+      "filename": "fan_target_75c.elf",
+      "url": "https://avoidik.github.io/ps5-payloads/files/fan_target_75c.elf",
+      "description": "Sets the fan controller's target temperature to 75C instead of the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one version only: installing another temperature replaces this one.",
+      "version": "0.1",
+      "category": "Utilities",
+      "checksum": "4b52e09c48ebed1f369221c290e8ec4a9fdb2a477b7b7f44a1b8646958d9f69b",
+      "homepage": "https://github.com/drakmor/fan_target",
+      "release_type": "stable",
+      "released": "2026-08-04T17:00:21Z"
+    },
+    {
+      "name": "Fan Target 70C",
+      "filename": "fan_target_70c.elf",
+      "url": "https://avoidik.github.io/ps5-payloads/files/fan_target_70c.elf",
+      "description": "Sets the fan controller's target temperature to 70C instead of the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one version only: installing another temperature replaces this one.",
+      "version": "0.1",
+      "category": "Utilities",
+      "checksum": "a9ad8502123799d58f8ddd9882d842f524c4ecc3ea6743a73c6dcdffd0bf30e0",
+      "homepage": "https://github.com/drakmor/fan_target",
+      "release_type": "stable",
+      "released": "2026-08-04T17:00:21Z"
+    },
+    {
+      "name": "Fan Target 65C",
+      "filename": "fan_target_65c.elf",
+      "url": "https://avoidik.github.io/ps5-payloads/files/fan_target_65c.elf",
+      "description": "Sets the fan controller's target temperature to 65C instead of the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one version only: installing another temperature replaces this one.",
+      "version": "0.1",
+      "category": "Utilities",
+      "checksum": "0bedeb564947530d09d1dfb27df63c2a09eaa7f51faf3ddcc90b3fb2870e6312",
+      "homepage": "https://github.com/drakmor/fan_target",
+      "release_type": "stable",
+      "released": "2026-08-04T17:00:21Z"
+    },
+    {
+      "name": "PS5X360 Helper",
+      "filename": "PS5X360-Helper.elf",
+      "url": "https://github.com/BrinooTk/PS5X360/releases/download/v1.0.2/PS5X360-Helper.elf",
+      "description": "Autoload helper for PS5X360, an Xbox 360 emulator for PS5 based on Xenia Canary. It keeps the PS5X360 app up to date from its GitHub releases. Install the app first (PS5X360 download).",
+      "version": "v1.0.2",
+      "category": "Emulators",
+      "checksum": "4a0250329e63b376f620511c4b6e2c6a2eb959e056824abde27947bf53f07b59",
+      "homepage": "https://github.com/BrinooTk/PS5X360",
+      "release_type": "stable",
+      "released": "2026-10-22T23:27:57Z"
+    },
+    {
       "name": "Orbit Store (Beta)",
       "filename": "orbit_store.elf",
       "url": "https://github.com/saawant12/orbit-store-ps5/releases/download/v1.4.0/orbit_store.elf",
@@ -147,6 +220,56 @@
       "requires": "LegacyJB",
       "homepage": "https://github.com/Phoenixx1202/Spectrum-Library",
       "release_type": "inactive"
+    }
+  ],
+  "downloads": [
+    {
+      "name": "PS5X360",
+      "file": "PPSA50011.zip",
+      "download": "https://github.com/BrinooTk/PS5X360/releases/download/v1.0.2/PPSA50011.zip",
+      "description": "Xbox 360 emulator app for PS5, based on Xenia Canary. Not a payload: extract the zip and copy the whole PPSA50011 folder to /data/homebrew/ over FTP, then let ShadowMountPlus register it. Needs etaHEN, kstuff and ShadowMountPlus, plus your own Xbox 360 games.",
+      "version": "v1.0.2",
+      "category": "Emulators",
+      "checksum": "230359c2638f99add3972147e1690e62d8984a37c00181501680bdda7c1096c8",
+      "homepage": "https://github.com/BrinooTk/PS5X360",
+      "release_type": "stable",
+      "released": "2026-10-22T23:27:57Z"
+    },
+    {
+      "name": "AMPR Emu",
+      "file": "libSceAmpr.sprx",
+      "download": "https://github.com/drakmor/ampr_emu/releases/download/0.4.2.1/libSceAmpr.sprx",
+      "description": "APR Emu (AMPR userland emulation) library, libSceAmpr.sprx, which some games need. Not a payload: ShadowMountPlus downloads the latest build by itself, and APR Emu Updater picks a build per game. Download it only to install it by hand.",
+      "version": "0.4.2.1",
+      "category": "Emulators",
+      "checksum": "69e6c4d5e4f5fb83c9e01815db5861c4c75734acbf4595cafa50d4c218116d1a",
+      "homepage": "https://github.com/drakmor/ampr_emu",
+      "release_type": "stable",
+      "released": "2026-09-06T12:12:31Z"
+    },
+    {
+      "name": "PlayGo Stub",
+      "file": "libScePlayGo.sprx",
+      "download": "https://github.com/drakmor/pgo_stub/releases/download/0.6/libScePlayGo.sprx",
+      "description": "Lightweight replacement for a game's PlayGo runtime library, libScePlayGo.sprx. It reports all content chunks and languages as installed, so titles that wait on PlayGo can carry on. Not a payload: it replaces the game's own module. Optional settings in playgo_stub.dat in the game folder (/app0).",
+      "version": "0.6",
+      "category": "Emulators",
+      "checksum": "f5fdb0ed6cc7413e6dcac79a62e0efd8cfbae04cca0bf932e7a741aed850d213",
+      "homepage": "https://github.com/drakmor/pgo_stub",
+      "release_type": "stable",
+      "released": "2026-10-10T17:01:35Z"
+    },
+    {
+      "name": "DLC Emu",
+      "file": "dlc_emu_0.3.zip",
+      "download": "https://github.com/drakmor/dlc_emu/releases/download/0.3/dlc_emu_0.3.zip",
+      "description": "Replacement modules (libSceAppContent, libSceNpEntitlementAccess, libSceGameUpdate) that make a game see the DLC listed in dlc_emu.ini in its folder (/app0) as owned. Not a payload: the zip has normal and logging builds of the modules, an example dlc_emu.ini and a helper script.",
+      "version": "0.3",
+      "category": "Emulators",
+      "checksum": "c9f353ae4c7951de57ae3b6f5b3be1683f72866e2137121bb548d061d04f265e",
+      "homepage": "https://github.com/drakmor/dlc_emu",
+      "release_type": "stable",
+      "released": "2026-06-28T12:11:32Z"
     }
   ]
 }
