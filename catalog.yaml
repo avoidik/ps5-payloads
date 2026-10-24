@@ -397,3 +397,17 @@ payloads:
       type: github
       repo: cobanov/PS5LM
       asset: '^ps5lm-app-v[\d.]+\.zip$'
+
+  - id: neoenabler
+    name: NeoEnabler
+    category: Utilities
+    description: >-
+      Starts PS4 games without PS4 Pro support in Pro mode, so game patches can raise them to higher
+      resolutions, up to native 4K; only useful for games that have a NeoEnabler patch. Load
+      ps-patch-system first, then this, after every boot. Pick patches in the panel on port 8765 or
+      in the Media tab.
+    extension: .elf
+    source:
+      type: github
+      repo: gasb07/NeoEnabler
+      asset: '^neo-manager\.elf$'
