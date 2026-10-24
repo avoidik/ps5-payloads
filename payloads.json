@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-24T10:59:20.663Z",
+  "generated_at": "2026-10-24T15:04:01.359Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
   "groups": {"fan-target":{"name":"Fan Target","description":"Sets the fan controller's target temperature below the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one variant only: lower targets make the fan react earlier and run faster; 85C is a good start."}},
   "payloads": [
@@ -86,14 +86,14 @@
     {
       "id": "ps5upload",
       "name": "PS5 Upload Helper",
-      "filename": "ps5upload-7.3.0.elf",
-      "url": "https://github.com/phantomptr/ps5upload/releases/download/v7.3.0/ps5upload-7.3.0.elf",
+      "filename": "ps5upload-7.3.1.elf",
+      "url": "https://github.com/phantomptr/ps5upload/releases/download/v7.3.1/ps5upload-7.3.1.elf",
       "description": "Console-side helper for the PS5 Upload app on PC, Mac, Android or web. Resumable uploads, package installs, file and game management on port 9120. Enter the 6-digit code it shows in the app to pair. Keep the app and helper on the same version.",
-      "version": "v7.3.0",
+      "version": "v7.3.1",
       "category": "Utilities",
-      "checksum": "ded4faa584fa2ac76d34210b7df01cee1359c47eeb0bae5c6f8d7c03a3e1a3cd",
+      "checksum": "999ee1ece7a0b41d41727d9cfab71eb6f6de6aa434f866792c4363ece483eed7",
       "source": "https://github.com/phantomptr/ps5upload",
-      "last_update": "2026-10-24T10:22:39Z",
+      "last_update": "2026-10-24T14:15:33Z",
       "release_type": "pre-release"
     },
     {
@@ -221,6 +221,19 @@
       "checksum": "4a0250329e63b376f620511c4b6e2c6a2eb959e056824abde27947bf53f07b59",
       "source": "https://github.com/BrinooTk/PS5X360",
       "last_update": "2026-10-22T23:27:57Z",
+      "release_type": "stable"
+    },
+    {
+      "id": "neoenabler",
+      "name": "NeoEnabler",
+      "filename": "neo-manager.elf",
+      "url": "https://github.com/gasb07/NeoEnabler/releases/download/v0.5.1/neo-manager.elf",
+      "description": "Starts PS4 games without PS4 Pro support in Pro mode, so game patches can raise them to higher resolutions, up to native 4K; only useful for games that have a NeoEnabler patch. Load ps-patch-system first, then this, after every boot. Pick patches in the panel on port 8765 or in the Media tab.",
+      "version": "v0.5.1",
+      "category": "Utilities",
+      "checksum": "105a48f1f1382c224f2f3227d28b02f8df79c3e07efe9fa79fb3f7b76cc41b64",
+      "source": "https://github.com/gasb07/NeoEnabler",
+      "last_update": "2026-10-23T22:28:26Z",
       "release_type": "stable"
     },
     {
