@@ -1,7 +1,8 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-24T09:11:53.438Z",
+  "generated_at": "2026-10-24T09:20:40.268Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
+  "groups": {"fan-target":{"name":"Fan Target","description":"Sets the fan controller's target temperature below the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one variant only: lower targets make the fan react earlier and run faster; 85C is a good start."}},
   "payloads": [
     {
       "id": "legacyjb",
@@ -145,7 +146,9 @@
       "checksum": "c37019c351c1c5b05b43adbac29d85bfd25f8c0ab9d94371cacab1945d8e0fd0",
       "source": "https://github.com/drakmor/fan_target",
       "last_update": "2026-08-04T17:00:21Z",
-      "release_type": "stable"
+      "release_type": "stable",
+      "group": "fan-target",
+      "variant": "85C"
     },
     {
       "id": "fan-target-80c",
@@ -158,7 +161,9 @@
       "checksum": "ccf2e709218f31cd9e6a0705c99646b8f030b877687df8377982a2f6ca10216e",
       "source": "https://github.com/drakmor/fan_target",
       "last_update": "2026-08-04T17:00:21Z",
-      "release_type": "stable"
+      "release_type": "stable",
+      "group": "fan-target",
+      "variant": "80C"
     },
     {
       "id": "fan-target-75c",
@@ -171,7 +176,9 @@
       "checksum": "4b52e09c48ebed1f369221c290e8ec4a9fdb2a477b7b7f44a1b8646958d9f69b",
       "source": "https://github.com/drakmor/fan_target",
       "last_update": "2026-08-04T17:00:21Z",
-      "release_type": "stable"
+      "release_type": "stable",
+      "group": "fan-target",
+      "variant": "75C"
     },
     {
       "id": "fan-target-70c",
@@ -184,7 +191,9 @@
       "checksum": "a9ad8502123799d58f8ddd9882d842f524c4ecc3ea6743a73c6dcdffd0bf30e0",
       "source": "https://github.com/drakmor/fan_target",
       "last_update": "2026-08-04T17:00:21Z",
-      "release_type": "stable"
+      "release_type": "stable",
+      "group": "fan-target",
+      "variant": "70C"
     },
     {
       "id": "fan-target-65c",
@@ -197,7 +206,9 @@
       "checksum": "0bedeb564947530d09d1dfb27df63c2a09eaa7f51faf3ddcc90b3fb2870e6312",
       "source": "https://github.com/drakmor/fan_target",
       "last_update": "2026-08-04T17:00:21Z",
-      "release_type": "stable"
+      "release_type": "stable",
+      "group": "fan-target",
+      "variant": "65C"
     },
     {
       "id": "ps5x360-helper",
