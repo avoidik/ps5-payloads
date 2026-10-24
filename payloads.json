@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-24T09:20:40.268Z",
+  "generated_at": "2026-10-24T10:59:20.663Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
   "groups": {"fan-target":{"name":"Fan Target","description":"Sets the fan controller's target temperature below the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one variant only: lower targets make the fan react earlier and run faster; 85C is a good start."}},
   "payloads": [
@@ -86,15 +86,15 @@
     {
       "id": "ps5upload",
       "name": "PS5 Upload Helper",
-      "filename": "ps5upload-7.2.0.elf",
-      "url": "https://github.com/phantomptr/ps5upload/releases/download/v7.2.0/ps5upload-7.2.0.elf",
+      "filename": "ps5upload-7.3.0.elf",
+      "url": "https://github.com/phantomptr/ps5upload/releases/download/v7.3.0/ps5upload-7.3.0.elf",
       "description": "Console-side helper for the PS5 Upload app on PC, Mac, Android or web. Resumable uploads, package installs, file and game management on port 9120. Enter the 6-digit code it shows in the app to pair. Keep the app and helper on the same version.",
-      "version": "v7.2.0",
+      "version": "v7.3.0",
       "category": "Utilities",
-      "checksum": "a8a20057b43fae225df7adfdda046911d81886a72fc3223e831c2999db948331",
+      "checksum": "ded4faa584fa2ac76d34210b7df01cee1359c47eeb0bae5c6f8d7c03a3e1a3cd",
       "source": "https://github.com/phantomptr/ps5upload",
-      "last_update": "2026-10-24T08:05:52Z",
-      "release_type": "stable"
+      "last_update": "2026-10-24T10:22:39Z",
+      "release_type": "pre-release"
     },
     {
       "id": "shadowmountplus",
