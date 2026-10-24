@@ -33,6 +33,10 @@
 
   .section-title { margin: 2.5rem 0 .25rem; font-size: 1.25rem; }
   .section-note { margin: 0 0 1rem; color: var(--muted); font-size: 13px; }
+  .link-list { display: grid; gap: .5rem; margin: 1rem 0 0; padding: 0; list-style: none; }
+  .link-list li { padding: .75rem 1rem; background: var(--card); border: 1px solid var(--line); border-radius: 10px; }
+  .link-list a { font-weight: 600; }
+  .link-list p { margin: .2rem 0 0; color: var(--muted); font-size: 13px; }
   .group-head { display: flex; flex-direction: column; gap: .4rem; margin: 1.25rem 0 .75rem; }
   .group-head h3 { margin: 0; font-size: 1rem; }
   .group-head .source { margin: 0; }
@@ -93,6 +97,11 @@
   <section id="external" hidden>
     <h2 class="section-title">From other catalogs</h2>
     <p class="section-note">Included as their authors publish them. Files are checksummed here, but not reviewed.</p>
+  </section>
+
+  <section id="links" hidden>
+    <h2 class="section-title">Useful links</h2>
+    <ul id="links-list" class="link-list"></ul>
   </section>
 
   <section id="inactive" hidden>

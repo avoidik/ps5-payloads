@@ -13,6 +13,11 @@
 #                              repo of each file's URL, else of the catalog's URL)
 #                Files are still downloaded and checksummed; entries that are not
 #                .elf/.bin or fail a check are skipped with a warning.
+#   links        useful links shown on the site (not in Payload Manager):
+#                  - name: link text                  (required)
+#                    url: any http(s) address, or
+#                    repo: owner/name                 (a GitHub repository)
+#                    description: one line            (default for repo: GitHub's description)
 #
 # Per-entry fields:
 #   id           unique key, referenced by `requires`; published as the payload id that Payload
@@ -45,6 +50,16 @@
 name: PS5 Payloads
 output: payloads.json
 base_url: https://avoidik.github.io/ps5-payloads/
+
+links:
+  - name: PS5PKGTool
+    repo: pearlxcore/PS5PKGTool
+  - name: ps5-commander
+    url: https://commander.s.gy/ps5
+    description: >-
+      A dual-pane file manager for the PS5 with full gamepad support. It supports internal and
+      external storage devices, secure file copying, archives, game images, a built-in text editor,
+      and the ability to manually mount games from folders.
 
 external:
   - name: Orbit Store

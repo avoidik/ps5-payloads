@@ -75,6 +75,17 @@ function loadCatalog(file) {
     if (!doc.base_url.endsWith('/')) doc.base_url += '/';
   }
 
+  // Useful links for the site: { name, url | repo, description? }
+  doc.links ??= [];
+  if (!Array.isArray(doc.links)) fail(`${file}: "links" must be a list`);
+  doc.links.forEach((l, i) => {
+    if (!l || typeof l.name !== 'string' || !l.name.trim()) fail(`links[${i}]: "name" is required`);
+    if ((l.url === undefined) === (l.repo === undefined)) fail(`links[${i}]: set exactly one of "url" or "repo"`);
+    if (l.url !== undefined && (typeof l.url !== 'string' || !/^https?:\/\//.test(l.url))) fail(`links[${i}]: "url" must be an http(s) URL`);
+    if (l.repo !== undefined && (typeof l.repo !== 'string' || !/^[\w.-]+\/[\w.-]+$/.test(l.repo))) fail(`links[${i}]: "repo" must be "owner/name"`);
+    if (l.description !== undefined && typeof l.description !== 'string') fail(`links[${i}]: "description" must be a string`);
+  });
+
   doc.external ??= [];
   if (!Array.isArray(doc.external)) fail(`${file}: "external" must be a list`);
   doc.external.forEach((c, i) => {
@@ -455,7 +466,16 @@ function buildDownloadEntry(p, up) {
   return entry;
 }
 
-function render(sourceName, entries, inactive, downloads, filesUrl) {
+// Site-only links. "href" instead of "url" and no "filename", so Payload Manager skips them.
+async function resolveLink(l) {
+  const link = { name: l.name.trim(), href: l.url ?? `https://github.com/${l.repo}` };
+  let description = l.description?.trim();
+  if (!description && l.repo) description = (await githubGet(`https://api.github.com/repos/${l.repo}`)).description?.trim();
+  if (description) link.description = description;
+  return link;
+}
+
+function render(sourceName, entries, inactive, downloads, links, filesUrl) {
   const s = JSON.stringify;
   const items = (list) => list.map((e) => {
     const fields = Object.entries(e).map(([k, v]) => `      ${s(k)}: ${s(v)}`);
@@ -472,6 +492,7 @@ function render(sourceName, entries, inactive, downloads, filesUrl) {
     // After "payloads": tools that read only that list, like Payload Manager, ignore these
     ...(inactive.length ? ['  ],', '  "inactive": [', items(inactive)] : []),
     ...(downloads.length ? ['  ],', '  "downloads": [', items(downloads)] : []),
+    ...(links.length ? ['  ],', '  "links": [', items(links)] : []),
     '  ]',
     '}',
     '',
@@ -543,7 +564,8 @@ async function main() {
 
   const inactive = catalog.payloads.filter((p) => !activeIds.has(p.id)).map((p) => buildInactiveEntry(p, nameById));
   const filesUrl = hosted.length ? `${catalog.base_url}files/` : null;
-  const out = render(sourceName, resolved, inactive, downloads, filesUrl);
+  const links = await Promise.all(catalog.links.map(resolveLink));
+  const out = render(sourceName, resolved, inactive, downloads, links, filesUrl);
   JSON.parse(out); // sanity check: must remain valid JSON
 
   if (opts.dryRun) {

@@ -50,6 +50,10 @@ external:
 
 Their payloads are added after ours, tagged with the catalog's `name`, and the site shows them in a separate "From other catalogs" section. Each file is still downloaded and SHA-256 checked, and must match the catalog's own checksum if it gives one. Entries that aren't `.elf`/`.bin`, fail a check, or reuse a filename are skipped with a warning. A catalog that can't be downloaded fails the build.
 
+## Useful links
+
+`links:` at the top of `catalog.yaml` lists other tools and pages for the site's "Useful links" section. Each link has a `name`, and either a `url` or a GitHub `repo` (`owner/name`), plus an optional `description`. For a `repo` without a description, the generator uses GitHub's own repo description. Links go into a `links` list in `payloads.json` with an `href` key instead of `url`, so Payload Manager ignores them.
+
 ## What the output contains
 
 `payloads.json` follows Payload Manager's custom repository format (version 0.6 and later). For each payload the generator writes:

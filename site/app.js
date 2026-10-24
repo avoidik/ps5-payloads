@@ -112,6 +112,12 @@ fetch('payloads.json', { cache: 'no-cache' })
     document.getElementById('downloads').hidden = downloads.length === 0;
     document.getElementById('downloads-list').append(...downloads.map(card));
 
+    const links = data.links ?? [];
+    document.getElementById('links').hidden = links.length === 0;
+    document.getElementById('links-list').append(...links.map((l) => el('li', {},
+      el('a', { href: l.href, target: '_blank', rel: 'noopener', textContent: `${l.name} ↗` }),
+      l.description ? el('p', { textContent: l.description }) : null)));
+
     // Disabled entries, at the bottom of the page
     document.getElementById('inactive').hidden = inactive.length === 0;
     document.getElementById('inactive-list').append(...inactive.map(card));
