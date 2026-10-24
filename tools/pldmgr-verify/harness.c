@@ -3,9 +3,9 @@
  * verify.mjs compiles it together with Payload Manager's unmodified sources, so
  * every command below runs the same code the console does:
  *
- *   harness add <url>                    sources_add()
- *   harness list                         sources_multi_repository_list_json()
- *   harness install <filename> <source>  sources_multi_repository_install()
+ *   harness add <url>                  sources_add()
+ *   harness list                       sources_multi_repository_list_json()
+ *   harness install <source_url> <id>  sources_repo_install(), into a new slot
  *
  * Results go to stdout; Payload Manager's log lines go to stderr.
  */
@@ -15,12 +15,12 @@
 #include <string.h>
 #include <curl/curl.h>
 
+#include "autoload.h"
 #include "config.h"
-#include "payload_mgr.h"
 #include "pldmgr.h"
 #include "sources.h"
 
-#define RESPONSE_BUFFER_SIZE 1048576 /* same as http_server.c */
+#define RESPONSE_BUFFER_SIZE 4194304 /* same as http_server.c */
 
 /* ── Stand-ins for console-only parts that source handling calls ── */
 
@@ -31,10 +31,15 @@ void pldmgr_log(const char *fmt, ...) {
     va_end(args);
 }
 
-/* Only used for the built-in repository's refresh timestamp */
-int config_read_last_update(long *out_ts) {
-    *out_ts = 0;
-    return 0;
+/* Settings: defaults, except custom sources must be switched on to be listed */
+void config_read(PldmgrConfig *cfg) {
+    memset(cfg, 0, sizeof(*cfg));
+    cfg->multi_sources_enabled = 1;
+}
+
+int config_read_bool(const char *key, int default_val) {
+    (void)key;
+    return default_val;
 }
 
 int config_write_last_update(long ts) {
@@ -42,10 +47,17 @@ int config_write_last_update(long ts) {
     return 0;
 }
 
-/* The real one also updates the autoload list; every install here starts in an empty folder */
-void payload_mgr_remove_old_files(const char *dir_path, const char *new_filename) {
-    (void)dir_path;
+/* Favorites and autoload follow payloads between slots; no such lists exist here */
+int pldmgr_favorites_update_entry(const char *old_key, const char *new_key) {
+    (void)old_key;
+    (void)new_key;
+    return 0;
+}
+
+int pldmgr_autoload_update_config_entry(const char *old_filename, const char *new_filename) {
+    (void)old_filename;
     (void)new_filename;
+    return 0;
 }
 
 int main(int argc, char **argv) {
@@ -64,10 +76,11 @@ int main(int argc, char **argv) {
         rc = len == 0;
         free(buf);
     } else if (argc == 4 && strcmp(argv[1], "install") == 0) {
-        rc = sources_multi_repository_install(argv[2], argv[3], "", msg, sizeof(msg));
-        puts(msg);
+        char out[4096] = "";
+        rc = sources_repo_install(argv[2], argv[3], "new", NULL, out, sizeof(out));
+        puts(out);
     } else {
-        fprintf(stderr, "usage: harness add <url> | list | install <filename> <source_id>\n");
+        fprintf(stderr, "usage: harness add <url> | list | install <source_url> <id>\n");
         rc = 2;
     }
 

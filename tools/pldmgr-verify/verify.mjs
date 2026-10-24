@@ -3,7 +3,8 @@
 // handling (sources.c, repository.c, ...) is built together with harness.c, and then:
 //   1. the file is added as a source over HTTP, like on the console (sources_add);
 //   2. the list its web UI receives is checked field by field;
-//   3. every payload is installed: downloaded, checksum-verified, and written to disk.
+//   3. every payload is installed by id into its own slot: downloaded, checksum-verified,
+//      and written to disk with its metadata.
 //
 // Usage: node tools/pldmgr-verify/verify.mjs [payloads.json] [files dir]
 // Files the generator extracted from archives (files_url) are served from the files dir
@@ -19,10 +20,10 @@ import path from 'node:path';
 
 // Payload Manager release to test against; bump deliberately
 const PLDMGR_REPO = 'https://github.com/itsPLK/ps5-payload-manager.git';
-const PLDMGR_REF = 'v0.5.2';
+const PLDMGR_REF = 'v0.6.3';
 const CA_BUNDLE = '/etc/ssl/certs/ca-certificates.crt';
-const LIST_FIELDS = ['name', 'filename', 'url', 'description', 'version', 'category'];
-const PLDMGR_SOURCES = ['sources.c', 'repository.c', 'json_helpers.c', 'utils.c', 'sha256.c'];
+const LIST_FIELDS = ['id', 'name', 'filename', 'url', 'description', 'version', 'category', 'checksum', 'last_update', 'source'];
+const PLDMGR_SOURCES = ['sources.c', 'repository.c', 'slot.c', 'json_helpers.c', 'utils.c', 'sha256.c'];
 
 const here = path.dirname(new URL(import.meta.url).pathname);
 const jsonFile = path.resolve(process.argv[2] ?? 'payloads.json');
@@ -141,7 +142,7 @@ async function main() {
     console.log(`web UI list: ${source.payloads.length} payloads`);
 
     // 3. Install every payload
-    const folders = new Map();
+    const slots = new Map();
     for (const p of doc.payloads) {
       const fail = (why) => {
         problems.push(`${p.name}: ${why}`);
@@ -152,24 +153,23 @@ async function main() {
       // Only these can be launched (is_supported_extension in payload_mgr.c)
       if (!/\.(elf|bin)$/i.test(p.filename)) { fail('not an .elf or .bin file'); continue; }
 
-      const res = await harness(bin, 'install', p.filename, source.id);
-      if (!res.ok) { fail(res.out); continue; }
-      const file = findFile(path.join(dataRoot, 'pldmgr/payloads'), p.filename);
+      const res = await harness(bin, 'install', url, p.id);
+      let result = {};
+      try { result = JSON.parse(res.out); } catch { /* reported below */ }
+      if (!res.ok || !result.ok) { fail(result.message ?? (res.out || 'install failed')); continue; }
+      const file = findFile(path.join(dataRoot, 'pldmgr/payloads/repo'), p.filename);
       if (!file) { fail('installed file not found'); continue; }
-      const folder = path.basename(path.dirname(file));
-      // Variants of one project (e.g. fan_target's temperatures) may share a folder on purpose:
-      // installing one replaces the other. Different projects sharing one would clobber each other.
-      const other = folders.get(folder);
-      if (other && other.homepage !== p.homepage) { fail(`installs into the same folder as ${other.name} ("${folder}")`); continue; }
-      if (other) console.log(`note: ${p.name} replaces ${other.name} when installed (same project, folder "${folder}")`);
-      else folders.set(folder, p);
+      // Each id gets its own slot (repo/<id>@<source>); a shared one would replace the other payload
+      const slot = path.basename(path.dirname(file));
+      if (slots.has(slot)) { fail(`installs into the same slot as ${slots.get(slot)} ("${slot}")`); continue; }
+      slots.set(slot, p.name);
 
-      // The metadata file must carry the checksum, or Payload Manager skipped verification
-      const meta = JSON.parse(fs.readFileSync(`${file}.json`, 'utf8'));
+      // The slot's metadata must carry the checksum, or Payload Manager skipped verification
+      const meta = JSON.parse(fs.readFileSync(path.join(path.dirname(file), 'meta.json'), 'utf8'));
       const sum = crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
       if (meta.checksum !== p.checksum) { fail(`checksum recorded as "${meta.checksum}"`); continue; }
       if (sum !== p.checksum) { fail('installed file does not match the checksum'); continue; }
-      console.log(`install ${p.name}: ok (folder ${folder})`);
+      console.log(`install ${p.name}: ok (slot ${slot})`);
     }
   } finally {
     server.close();

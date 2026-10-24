@@ -78,7 +78,7 @@ function card(p) {
       el('span', { className: 'version' },
         p.version,
         p.release_type ? el('span', { className: `release ${p.release_type}`, textContent: p.release_type }) : null)),
-    p.released ? releasedDate(p.released) : null,
+    p.last_update ? releasedDate(p.last_update) : null,
     el('span', { className: 'category', textContent: p.category }),
     description ? el('p', { textContent: description }) : null,
     requires.length
@@ -90,7 +90,7 @@ function card(p) {
       inactive ? null : el('span', { className: 'file', textContent: p.filename }),
       el('span', { className: 'links' },
         inactive ? null : el('a', { href: p.url, textContent: 'Download' }),
-        p.homepage ? el('a', { href: p.homepage, target: '_blank', rel: 'noopener', textContent: 'Upstream ↗' }) : null),
+        p.source ? el('a', { href: p.source, target: '_blank', rel: 'noopener', textContent: 'Upstream ↗' }) : null),
       inactive ? null : checksumField(p.checksum, `sum-${id}`)),
   );
 }

@@ -15,7 +15,8 @@
 #                .elf/.bin or fail a check are skipped with a warning.
 #
 # Per-entry fields:
-#   id           unique key, referenced by `requires`
+#   id           unique key, referenced by `requires`; published as the payload id that Payload
+#                Manager names its install slot after, so keep it stable (a-z 0-9 . _ -)
 #   name         display name                        (required)
 #   category     grouping in the dashboard            (default: Uncategorized)
 #   description  shown in the dashboard
@@ -39,7 +40,7 @@
 #     type: url    -> url: direct download link, version: (optional),
 #                     homepage: (optional) project page linked from the site
 #
-# Values must not contain { } " \ characters (pldmgr's parser can't handle them).
+# Text is published as is; keep names and URLs within Payload Manager's field sizes.
 
 name: PS5 Payloads
 output: payloads.json

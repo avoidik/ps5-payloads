@@ -14,20 +14,25 @@ import { Readable } from 'node:stream';
 import { unzipSync } from 'fflate';
 import { load as loadYaml } from 'js-yaml';
 
-// Field buffer sizes in pldmgr's RepoPayload struct, minus the NUL terminator.
-const LIMITS = { name: 127, filename: 255, url: 1023, description: 1023, version: 63, category: 127 };
+// Field buffer sizes in pldmgr's RepoPayload struct, minus the NUL terminator. Longer
+// values make pldmgr (0.6+) reject the entry; only description is truncated instead.
+const LIMITS = {
+  id: 127, name: 127, filename: 255, url: 1023, description: 1023, version: 63, category: 127,
+  last_update: 63, source: 1023, author: 127, details_url: 1023,
+};
 const SOURCE_NAME_LIMIT = 255;
-const PAYLOAD_KEYS = ['name', 'filename', 'url', 'description', 'version', 'category', 'checksum', 'requires', 'homepage', 'release_type', 'released', 'catalog', 'catalog_url', 'file', 'download'];
+// Payload ids name pldmgr's install slots (repo/<id>@<source>), so they must stay stable
+const ID_PATTERN = /^[a-z0-9._-]+$/;
 // Fields taken from external catalogs; anything else they carry is dropped
-const PLDMGR_FIELDS = ['name', 'filename', 'url', 'description', 'version', 'category', 'checksum'];
+const PLDMGR_FIELDS = [
+  'id', 'name', 'filename', 'url', 'description', 'version', 'category', 'checksum',
+  'last_update', 'source', 'author', 'details_url',
+];
 const RELEASES_PER_PAGE = 100; // GitHub's maximum
 // pldmgr only launches these (is_supported_extension in payload_mgr.c)
 const SUPPORTED_EXTENSIONS = ['.elf', '.bin'];
 // payload: offered in Payload Manager; download: listed on the site only (apps, archives)
 const KINDS = ['payload', 'download'];
-// The scanner ends an object at the first '}', ignores escapes and stops at '"'.
-// eslint-disable-next-line no-control-regex -- control characters are exactly what we reject
-const UNSAFE_CHARS = /[{}"\\\u0000-\u001f\u007f]/;
 
 class CatalogError extends Error {}
 
@@ -74,9 +79,7 @@ function loadCatalog(file) {
   if (!Array.isArray(doc.external)) fail(`${file}: "external" must be a list`);
   doc.external.forEach((c, i) => {
     if (!c || typeof c.url !== 'string' || !/^https?:\/\//.test(c.url)) fail(`external[${i}]: "url" must be an http(s) URL`);
-    if (typeof c.name !== 'string' || !c.name.trim() || UNSAFE_CHARS.test(c.name)) {
-      fail(`external[${i}]: "name" is required, without { } " \\ or control characters`);
-    }
+    if (typeof c.name !== 'string' || !c.name.trim()) fail(`external[${i}]: "name" is required`);
     if (c.homepage !== undefined && (typeof c.homepage !== 'string' || !/^https?:\/\//.test(c.homepage))) {
       fail(`external[${i}]: "homepage" must be an http(s) URL`);
     }
@@ -91,6 +94,7 @@ function loadCatalog(file) {
       if (typeof p[key] !== 'string' || !p[key].trim()) fail(`${where}: "${key}" is required`);
     }
     if (ids.has(p.id)) fail(`${where}: duplicate id "${p.id}"`);
+    if (!ID_PATTERN.test(p.id) || p.id.length > LIMITS.id) fail(`${where}: "id" must use only a-z, 0-9, ".", "_" and "-"`);
     if (p.enabled !== undefined && typeof p.enabled !== 'boolean') fail(`${where}: "enabled" must be true or false`);
     p.kind ??= 'payload';
     if (!KINDS.includes(p.kind)) fail(`${where}: "kind" must be one of ${KINDS.join(', ')}`);
@@ -351,16 +355,16 @@ async function resolveExternalEntry(cat, item) {
     }
     entry.checksum = checksum;
     entry.category ||= 'Uncategorized';
+    // Prefixed with the catalog, so ids can't clash with ours inside this source
+    entry.id = `${slug(cat.name)}.${ID_PATTERN.test(entry.id ?? '') ? entry.id : slug(entry.name)}`;
     const rel = await githubReleaseOf(entry.url);
     if (rel) entry.release_type = rel.releaseType;
-    const released = rel?.released ?? modified;
-    if (released) entry.released = released;
-    const homepage = cat.homepage ?? githubRepoPage(entry.url) ?? githubRepoPage(cat.url);
-    if (homepage) entry.homepage = homepage;
+    entry.last_update ||= rel?.released ?? modified ?? undefined;
+    entry.source ||= cat.homepage ?? githubRepoPage(entry.url) ?? githubRepoPage(cat.url) ?? undefined;
+    for (const key of Object.keys(entry)) if (entry[key] === undefined) delete entry[key];
     entry.catalog = cat.name;
     entry.catalog_url = cat.url;
     for (const [key, value] of Object.entries(entry)) checkValue('entry', key, value, LIMITS[key]);
-    checkShownByPldmgr('entry', entry);
 
     console.error(`  [${cat.name}] ${fn} ${entry.version ?? ''} (${size} bytes) sha256=${checksum}`);
     return entry;
@@ -373,21 +377,11 @@ async function resolveExternalEntry(cat, item) {
 
 // ── pldmgr-compatible output ────────────────────────────────
 
-// pldmgr_json_escape keeps only printable ASCII, so anything else would vanish from its UI
-function checkShownByPldmgr(id, entry) {
-  for (const key of PLDMGR_FIELDS) {
-    if (entry[key] !== undefined && /[^\x20-\x7e]/.test(entry[key])) {
-      fail(`${id}: "${key}" has characters Payload Manager drops (only printable ASCII is kept): ${JSON.stringify(entry[key])}`);
-    }
-  }
-}
-
 function checkValue(id, key, value, limit) {
-  if (UNSAFE_CHARS.test(value)) fail(`${id}: "${key}" contains a character pldmgr cannot parse ({ } " \\ or control): ${JSON.stringify(value)}`);
-  // strstr would match a value that looks like a key before the real key.
-  if (PAYLOAD_KEYS.includes(value)) fail(`${id}: "${key}" value "${value}" collides with a JSON key name`);
   if (limit && Buffer.byteLength(value, 'utf8') > limit) fail(`${id}: "${key}" is longer than pldmgr's ${limit}-byte limit`);
 }
+
+const slug = (text) => text.toLowerCase().replace(/[^a-z0-9._-]+/g, '-').replace(/^-+|-+$/g, '');
 
 function buildEntry(p, up, nameById) {
   const requires = (p.requires ?? []).map((r) => nameById.get(r));
@@ -395,6 +389,7 @@ function buildEntry(p, up, nameById) {
   if (requires.length) description = `${description}${description ? ' ' : ''}Requires: ${requires.join(', ')}.`;
 
   const entry = {
+    id: p.id,
     name: p.name.trim(),
     filename: p.filename ?? up.filename,
     url: up.url,
@@ -404,11 +399,12 @@ function buildEntry(p, up, nameById) {
     checksum: up.checksum,
   };
   if (requires.length) entry.requires = requires.join(', ');
-  // Not used by pldmgr; the landing page links to it
-  if (up.homepage) entry.homepage = up.homepage;
+  // Upstream project page; pldmgr links to it and so does the landing page
+  if (up.homepage) entry.source = up.homepage;
+  // Release date; pldmgr uses it to break ties between equal versions
+  if (up.released) entry.last_update = up.released;
   // Not used by pldmgr; the landing page shows it as a badge (unknown for plain URL sources)
   if (up.releaseType) entry.release_type = up.releaseType;
-  if (up.released) entry.released = up.released;
 
   const fn = entry.filename;
   if (!fn || fn.includes('/') || fn.includes('..')) fail(`${p.id}: invalid filename "${fn}"`);
@@ -417,7 +413,6 @@ function buildEntry(p, up, nameById) {
   }
   if (!/^[0-9a-f]{64}$/.test(entry.checksum)) fail(`${p.id}: bad checksum "${entry.checksum}"`);
   for (const [key, value] of Object.entries(entry)) checkValue(p.id, key, value, LIMITS[key]);
-  checkShownByPldmgr(p.id, entry);
   return entry;
 }
 
@@ -432,7 +427,7 @@ function buildInactiveEntry(p, nameById) {
   if (p.version) entry.version = p.version;
   if (requires.length) entry.requires = requires.join(', ');
   const homepage = p.source.type === 'github' ? `https://github.com/${p.source.repo}` : p.source.homepage;
-  if (homepage) entry.homepage = homepage;
+  if (homepage) entry.source = homepage;
   entry.release_type = 'inactive';
   for (const [key, value] of Object.entries(entry)) checkValue(p.id, key, value, LIMITS[key]);
   return entry;
@@ -450,9 +445,9 @@ function buildDownloadEntry(p, up) {
     category: p.category ?? 'Uncategorized',
     checksum: up.checksum,
   };
-  if (up.homepage) entry.homepage = up.homepage;
+  if (up.homepage) entry.source = up.homepage;
+  if (up.released) entry.last_update = up.released;
   if (up.releaseType) entry.release_type = up.releaseType;
-  if (up.released) entry.released = up.released;
   if (path.extname(entry.file).toLowerCase() !== p.extension.toLowerCase()) {
     fail(`${p.id}: "${entry.file}" does not have the expected ${p.extension} extension`);
   }
@@ -472,7 +467,6 @@ function render(sourceName, entries, inactive, downloads, filesUrl) {
     `  "generated_at": ${s(new Date().toISOString())},`,
     // Where extracted files are hosted; lets the verifier serve them locally before deploy
     ...(filesUrl ? [`  "files_url": ${s(filesUrl)},`] : []),
-    '  "_pldmgr_parser_guard": {},',
     '  "payloads": [',
     items(entries),
     // After "payloads": tools that read only that list, like Payload Manager, ignore these
@@ -491,9 +485,7 @@ async function main() {
   const catalog = loadCatalog(opts.catalog);
 
   const sourceName = catalog.name.trim();
-  if (UNSAFE_CHARS.test(sourceName) || Buffer.byteLength(sourceName) > SOURCE_NAME_LIMIT) {
-    fail(`top-level name must be <= ${SOURCE_NAME_LIMIT} bytes without { } " \\ or control characters`);
-  }
+  if (Buffer.byteLength(sourceName) > SOURCE_NAME_LIMIT) fail(`top-level name must be <= ${SOURCE_NAME_LIMIT} bytes`);
 
   // Disabled entries are validated above but never looked up or downloaded
   const active = catalog.payloads.filter((p) => p.enabled !== false);
@@ -525,6 +517,7 @@ async function main() {
   );
 
   const filenames = new Set();
+  const ids = new Set(resolved.map((e) => e.id));
   for (const e of resolved) {
     if (filenames.has(e.filename)) fail(`duplicate filename "${e.filename}"`);
     filenames.add(e.filename);
@@ -535,11 +528,12 @@ async function main() {
     const cat = await loadExternal(ext);
     const entries = await Promise.all(cat.items.map((item) => resolveExternalEntry(cat, item)));
     for (const e of entries.filter(Boolean)) {
-      if (filenames.has(e.filename)) {
-        warn(`skipping ${cat.name} / ${e.name}: filename "${e.filename}" is already used`);
+      if (filenames.has(e.filename) || ids.has(e.id)) {
+        warn(`skipping ${cat.name} / ${e.name}: ${filenames.has(e.filename) ? `filename "${e.filename}"` : `id "${e.id}"`} is already used`);
         continue;
       }
       filenames.add(e.filename);
+      ids.add(e.id);
       resolved.push(e);
     }
   }
