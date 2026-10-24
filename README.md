@@ -50,6 +50,10 @@ external:
 
 Their payloads are added after ours, tagged with the catalog's `name`, and the site shows them in a separate "From other catalogs" section. Each file is still downloaded and SHA-256 checked, and must match the catalog's own checksum if it gives one. Entries that aren't `.elf`/`.bin`, fail a check, or reuse a filename are skipped with a warning. A catalog that can't be downloaded fails the build.
 
+## Groups
+
+Variants of one project can share a single card on the site. Define the group once under `groups:` (`<id>: {name, description}`), then give each member `group: <id>` and a short `variant:` label. The card shows the group's name and description and lists every variant with its own download and checksum. In Payload Manager, the members stay separate payloads with their own names, descriptions and install slots. Example: the five Fan Target temperatures.
+
 ## Useful links
 
 `links:` at the top of `catalog.yaml` lists other tools and pages for the site's "Useful links" section. Each link has a `name`, and either a `url` or a GitHub `repo` (`owner/name`), plus an optional `description`. For a `repo` without a description, the generator uses GitHub's own repo description. Links go into a `links` list in `payloads.json` with an `href` key instead of `url`, so Payload Manager ignores them.

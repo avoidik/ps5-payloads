@@ -75,6 +75,15 @@ function loadCatalog(file) {
     if (!doc.base_url.endsWith('/')) doc.base_url += '/';
   }
 
+  // Payloads shown together on one site card: { <group id>: { name, description? } }
+  doc.groups ??= {};
+  if (typeof doc.groups !== 'object' || Array.isArray(doc.groups)) fail(`${file}: "groups" must be a mapping`);
+  for (const [gid, g] of Object.entries(doc.groups)) {
+    if (!ID_PATTERN.test(gid)) fail(`groups.${gid}: group ids use only a-z, 0-9, ".", "_" and "-"`);
+    if (!g || typeof g.name !== 'string' || !g.name.trim()) fail(`groups.${gid}: "name" is required`);
+    if (g.description !== undefined && typeof g.description !== 'string') fail(`groups.${gid}: "description" must be a string`);
+  }
+
   // Useful links for the site: { name, url | repo, description? }
   doc.links ??= [];
   if (!Array.isArray(doc.links)) fail(`${file}: "links" must be a list`);
@@ -117,6 +126,13 @@ function loadCatalog(file) {
     }
     ids.add(p.id);
 
+    if (p.group !== undefined) {
+      if (p.kind !== 'payload') fail(`${where}: only payloads can be in a group`);
+      if (!Object.hasOwn(doc.groups, p.group)) fail(`${where}: unknown group "${p.group}"`);
+      if (typeof p.variant !== 'string' || !p.variant.trim()) fail(`${where}: "variant" is required for group members`);
+    } else if (p.variant !== undefined) {
+      fail(`${where}: "variant" only applies to group members`);
+    }
     if (p.requires !== undefined && !(Array.isArray(p.requires) && p.requires.every((r) => typeof r === 'string'))) {
       fail(`${where}: "requires" must be a list of ids`);
     }
@@ -416,6 +432,8 @@ function buildEntry(p, up, nameById) {
   if (up.released) entry.last_update = up.released;
   // Not used by pldmgr; the landing page shows it as a badge (unknown for plain URL sources)
   if (up.releaseType) entry.release_type = up.releaseType;
+  // Not used by pldmgr; the landing page shows a group's members on one card
+  if (p.group) Object.assign(entry, { group: p.group, variant: p.variant.trim() });
 
   const fn = entry.filename;
   if (!fn || fn.includes('/') || fn.includes('..')) fail(`${p.id}: invalid filename "${fn}"`);
@@ -475,7 +493,7 @@ async function resolveLink(l) {
   return link;
 }
 
-function render(sourceName, entries, inactive, downloads, links, filesUrl) {
+function render(sourceName, entries, inactive, downloads, links, groups, filesUrl) {
   const s = JSON.stringify;
   const items = (list) => list.map((e) => {
     const fields = Object.entries(e).map(([k, v]) => `      ${s(k)}: ${s(v)}`);
@@ -487,6 +505,8 @@ function render(sourceName, entries, inactive, downloads, links, filesUrl) {
     `  "generated_at": ${s(new Date().toISOString())},`,
     // Where extracted files are hosted; lets the verifier serve them locally before deploy
     ...(filesUrl ? [`  "files_url": ${s(filesUrl)},`] : []),
+    // Before "payloads": Payload Manager only scans from that key onwards
+    ...(Object.keys(groups).length ? [`  "groups": ${s(groups)},`] : []),
     '  "payloads": [',
     items(entries),
     // After "payloads": tools that read only that list, like Payload Manager, ignore these
@@ -565,7 +585,15 @@ async function main() {
   const inactive = catalog.payloads.filter((p) => !activeIds.has(p.id)).map((p) => buildInactiveEntry(p, nameById));
   const filesUrl = hosted.length ? `${catalog.base_url}files/` : null;
   const links = await Promise.all(catalog.links.map(resolveLink));
-  const out = render(sourceName, resolved, inactive, downloads, links, filesUrl);
+  // Only groups that have a published member
+  const groups = {};
+  for (const e of resolved) {
+    if (e.group && !groups[e.group]) {
+      const g = catalog.groups[e.group];
+      groups[e.group] = { name: g.name.trim(), ...(g.description ? { description: g.description.trim() } : {}) };
+    }
+  }
+  const out = render(sourceName, resolved, inactive, downloads, links, groups, filesUrl);
   JSON.parse(out); // sanity check: must remain valid JSON
 
   if (opts.dryRun) {

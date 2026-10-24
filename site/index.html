@@ -63,6 +63,15 @@
   .foot { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1rem; margin-top: auto; padding-top: .6rem; border-top: 1px solid var(--line); font-size: 13px; }
   .file { color: var(--muted); font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; word-break: break-all; }
   .links { display: flex; gap: 1rem; margin-left: auto; }
+  details.sha { position: relative; }
+  details.sha > summary { list-style: none; cursor: pointer; padding: .1rem .55rem; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 12px; }
+  details.sha > summary::-webkit-details-marker { display: none; }
+  details.sha > summary:hover, details.sha[open] > summary { color: var(--accent); border-color: var(--accent); }
+  .sha-panel { position: absolute; right: 0; bottom: calc(100% + 6px); z-index: 10; width: min(380px, 80vw); padding: .5rem; background: var(--card); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 8px 24px rgba(0, 0, 0, .18); }
+  .variants { display: grid; gap: .45rem; width: 100%; margin: 0; padding: 0; list-style: none; }
+  .variants li { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .8rem; scroll-margin-top: 1rem; }
+  .variants .variant { min-width: 3.2em; font-weight: 600; }
+  .variants .file { flex: 1; min-width: 0; }
   .field { display: flex; align-items: center; gap: .4rem; width: 100%; }
   .field label { flex: none; white-space: nowrap; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
   .field input { flex: 1; min-width: 0; height: 28px; margin: 0; padding: 0 .5rem; -webkit-appearance: none; appearance: none; box-shadow: none; border: 1px solid var(--line); border-radius: 6px; background: var(--chip); color: var(--muted); font: 12px ui-monospace, SFMono-Regular, Menlo, monospace; line-height: 26px; text-overflow: ellipsis; }

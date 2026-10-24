@@ -64,6 +64,47 @@ function checksumField(sum, id) {
 
 const slug = (name) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
+// SHA-256 behind a small toggle; the panel floats above the card instead of pushing it around
+function shaFlyout(sum, id) {
+  return el('details', { className: 'sha' },
+    el('summary', { textContent: 'SHA-256' }),
+    el('div', { className: 'sha-panel' }, checksumField(sum, id)));
+}
+
+// One open fly-out at a time; a click anywhere else closes it
+document.addEventListener('click', (e) => {
+  for (const d of document.querySelectorAll('details.sha[open]')) if (!d.contains(e.target)) d.open = false;
+});
+
+function versionBadge(version, type) {
+  return el('span', { className: 'version' },
+    version,
+    type ? el('span', { className: `release ${type}`, textContent: type }) : null);
+}
+
+// Several payloads of one project (e.g. fan_target's temperatures) on a single card
+function groupCard(gid, group, members) {
+  const first = members[0];
+  const sameVersion = members.every((m) => m.version === first.version);
+  return el('article', { className: 'card', id: slug(gid) },
+    el('div', { className: 'top' },
+      el('h2', { textContent: group.name }),
+      sameVersion ? versionBadge(first.version, first.release_type) : null),
+    first.last_update ? releasedDate(first.last_update) : null,
+    el('span', { className: 'category', textContent: first.category }),
+    group.description ? el('p', { textContent: group.description }) : null,
+    el('div', { className: 'foot' },
+      el('ul', { className: 'variants' }, ...members.map((m) => el('li', { id: slug(m.name) },
+        el('span', { className: 'variant', textContent: m.variant }),
+        el('span', { className: 'file', textContent: m.filename }),
+        el('a', { href: m.url, textContent: 'Download' }),
+        shaFlyout(m.checksum, `sum-${slug(m.name)}`)))),
+      first.source
+        ? el('span', { className: 'links' }, el('a', { href: first.source, target: '_blank', rel: 'noopener', textContent: 'Upstream ↗' }))
+        : null),
+  );
+}
+
 function card(p) {
   const requires = p.requires ? p.requires.split(', ') : [];
   // The generator appends "Requires: …." for Payload Manager's UI; shown as chips here instead
@@ -75,9 +116,7 @@ function card(p) {
   return el('article', { className: inactive ? 'card inactive' : 'card', id },
     el('div', { className: 'top' },
       el('h2', { textContent: p.name }),
-      el('span', { className: 'version' },
-        p.version,
-        p.release_type ? el('span', { className: `release ${p.release_type}`, textContent: p.release_type }) : null)),
+      versionBadge(p.version, p.release_type)),
     p.last_update ? releasedDate(p.last_update) : null,
     el('span', { className: 'category', textContent: p.category }),
     description ? el('p', { textContent: description }) : null,
@@ -91,7 +130,7 @@ function card(p) {
       el('span', { className: 'links' },
         inactive ? null : el('a', { href: p.url, textContent: 'Download' }),
         p.source ? el('a', { href: p.source, target: '_blank', rel: 'noopener', textContent: 'Upstream ↗' }) : null),
-      inactive ? null : checksumField(p.checksum, `sum-${id}`)),
+      inactive ? null : shaFlyout(p.checksum, `sum-${id}`)),
   );
 }
 
@@ -105,7 +144,19 @@ fetch('payloads.json', { cache: 'no-cache' })
     const counts = `${data.payloads.length} payloads${extras.length ? ` (+${extras.join(', ')})` : ''}`;
     document.getElementById('status').textContent = `${counts} · updated ${when}`;
 
-    document.getElementById('list').append(...data.payloads.filter((p) => !p.catalog).map(card));
+    // Group members share one card, placed where the first member would be
+    const cardGroups = data.groups ?? {};
+    const own = data.payloads.filter((p) => !p.catalog);
+    const shown = new Set();
+    for (const p of own) {
+      if (p.group && cardGroups[p.group]) {
+        if (shown.has(p.group)) continue;
+        shown.add(p.group);
+        document.getElementById('list').append(groupCard(p.group, cardGroups[p.group], own.filter((m) => m.group === p.group)));
+      } else {
+        document.getElementById('list').append(card(p));
+      }
+    }
 
     // Site-only downloads (apps); they use "file" and "download" so Payload Manager skips them
     const downloads = (data.downloads ?? []).map((d) => ({ ...d, filename: d.file, url: d.download }));

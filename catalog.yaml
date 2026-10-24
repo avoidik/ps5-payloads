@@ -13,6 +13,9 @@
 #                              repo of each file's URL, else of the catalog's URL)
 #                Files are still downloaded and checksummed; entries that are not
 #                .elf/.bin or fail a check are skipped with a warning.
+#   groups       payloads shown together on one site card, by group id:
+#                  <id>: {name: card title (required), description: card text}
+#                members set `group: <id>` and a short `variant:` label (e.g. 85C)
 #   links        useful links shown on the site (not in Payload Manager):
 #                  - name: link text                  (required)
 #                    url: any http(s) address, or
@@ -30,6 +33,8 @@
 #   version      override the release tag
 #   kind         payload (default): offered in Payload Manager; download: listed on the site only,
 #                for apps and archives Payload Manager can't install (extension may be e.g. .zip)
+#   group        id of a group in `groups` (optional); needs `variant`, the label of this
+#                member on the group's card (e.g. 85C). Only affects the site.
 #   enabled      false to leave the entry out without deleting it; it is not looked up
 #                or downloaded until re-enabled (default: true)
 #   extension    the one file type this provider ships: .elf or .bin (required;
@@ -50,6 +55,14 @@
 name: PS5 Payloads
 output: payloads.json
 base_url: https://avoidik.github.io/ps5-payloads/
+
+groups:
+  fan-target:
+    name: Fan Target
+    description: >-
+      Sets the fan controller's target temperature below the default 91C, with the automatic fan
+      control left on. Runs in the background and restores the target if a game changes it. Use one
+      variant only: lower targets make the fan react earlier and run faster; 85C is a good start.
 
 links:
   - name: PS5PKGTool
@@ -208,6 +221,8 @@ payloads:
 
   - id: fan-target-85c
     name: Fan Target 85C
+    group: fan-target
+    variant: 85C
     category: Utilities
     description: >-
       Sets the fan controller's target temperature to 85C instead of the default 91C, with the
@@ -222,6 +237,8 @@ payloads:
 
   - id: fan-target-80c
     name: Fan Target 80C
+    group: fan-target
+    variant: 80C
     category: Utilities
     description: >-
       Sets the fan controller's target temperature to 80C instead of the default 91C, with the
@@ -236,6 +253,8 @@ payloads:
 
   - id: fan-target-75c
     name: Fan Target 75C
+    group: fan-target
+    variant: 75C
     category: Utilities
     description: >-
       Sets the fan controller's target temperature to 75C instead of the default 91C, with the
@@ -250,6 +269,8 @@ payloads:
 
   - id: fan-target-70c
     name: Fan Target 70C
+    group: fan-target
+    variant: 70C
     category: Utilities
     description: >-
       Sets the fan controller's target temperature to 70C instead of the default 91C, with the
@@ -264,6 +285,8 @@ payloads:
 
   - id: fan-target-65c
     name: Fan Target 65C
+    group: fan-target
+    variant: 65C
     category: Utilities
     description: >-
       Sets the fan controller's target temperature to 65C instead of the default 91C, with the
