@@ -100,10 +100,17 @@ fetch('payloads.json', { cache: 'no-cache' })
   .then((data) => {
     const when = data.generated_at ? new Date(data.generated_at).toLocaleString() : 'unknown';
     const inactive = data.inactive ?? [];
-    const counts = `${data.payloads.length} payloads${inactive.length ? ` (+${inactive.length} inactive)` : ''}`;
+    const apps = data.downloads?.length ?? 0;
+    const extras = [apps && `${apps} app${apps === 1 ? '' : 's'}`, inactive.length && `${inactive.length} inactive`].filter(Boolean);
+    const counts = `${data.payloads.length} payloads${extras.length ? ` (+${extras.join(', ')})` : ''}`;
     document.getElementById('status').textContent = `${counts} · updated ${when}`;
 
     document.getElementById('list').append(...data.payloads.filter((p) => !p.catalog).map(card));
+
+    // Site-only downloads (apps); they use "file" and "download" so Payload Manager skips them
+    const downloads = (data.downloads ?? []).map((d) => ({ ...d, filename: d.file, url: d.download }));
+    document.getElementById('downloads').hidden = downloads.length === 0;
+    document.getElementById('downloads-list').append(...downloads.map(card));
 
     // Disabled entries, at the bottom of the page
     document.getElementById('inactive').hidden = inactive.length === 0;

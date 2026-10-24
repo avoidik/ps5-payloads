@@ -5,7 +5,9 @@
 //   2. the list its web UI receives is checked field by field;
 //   3. every payload is installed: downloaded, checksum-verified, and written to disk.
 //
-// Usage: node tools/pldmgr-verify/verify.mjs [payloads.json]
+// Usage: node tools/pldmgr-verify/verify.mjs [payloads.json] [files dir]
+// Files the generator extracted from archives (files_url) are served from the files dir
+// (default: files/ next to payloads.json), so they're tested before they're deployed.
 // Needs git, gcc, python3, libcurl headers and the system CA bundle.
 
 import { execFile, execFileSync } from 'node:child_process';
@@ -24,7 +26,9 @@ const PLDMGR_SOURCES = ['sources.c', 'repository.c', 'json_helpers.c', 'utils.c'
 
 const here = path.dirname(new URL(import.meta.url).pathname);
 const jsonFile = path.resolve(process.argv[2] ?? 'payloads.json');
-const doc = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
+const filesDir = path.resolve(process.argv[3] ?? path.join(path.dirname(jsonFile), 'files'));
+const original = fs.readFileSync(jsonFile, 'utf8');
+let doc; // the file as served, with hosted-file URLs pointing at the local server
 const work = fs.mkdtempSync(path.join(os.tmpdir(), 'pldmgr-verify-'));
 const dataRoot = path.join(work, 'data');
 const problems = [];
@@ -61,14 +65,22 @@ function build() {
   return bin;
 }
 
-// Serves payloads.json over HTTP, since Payload Manager only accepts HTTP 200 responses
-function serve() {
-  const body = fs.readFileSync(jsonFile);
+// Serves payloads.json (and any hosted files) over HTTP, since Payload Manager only
+// accepts HTTP 200 responses
+async function serve() {
+  let body = ''; // set once the port is known
   const server = http.createServer((req, res) => {
-    if (req.url === '/payloads.json') res.writeHead(200, { 'Content-Type': 'application/json' }).end(body);
-    else res.writeHead(404).end();
+    if (req.url === '/payloads.json') return res.writeHead(200, { 'Content-Type': 'application/json' }).end(body);
+    const file = req.url.startsWith('/files/') && path.join(filesDir, path.basename(decodeURIComponent(req.url)));
+    if (file && fs.existsSync(file)) return res.writeHead(200).end(fs.readFileSync(file));
+    return res.writeHead(404).end();
   });
-  return new Promise((resolve) => server.listen(0, '127.0.0.1', () => resolve(server)));
+  await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
+  const filesUrl = JSON.parse(original).files_url;
+  body = filesUrl ? original.replaceAll(filesUrl, `http://127.0.0.1:${server.address().port}/files/`) : original;
+  doc = JSON.parse(body);
+  if (filesUrl) console.log(`hosted files: served from ${filesDir}`);
+  return server;
 }
 
 // Must not block: the HTTP server above runs on this process's event loop
@@ -145,8 +157,12 @@ async function main() {
       const file = findFile(path.join(dataRoot, 'pldmgr/payloads'), p.filename);
       if (!file) { fail('installed file not found'); continue; }
       const folder = path.basename(path.dirname(file));
-      if (folders.has(folder)) { fail(`installs into the same folder as ${folders.get(folder)} ("${folder}")`); continue; }
-      folders.set(folder, p.name);
+      // Variants of one project (e.g. fan_target's temperatures) may share a folder on purpose:
+      // installing one replaces the other. Different projects sharing one would clobber each other.
+      const other = folders.get(folder);
+      if (other && other.homepage !== p.homepage) { fail(`installs into the same folder as ${other.name} ("${folder}")`); continue; }
+      if (other) console.log(`note: ${p.name} replaces ${other.name} when installed (same project, folder "${folder}")`);
+      else folders.set(folder, p);
 
       // The metadata file must carry the checksum, or Payload Manager skipped verification
       const meta = JSON.parse(fs.readFileSync(`${file}.json`, 'utf8'));

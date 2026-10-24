@@ -11,17 +11,20 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { Readable } from 'node:stream';
+import { unzipSync } from 'fflate';
 import { load as loadYaml } from 'js-yaml';
 
 // Field buffer sizes in pldmgr's RepoPayload struct, minus the NUL terminator.
 const LIMITS = { name: 127, filename: 255, url: 1023, description: 1023, version: 63, category: 127 };
 const SOURCE_NAME_LIMIT = 255;
-const PAYLOAD_KEYS = ['name', 'filename', 'url', 'description', 'version', 'category', 'checksum', 'requires', 'homepage', 'release_type', 'released', 'catalog', 'catalog_url'];
+const PAYLOAD_KEYS = ['name', 'filename', 'url', 'description', 'version', 'category', 'checksum', 'requires', 'homepage', 'release_type', 'released', 'catalog', 'catalog_url', 'file', 'download'];
 // Fields taken from external catalogs; anything else they carry is dropped
 const PLDMGR_FIELDS = ['name', 'filename', 'url', 'description', 'version', 'category', 'checksum'];
 const RELEASES_PER_PAGE = 100; // GitHub's maximum
 // pldmgr only launches these (is_supported_extension in payload_mgr.c)
 const SUPPORTED_EXTENSIONS = ['.elf', '.bin'];
+// payload: offered in Payload Manager; download: listed on the site only (apps, archives)
+const KINDS = ['payload', 'download'];
 // The scanner ends an object at the first '}', ignores escapes and stops at '"'.
 // eslint-disable-next-line no-control-regex -- control characters are exactly what we reject
 const UNSAFE_CHARS = /[{}"\\\u0000-\u001f\u007f]/;
@@ -62,6 +65,11 @@ function loadCatalog(file) {
   if (typeof doc.name !== 'string' || !doc.name.trim()) fail(`${file}: top-level "name" is required`);
   if (!Array.isArray(doc.payloads) || doc.payloads.length === 0) fail(`${file}: "payloads" must be a non-empty list`);
 
+  if (doc.base_url !== undefined) {
+    if (typeof doc.base_url !== 'string' || !/^https?:\/\//.test(doc.base_url)) fail(`${file}: "base_url" must be an http(s) URL`);
+    if (!doc.base_url.endsWith('/')) doc.base_url += '/';
+  }
+
   doc.external ??= [];
   if (!Array.isArray(doc.external)) fail(`${file}: "external" must be a list`);
   doc.external.forEach((c, i) => {
@@ -84,8 +92,13 @@ function loadCatalog(file) {
     }
     if (ids.has(p.id)) fail(`${where}: duplicate id "${p.id}"`);
     if (p.enabled !== undefined && typeof p.enabled !== 'boolean') fail(`${where}: "enabled" must be true or false`);
-    if (!SUPPORTED_EXTENSIONS.includes(p.extension)) {
+    p.kind ??= 'payload';
+    if (!KINDS.includes(p.kind)) fail(`${where}: "kind" must be one of ${KINDS.join(', ')}`);
+    if (p.kind === 'payload' && !SUPPORTED_EXTENSIONS.includes(p.extension)) {
       fail(`${where}: "extension" must be one of ${SUPPORTED_EXTENSIONS.join(', ')}`);
+    }
+    if (p.kind === 'download' && !(typeof p.extension === 'string' && /^\.[a-z0-9]+$/i.test(p.extension))) {
+      fail(`${where}: "extension" must be a file extension like .zip`);
     }
     ids.add(p.id);
 
@@ -117,11 +130,17 @@ function loadCatalog(file) {
     } else {
       fail(`${where}: source.type must be "github" or "url"`);
     }
+    if (src.extract !== undefined) {
+      if (p.kind !== 'payload') fail(`${where}: source.extract only applies to payloads`);
+      if (typeof src.extract !== 'string' || !src.extract || src.extract.includes('/')) fail(`${where}: source.extract must be a file name`);
+      if (!doc.base_url) fail(`${where}: source.extract needs a top-level "base_url" to host the extracted file`);
+    }
   });
 
   for (const p of doc.payloads) {
     for (const r of p.requires ?? []) {
       if (!ids.has(r)) fail(`${p.id}: requires unknown id "${r}"`);
+      if (doc.payloads.find((x) => x.id === r).kind !== 'payload') fail(`${p.id}: requires "${r}", which is not a payload`);
       if (r === p.id) fail(`${p.id}: requires itself`);
     }
   }
@@ -209,10 +228,48 @@ async function sha256OfUrl(url) {
     hash.update(chunk);
     size += chunk.length;
   }
-  // Release date fallback for files that don't come from a GitHub release lookup
-  const lastModified = Date.parse(res.headers.get('last-modified') ?? '');
-  const modified = Number.isNaN(lastModified) ? null : new Date(lastModified).toISOString().replace('.000Z', 'Z');
-  return { checksum: hash.digest('hex'), size, modified };
+  return { checksum: hash.digest('hex'), size, modified: lastModifiedOf(res) };
+}
+
+// Release date fallback for files that don't come from a GitHub release lookup
+function lastModifiedOf(res) {
+  const t = Date.parse(res.headers.get('last-modified') ?? '');
+  return Number.isNaN(t) ? null : new Date(t).toISOString().replace('.000Z', 'Z');
+}
+
+// Archives are read whole so a file can be extracted from them
+async function downloadBytes(url) {
+  const res = await fetch(url, { redirect: 'follow', headers: { 'User-Agent': 'ps5-payloads-generator' } });
+  if (!res.ok) fail(`download failed (HTTP ${res.status}): ${url}`);
+  const data = Buffer.from(await res.arrayBuffer());
+  return { data, checksum: sha256(data), size: data.length, modified: lastModifiedOf(res) };
+}
+
+const sha256 = (data) => crypto.createHash('sha256').update(data).digest('hex');
+
+// Takes one file out of a zip archive; it's then hosted with the site under files/
+function extractFile(p, up, archive, baseUrl) {
+  const name = p.source.extract;
+  const isSums = (n) => /sha256sums/i.test(path.basename(n));
+  let files;
+  try {
+    files = unzipSync(archive, { filter: (f) => path.basename(f.name) === name || isSums(f.name) });
+  } catch (e) {
+    fail(`${p.id}: cannot read ${up.filename} as a zip archive: ${e.message}`);
+  }
+  const matches = Object.keys(files).filter((n) => path.basename(n) === name);
+  if (matches.length !== 1) fail(`${p.id}: ${up.filename} has ${matches.length ? 'several files' : 'no file'} named "${name}"`);
+  const data = Buffer.from(files[matches[0]]);
+  if (data.length === 0) fail(`${p.id}: ${name} in ${up.filename} is empty`);
+  const checksum = sha256(data);
+
+  // Cross-check against the archive's own checksum list, when it has one
+  for (const [n, list] of Object.entries(files).filter(([f]) => isSums(f))) {
+    const line = Buffer.from(list).toString('utf8').split('\n').map((l) => l.trim().split(/\s+\*?/))
+      .find(([, f]) => f && path.basename(f) === name);
+    if (line && line[0].toLowerCase() !== checksum) fail(`${p.id}: ${name} does not match ${path.basename(n)} in ${up.filename}`);
+  }
+  return { ...up, archive: up.filename, filename: name, url: `${baseUrl}files/${name}`, checksum, size: data.length, hosted: data };
 }
 
 // Date and type of the GitHub release a download URL points at, if it points at one
@@ -231,15 +288,17 @@ async function githubReleaseOf(url) {
   }
 }
 
-async function resolvePayload(p) {
+async function resolvePayload(p, baseUrl) {
   const up = p.source.type === 'github' ? await resolveGithub(p) : resolveUrl(p);
-  const { checksum, size, modified } = await sha256OfUrl(up.url);
+  const extract = p.source.extract;
+  const { checksum, size, modified, data } = extract ? await downloadBytes(up.url) : await sha256OfUrl(up.url);
   if (size === 0) fail(`${p.id}: downloaded file is empty: ${up.url}`);
   if (up.size != null && size !== up.size) fail(`${p.id}: size mismatch for ${up.url} (expected ${up.size}, got ${size})`);
   if (up.digest && up.digest !== checksum) fail(`${p.id}: checksum mismatch for ${up.url} (GitHub ${up.digest}, computed ${checksum})`);
   // Direct URLs: use the GitHub release they point at, else the server's Last-Modified
   const rel = up.released ? null : await githubReleaseOf(up.url);
-  return { ...up, ...rel, checksum, size, released: up.released ?? rel?.released ?? modified };
+  const resolved = { ...up, ...rel, checksum, size, released: up.released ?? rel?.released ?? modified };
+  return extract ? extractFile(p, resolved, data, baseUrl) : resolved;
 }
 
 // ── External catalogs ───────────────────────────────────────
@@ -301,6 +360,7 @@ async function resolveExternalEntry(cat, item) {
     entry.catalog = cat.name;
     entry.catalog_url = cat.url;
     for (const [key, value] of Object.entries(entry)) checkValue('entry', key, value, LIMITS[key]);
+    checkShownByPldmgr('entry', entry);
 
     console.error(`  [${cat.name}] ${fn} ${entry.version ?? ''} (${size} bytes) sha256=${checksum}`);
     return entry;
@@ -312,6 +372,15 @@ async function resolveExternalEntry(cat, item) {
 }
 
 // ── pldmgr-compatible output ────────────────────────────────
+
+// pldmgr_json_escape keeps only printable ASCII, so anything else would vanish from its UI
+function checkShownByPldmgr(id, entry) {
+  for (const key of PLDMGR_FIELDS) {
+    if (entry[key] !== undefined && /[^\x20-\x7e]/.test(entry[key])) {
+      fail(`${id}: "${key}" has characters Payload Manager drops (only printable ASCII is kept): ${JSON.stringify(entry[key])}`);
+    }
+  }
+}
 
 function checkValue(id, key, value, limit) {
   if (UNSAFE_CHARS.test(value)) fail(`${id}: "${key}" contains a character pldmgr cannot parse ({ } " \\ or control): ${JSON.stringify(value)}`);
@@ -348,6 +417,7 @@ function buildEntry(p, up, nameById) {
   }
   if (!/^[0-9a-f]{64}$/.test(entry.checksum)) fail(`${p.id}: bad checksum "${entry.checksum}"`);
   for (const [key, value] of Object.entries(entry)) checkValue(p.id, key, value, LIMITS[key]);
+  checkShownByPldmgr(p.id, entry);
   return entry;
 }
 
@@ -368,7 +438,29 @@ function buildInactiveEntry(p, nameById) {
   return entry;
 }
 
-function render(sourceName, entries, inactive) {
+// Site-only downloads (apps, archives). They use "file" and "download" instead of
+// "filename" and "url", so Payload Manager's parser skips them.
+function buildDownloadEntry(p, up) {
+  const entry = {
+    name: p.name.trim(),
+    file: p.filename ?? up.filename,
+    download: up.url,
+    description: (p.description ?? '').trim(),
+    version: p.version ?? up.version,
+    category: p.category ?? 'Uncategorized',
+    checksum: up.checksum,
+  };
+  if (up.homepage) entry.homepage = up.homepage;
+  if (up.releaseType) entry.release_type = up.releaseType;
+  if (up.released) entry.released = up.released;
+  if (path.extname(entry.file).toLowerCase() !== p.extension.toLowerCase()) {
+    fail(`${p.id}: "${entry.file}" does not have the expected ${p.extension} extension`);
+  }
+  for (const [key, value] of Object.entries(entry)) checkValue(p.id, key, value, LIMITS[key]);
+  return entry;
+}
+
+function render(sourceName, entries, inactive, downloads, filesUrl) {
   const s = JSON.stringify;
   const items = (list) => list.map((e) => {
     const fields = Object.entries(e).map(([k, v]) => `      ${s(k)}: ${s(v)}`);
@@ -378,11 +470,14 @@ function render(sourceName, entries, inactive) {
     '{',
     `  "name": ${s(sourceName)},`,
     `  "generated_at": ${s(new Date().toISOString())},`,
+    // Where extracted files are hosted; lets the verifier serve them locally before deploy
+    ...(filesUrl ? [`  "files_url": ${s(filesUrl)},`] : []),
     '  "_pldmgr_parser_guard": {},',
     '  "payloads": [',
     items(entries),
     // After "payloads": tools that read only that list, like Payload Manager, ignore these
     ...(inactive.length ? ['  ],', '  "inactive": [', items(inactive)] : []),
+    ...(downloads.length ? ['  ],', '  "downloads": [', items(downloads)] : []),
     '  ]',
     '}',
     '',
@@ -408,14 +503,24 @@ async function main() {
     for (const r of p.requires ?? []) if (!activeIds.has(r)) fail(`${p.id}: requires "${r}", which is disabled`);
   }
 
-  const ordered = orderByDependencies(active);
+  const ordered = orderByDependencies(active.filter((p) => p.kind === 'payload'));
   const nameById = new Map(catalog.payloads.map((p) => [p.id, p.name.trim()]));
 
+  const hosted = [];
   const resolved = await Promise.all(
     ordered.map(async (p) => {
-      const up = await resolvePayload(p);
-      console.error(`  ${p.id}: ${up.filename} ${up.version} (${up.size} bytes) sha256=${up.checksum}`);
+      const up = await resolvePayload(p, catalog.base_url);
+      const from = up.archive ? ` from ${up.archive}` : '';
+      console.error(`  ${p.id}: ${up.filename}${from} ${up.version} (${up.size} bytes) sha256=${up.checksum}`);
+      if (up.hosted) hosted.push({ name: up.filename, data: up.hosted });
       return buildEntry(p, up, nameById);
+    }),
+  );
+  const downloads = await Promise.all(
+    active.filter((p) => p.kind === 'download').map(async (p) => {
+      const up = await resolvePayload(p);
+      console.error(`  ${p.id}: ${up.filename} ${up.version} (${up.size} bytes, site download) sha256=${up.checksum}`);
+      return buildDownloadEntry(p, up);
     }),
   );
 
@@ -443,7 +548,8 @@ async function main() {
   if (resolved.length === 0) fail('no enabled payloads to write');
 
   const inactive = catalog.payloads.filter((p) => !activeIds.has(p.id)).map((p) => buildInactiveEntry(p, nameById));
-  const out = render(sourceName, resolved, inactive);
+  const filesUrl = hosted.length ? `${catalog.base_url}files/` : null;
+  const out = render(sourceName, resolved, inactive, downloads, filesUrl);
   JSON.parse(out); // sanity check: must remain valid JSON
 
   if (opts.dryRun) {
@@ -453,10 +559,19 @@ async function main() {
   const outPath = opts.out
     ? path.resolve(opts.out)
     : path.resolve(path.dirname(opts.catalog), catalog.output ?? 'payloads.json');
+  // Extracted files, published with the site; rewritten from scratch so nothing stale remains
+  const filesDir = path.join(path.dirname(outPath), 'files');
+  fs.rmSync(filesDir, { recursive: true, force: true });
+  if (hosted.length) {
+    fs.mkdirSync(filesDir);
+    for (const f of hosted) fs.writeFileSync(path.join(filesDir, f.name), f.data);
+  }
+
   const tmp = `${outPath}.tmp`;
   fs.writeFileSync(tmp, out);
   fs.renameSync(tmp, outPath);
-  console.error(`Wrote ${resolved.length} payloads to ${outPath}`);
+  const extra = [hosted.length && `${hosted.length} files to ${filesDir}`, downloads.length && `${downloads.length} site downloads`].filter(Boolean);
+  console.error(`Wrote ${resolved.length} payloads to ${outPath}${extra.length ? ` (plus ${extra.join(', ')})` : ''}`);
 }
 
 main().catch((e) => {

@@ -4,6 +4,8 @@
 # Top-level fields:
 #   name         source name shown in pldmgr          (required)
 #   output       generated file                       (default: payloads.json)
+#   base_url     public address of the published site; files extracted from archives
+#                (source.extract) are served from <base_url>files/
 #   external     other catalogs' payloads.json files, included as published:
 #                  - name: catalog name, used as its section title on the site (required)
 #                    url: link to the payloads.json   (required)
@@ -20,6 +22,8 @@
 #   requires     list of ids that must be loaded first
 #   filename     override the upstream asset name
 #   version      override the release tag
+#   kind         payload (default): offered in Payload Manager; download: listed on the site only,
+#                for apps and archives Payload Manager can't install (extension may be e.g. .zip)
 #   enabled      false to leave the entry out without deleting it; it is not looked up
 #                or downloaded until re-enabled (default: true)
 #   extension    the one file type this provider ships: .elf or .bin (required;
@@ -29,6 +33,9 @@
 #                     asset names, tag: (optional) pin a specific release,
 #                     prerelease: (optional) true to also consider pre-releases
 #                     (default: false, stable releases only)
+#     extract: (optional, either type) name of one file inside a .zip asset; that file is
+#              extracted, checked against the archive's SHA256SUMS if present, and hosted
+#              with the site (needs base_url)
 #     type: url    -> url: direct download link, version: (optional),
 #                     homepage: (optional) project page linked from the site
 #
@@ -36,6 +43,7 @@
 
 name: PS5 Payloads
 output: payloads.json
+base_url: https://avoidik.github.io/ps5-payloads/
 
 external:
   - name: Orbit Store
@@ -181,3 +189,142 @@ payloads:
       type: github
       repo: idlesauce/ps5-remoteplay-get-pin
       asset: '^rp-get-pin\.elf$'
+
+  - id: fan-target-85c
+    name: Fan Target 85C
+    category: Utilities
+    description: >-
+      Sets the fan controller's target temperature to 85C instead of the default 91C, with the
+      automatic fan control left on. Runs in the background and restores the target if a game
+      changes it. Use one version only: installing another temperature replaces this one.
+    extension: .elf
+    source:
+      type: github
+      repo: drakmor/fan_target
+      asset: '^fan-target\.zip$'
+      extract: fan_target_85c.elf
+
+  - id: fan-target-80c
+    name: Fan Target 80C
+    category: Utilities
+    description: >-
+      Sets the fan controller's target temperature to 80C instead of the default 91C, with the
+      automatic fan control left on. Runs in the background and restores the target if a game
+      changes it. Use one version only: installing another temperature replaces this one.
+    extension: .elf
+    source:
+      type: github
+      repo: drakmor/fan_target
+      asset: '^fan-target\.zip$'
+      extract: fan_target_80c.elf
+
+  - id: fan-target-75c
+    name: Fan Target 75C
+    category: Utilities
+    description: >-
+      Sets the fan controller's target temperature to 75C instead of the default 91C, with the
+      automatic fan control left on. Runs in the background and restores the target if a game
+      changes it. Use one version only: installing another temperature replaces this one.
+    extension: .elf
+    source:
+      type: github
+      repo: drakmor/fan_target
+      asset: '^fan-target\.zip$'
+      extract: fan_target_75c.elf
+
+  - id: fan-target-70c
+    name: Fan Target 70C
+    category: Utilities
+    description: >-
+      Sets the fan controller's target temperature to 70C instead of the default 91C, with the
+      automatic fan control left on. Runs in the background and restores the target if a game
+      changes it. Use one version only: installing another temperature replaces this one.
+    extension: .elf
+    source:
+      type: github
+      repo: drakmor/fan_target
+      asset: '^fan-target\.zip$'
+      extract: fan_target_70c.elf
+
+  - id: fan-target-65c
+    name: Fan Target 65C
+    category: Utilities
+    description: >-
+      Sets the fan controller's target temperature to 65C instead of the default 91C, with the
+      automatic fan control left on. Runs in the background and restores the target if a game
+      changes it. Use one version only: installing another temperature replaces this one.
+    extension: .elf
+    source:
+      type: github
+      repo: drakmor/fan_target
+      asset: '^fan-target\.zip$'
+      extract: fan_target_65c.elf
+
+  - id: ps5x360-helper
+    name: PS5X360 Helper
+    category: Emulators
+    description: >-
+      Autoload helper for PS5X360, an Xbox 360 emulator for PS5 based on Xenia Canary. It keeps the
+      PS5X360 app up to date from its GitHub releases. Install the app first (PS5X360 download).
+    extension: .elf
+    source:
+      type: github
+      repo: BrinooTk/PS5X360
+      asset: '^PS5X360-Helper\.elf$'
+
+  - id: ps5x360
+    name: PS5X360
+    kind: download
+    category: Emulators
+    description: >-
+      Xbox 360 emulator app for PS5, based on Xenia Canary. Not a payload: extract the zip and copy
+      the whole PPSA50011 folder to /data/homebrew/ over FTP, then let ShadowMountPlus register it.
+      Needs etaHEN, kstuff and ShadowMountPlus, plus your own Xbox 360 games.
+    extension: .zip
+    source:
+      type: github
+      repo: BrinooTk/PS5X360
+      asset: '^PPSA50011\.zip$'
+
+  - id: ampr-emu
+    name: AMPR Emu
+    kind: download
+    category: Emulators
+    description: >-
+      APR Emu (AMPR userland emulation) library, libSceAmpr.sprx, which some games need. Not a
+      payload: ShadowMountPlus downloads the latest build by itself, and APR Emu Updater picks a build
+      per game. Download it only to install it by hand.
+    extension: .sprx
+    source:
+      type: github
+      repo: drakmor/ampr_emu
+      asset: '^libSceAmpr\.sprx$'
+
+  - id: playgo-stub
+    name: PlayGo Stub
+    kind: download
+    category: Emulators
+    description: >-
+      Lightweight replacement for a game's PlayGo runtime library, libScePlayGo.sprx. It reports all
+      content chunks and languages as installed, so titles that wait on PlayGo can carry on. Not a
+      payload: it replaces the game's own module. Optional settings in playgo_stub.dat in the game
+      folder (/app0).
+    extension: .sprx
+    source:
+      type: github
+      repo: drakmor/pgo_stub
+      asset: '^libScePlayGo\.sprx$'
+
+  - id: dlc-emu
+    name: DLC Emu
+    kind: download
+    category: Emulators
+    description: >-
+      Replacement modules (libSceAppContent, libSceNpEntitlementAccess, libSceGameUpdate) that make a
+      game see the DLC listed in dlc_emu.ini in its folder (/app0) as owned. Not a payload: the zip
+      has normal and logging builds of the modules, an example dlc_emu.ini and a helper script.
+    extension: .zip
+    source:
+      type: github
+      repo: drakmor/dlc_emu
+      asset: '^dlc_emu_[\d.]+\.zip$'

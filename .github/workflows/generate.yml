@@ -83,7 +83,10 @@ jobs:
       - uses: actions/upload-artifact@v7
         with:
           name: payloads.json
-          path: payloads.json
+          # files/ holds payloads extracted from archives; the verify job serves them locally
+          path: |
+            payloads.json
+            files/
 
       - name: Commit payloads.json
         if: steps.diff.outputs.changed == 'true' && github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
@@ -103,6 +106,8 @@ jobs:
         run: |
           mkdir -p _site
           cp site/* payloads.json _site/
+          # Payloads extracted from archives are hosted with the site
+          if [ -d files ]; then cp -r files _site/; fi
 
       - uses: actions/upload-pages-artifact@v5
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
