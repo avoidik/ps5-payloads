@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-24T15:21:10.769Z",
+  "generated_at": "2026-10-24T20:49:16.321Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
   "groups": {"fan-target":{"name":"Fan Target","description":"Sets the fan controller's target temperature below the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one variant only: lower targets make the fan react earlier and run faster; 85C is a good start."}},
   "payloads": [
@@ -86,15 +86,15 @@
     {
       "id": "ps5upload",
       "name": "PS5 Upload Helper",
-      "filename": "ps5upload-7.3.1.elf",
-      "url": "https://github.com/phantomptr/ps5upload/releases/download/v7.3.1/ps5upload-7.3.1.elf",
+      "filename": "ps5upload-7.5.0.elf",
+      "url": "https://github.com/phantomptr/ps5upload/releases/download/v7.5.0/ps5upload-7.5.0.elf",
       "description": "Console-side helper for the PS5 Upload app on PC, Mac, Android or web. Resumable uploads, package installs, file and game management on port 9120. Enter the 6-digit code it shows in the app to pair. Keep the app and helper on the same version.",
-      "version": "v7.3.1",
+      "version": "v7.5.0",
       "category": "Utilities",
-      "checksum": "999ee1ece7a0b41d41727d9cfab71eb6f6de6aa434f866792c4363ece483eed7",
+      "checksum": "57f4bfea3233d4e0094a298b89b165048ceef875937d8fbe9fb0f0572d163d8c",
       "source": "https://github.com/phantomptr/ps5upload",
-      "last_update": "2026-10-24T14:15:33Z",
-      "release_type": "pre-release"
+      "last_update": "2026-10-24T20:39:27Z",
+      "release_type": "stable"
     },
     {
       "id": "shadowmountplus",
@@ -265,14 +265,14 @@
     {
       "name": "Orbit Store (Beta)",
       "filename": "orbit_store.elf",
-      "url": "https://github.com/saawant12/orbit-store-ps5/releases/download/v1.4.0/orbit_store.elf",
+      "url": "https://github.com/saawant12/orbit-store-ps5/releases/download/v1.5.0/orbit_store.elf",
       "description": "A modern PS5 download manager with a native TV app, resumable downloads and phone controls.",
-      "version": "v1.4.0",
+      "version": "v1.5.0",
       "category": "Utilities",
-      "checksum": "e43c6272b3519fc2ec8b9373a484f2c2adb9669d7652567661149da741ab6d94",
+      "checksum": "9590ef2cfa8764eb96fbe52dec302f1d9c8ba7d51101f031a69ac1279d20e579",
       "id": "orbit-store.orbit-store-beta",
       "release_type": "stable",
-      "last_update": "2026-10-22T21:11:50Z",
+      "last_update": "2026-10-24T17:22:19Z",
       "source": "https://github.com/saawant12/orbit-store-ps5",
       "catalog": "Orbit Store",
       "catalog_url": "https://raw.githubusercontent.com/saawant12/orbit-store-ps5/refs/heads/main/payloads.json"
