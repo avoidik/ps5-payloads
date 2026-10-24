@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-23T17:06:49.647Z",
+  "generated_at": "2026-10-24T04:36:13.056Z",
   "_pldmgr_parser_guard": {},
   "payloads": [
     {
@@ -78,15 +78,15 @@
     },
     {
       "name": "PS5 Upload Helper",
-      "filename": "ps5upload-7.1.19.elf",
-      "url": "https://github.com/phantomptr/ps5upload/releases/download/v7.1.19/ps5upload-7.1.19.elf",
+      "filename": "ps5upload-7.1.20.elf",
+      "url": "https://github.com/phantomptr/ps5upload/releases/download/v7.1.20/ps5upload-7.1.20.elf",
       "description": "Console-side helper for the PS5 Upload app on PC, Mac, Android or web. Resumable uploads, package installs, file and game management on port 9120. Enter the 6-digit code it shows in the app to pair. Keep the app and helper on the same version.",
-      "version": "v7.1.19",
+      "version": "v7.1.20",
       "category": "Utilities",
-      "checksum": "c5e68afd6c3101a50b6a425350a7d3fec9ab5049cf8bed9ced53f4548598da07",
+      "checksum": "39fa28f42e9a854549f06543bf5cbb9c383b33a4ad8bfa8557b6aa6f6470d07b",
       "homepage": "https://github.com/phantomptr/ps5upload",
-      "release_type": "stable",
-      "released": "2026-10-23T09:58:44Z"
+      "release_type": "pre-release",
+      "released": "2026-10-24T03:24:42Z"
     },
     {
       "name": "ShadowMountPlus",
@@ -103,14 +103,14 @@
     {
       "name": "PS4Mount",
       "filename": "ps4mount.elf",
-      "url": "https://github.com/gasb07/ps4mount/releases/download/v0.6.1/ps4mount.elf",
+      "url": "https://github.com/gasb07/ps4mount/releases/download/v0.7.0/ps4mount.elf",
       "description": "Plays PS4 fake PKGs straight from an exFAT USB drive without installing them. Put the game and update .pkg files in the drive root; it adds them to the home screen. Web panel on port 8770 and in the Media tab. Needs fake PKG support (e.g. etaHEN with kstuff) and kernel log access (klogsrv on port 3232, or no other payload reading /dev/klog). Load after every boot. Tested on firmware 13.20.",
-      "version": "v0.6.1",
+      "version": "v0.7.0",
       "category": "Utilities",
-      "checksum": "e8730c816fe762c52a9aa88c2116520569fa4448c49ff4c2035001ab9427601a",
+      "checksum": "9a99fdeb2be8ebee823b14636e0aac5721386feabcfe97e27dc6d5b3e4158bb7",
       "homepage": "https://github.com/gasb07/ps4mount",
       "release_type": "stable",
-      "released": "2026-10-21T03:06:30Z"
+      "released": "2026-10-24T02:07:53Z"
     },
     {
       "name": "Orbit Store (Beta)",
