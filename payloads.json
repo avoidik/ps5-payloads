@@ -1,10 +1,10 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-24T08:40:06.256Z",
+  "generated_at": "2026-10-24T08:51:55.752Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
-  "_pldmgr_parser_guard": {},
   "payloads": [
     {
+      "id": "legacyjb",
       "name": "LegacyJB",
       "filename": "LegacyJB.elf",
       "url": "https://github.com/Phoenixx1202/LegacyJB/releases/download/1.2.1/LegacyJB.elf",
@@ -12,11 +12,12 @@
       "version": "1.2.1",
       "category": "Jailbreak",
       "checksum": "7633372f39a7a6e460f3990b02cd07026f4e5591aefd2509f8c6338f03b8440b",
-      "homepage": "https://github.com/Phoenixx1202/LegacyJB",
-      "release_type": "stable",
-      "released": "2026-09-29T21:35:25Z"
+      "source": "https://github.com/Phoenixx1202/LegacyJB",
+      "last_update": "2026-09-29T21:35:25Z",
+      "release_type": "stable"
     },
     {
+      "id": "pegasus-dl",
       "name": "Pegasus DL",
       "filename": "pegasus_dl.elf",
       "url": "https://github.com/pegasus-ps5/pegasus-dl/releases/download/v1.11.0/pegasus_dl.elf",
@@ -24,11 +25,12 @@
       "version": "v1.11.0",
       "category": "Downloaders",
       "checksum": "32b69c2089bb545abfabd04d5827444698f9c4f1bc4915d72247cb781e8c23d9",
-      "homepage": "https://github.com/pegasus-ps5/pegasus-dl",
-      "release_type": "stable",
-      "released": "2026-10-09T22:57:31Z"
+      "source": "https://github.com/pegasus-ps5/pegasus-dl",
+      "last_update": "2026-10-09T22:57:31Z",
+      "release_type": "stable"
     },
     {
+      "id": "ps5-account-tools",
       "name": "PS5 Account Tools",
       "filename": "ps5-account-tools-v1.2.elf",
       "url": "https://github.com/MangoScango/ps5-account-tools/releases/download/v1.2/ps5-account-tools-v1.2.elf",
@@ -36,11 +38,12 @@
       "version": "v1.2",
       "category": "Utilities",
       "checksum": "2e1402d8c088afda55280b28fcc66ccb870528ec948d10ea586088f60f723f2a",
-      "homepage": "https://github.com/MangoScango/ps5-account-tools",
-      "release_type": "stable",
-      "released": "2026-09-19T15:29:14Z"
+      "source": "https://github.com/MangoScango/ps5-account-tools",
+      "last_update": "2026-09-19T15:29:14Z",
+      "release_type": "stable"
     },
     {
+      "id": "apr-emu-updater",
       "name": "APR Emu Updater",
       "filename": "apr_emu_updater_v2.0.6.elf",
       "url": "https://github.com/tsuramatsu1/apr-emu-updater/releases/download/v2.0.6/apr_emu_updater_v2.0.6.elf",
@@ -48,11 +51,12 @@
       "version": "v2.0.6",
       "category": "Utilities",
       "checksum": "4f04464283a6a551883e40e36b59134ecad0e38ecbb7ea89cbec3f91a3bd9122",
-      "homepage": "https://github.com/tsuramatsu1/apr-emu-updater",
-      "release_type": "stable",
-      "released": "2026-08-29T09:54:19Z"
+      "source": "https://github.com/tsuramatsu1/apr-emu-updater",
+      "last_update": "2026-08-29T09:54:19Z",
+      "release_type": "stable"
     },
     {
+      "id": "ps5sx2-helper",
       "name": "PS5SX2 Helper",
       "filename": "PS5SXHelper.elf",
       "url": "https://github.com/Swordpdf/PS5SX2/releases/download/vk-285-177/PS5SXHelper.elf",
@@ -60,11 +64,12 @@
       "version": "vk-285-177",
       "category": "Emulators",
       "checksum": "f7960126abe5ad30869fbe01235fecf2bfac71bd90ee3b9c9eb22810b699e736",
-      "homepage": "https://github.com/Swordpdf/PS5SX2",
-      "release_type": "stable",
-      "released": "2026-10-19T14:10:40Z"
+      "source": "https://github.com/Swordpdf/PS5SX2",
+      "last_update": "2026-10-19T14:10:40Z",
+      "release_type": "stable"
     },
     {
+      "id": "ps5sx2-installer",
       "name": "PS5SX2 Installer",
       "filename": "PS5SX2Installer.elf",
       "url": "https://github.com/Swordpdf/PS5SX2/releases/download/vk-285-177/PS5SX2Installer.elf",
@@ -73,11 +78,12 @@
       "category": "Emulators",
       "checksum": "6b1be3ea24ec8144b27b2a1f3e279cd17574f3093e9431abf8579dcc6c0bfae9",
       "requires": "PS5SX2 Helper",
-      "homepage": "https://github.com/Swordpdf/PS5SX2",
-      "release_type": "stable",
-      "released": "2026-10-19T14:10:40Z"
+      "source": "https://github.com/Swordpdf/PS5SX2",
+      "last_update": "2026-10-19T14:10:40Z",
+      "release_type": "stable"
     },
     {
+      "id": "ps5upload",
       "name": "PS5 Upload Helper",
       "filename": "ps5upload-7.2.0.elf",
       "url": "https://github.com/phantomptr/ps5upload/releases/download/v7.2.0/ps5upload-7.2.0.elf",
@@ -85,11 +91,12 @@
       "version": "v7.2.0",
       "category": "Utilities",
       "checksum": "a8a20057b43fae225df7adfdda046911d81886a72fc3223e831c2999db948331",
-      "homepage": "https://github.com/phantomptr/ps5upload",
-      "release_type": "stable",
-      "released": "2026-10-24T08:05:52Z"
+      "source": "https://github.com/phantomptr/ps5upload",
+      "last_update": "2026-10-24T08:05:52Z",
+      "release_type": "stable"
     },
     {
+      "id": "shadowmountplus",
       "name": "ShadowMountPlus",
       "filename": "shadowmountplus.elf",
       "url": "https://github.com/drakmor/ShadowMountPlus/releases/download/1.7beta7/shadowmountplus.elf",
@@ -97,11 +104,12 @@
       "version": "1.7beta7",
       "category": "Utilities",
       "checksum": "a8f9d7f76e8749912508ade0cd5c78076b5bbf1271813c78c80c3d3d9d4777ee",
-      "homepage": "https://github.com/drakmor/ShadowMountPlus",
-      "release_type": "stable",
-      "released": "2026-10-21T11:56:24Z"
+      "source": "https://github.com/drakmor/ShadowMountPlus",
+      "last_update": "2026-10-21T11:56:24Z",
+      "release_type": "stable"
     },
     {
+      "id": "ps4mount",
       "name": "PS4Mount",
       "filename": "ps4mount.elf",
       "url": "https://github.com/gasb07/ps4mount/releases/download/v0.7.0/ps4mount.elf",
@@ -109,11 +117,12 @@
       "version": "v0.7.0",
       "category": "Utilities",
       "checksum": "9a99fdeb2be8ebee823b14636e0aac5721386feabcfe97e27dc6d5b3e4158bb7",
-      "homepage": "https://github.com/gasb07/ps4mount",
-      "release_type": "stable",
-      "released": "2026-10-24T02:07:53Z"
+      "source": "https://github.com/gasb07/ps4mount",
+      "last_update": "2026-10-24T02:07:53Z",
+      "release_type": "stable"
     },
     {
+      "id": "rp-get-pin",
       "name": "Remote Play PIN",
       "filename": "rp-get-pin.elf",
       "url": "https://github.com/idlesauce/ps5-remoteplay-get-pin/releases/download/v0.1.1/rp-get-pin.elf",
@@ -121,11 +130,12 @@
       "version": "v0.1.1",
       "category": "Utilities",
       "checksum": "1d611c1856dd2f4b4b6cb42ead1128a7f08a26585788f92de79fa4f67d721472",
-      "homepage": "https://github.com/idlesauce/ps5-remoteplay-get-pin",
-      "release_type": "stable",
-      "released": "2025-03-09T14:25:13Z"
+      "source": "https://github.com/idlesauce/ps5-remoteplay-get-pin",
+      "last_update": "2025-03-09T14:25:13Z",
+      "release_type": "stable"
     },
     {
+      "id": "fan-target-85c",
       "name": "Fan Target 85C",
       "filename": "fan_target_85c.elf",
       "url": "https://avoidik.github.io/ps5-payloads/files/fan_target_85c.elf",
@@ -133,11 +143,12 @@
       "version": "0.1",
       "category": "Utilities",
       "checksum": "c37019c351c1c5b05b43adbac29d85bfd25f8c0ab9d94371cacab1945d8e0fd0",
-      "homepage": "https://github.com/drakmor/fan_target",
-      "release_type": "stable",
-      "released": "2026-08-04T17:00:21Z"
+      "source": "https://github.com/drakmor/fan_target",
+      "last_update": "2026-08-04T17:00:21Z",
+      "release_type": "stable"
     },
     {
+      "id": "fan-target-80c",
       "name": "Fan Target 80C",
       "filename": "fan_target_80c.elf",
       "url": "https://avoidik.github.io/ps5-payloads/files/fan_target_80c.elf",
@@ -145,11 +156,12 @@
       "version": "0.1",
       "category": "Utilities",
       "checksum": "ccf2e709218f31cd9e6a0705c99646b8f030b877687df8377982a2f6ca10216e",
-      "homepage": "https://github.com/drakmor/fan_target",
-      "release_type": "stable",
-      "released": "2026-08-04T17:00:21Z"
+      "source": "https://github.com/drakmor/fan_target",
+      "last_update": "2026-08-04T17:00:21Z",
+      "release_type": "stable"
     },
     {
+      "id": "fan-target-75c",
       "name": "Fan Target 75C",
       "filename": "fan_target_75c.elf",
       "url": "https://avoidik.github.io/ps5-payloads/files/fan_target_75c.elf",
@@ -157,11 +169,12 @@
       "version": "0.1",
       "category": "Utilities",
       "checksum": "4b52e09c48ebed1f369221c290e8ec4a9fdb2a477b7b7f44a1b8646958d9f69b",
-      "homepage": "https://github.com/drakmor/fan_target",
-      "release_type": "stable",
-      "released": "2026-08-04T17:00:21Z"
+      "source": "https://github.com/drakmor/fan_target",
+      "last_update": "2026-08-04T17:00:21Z",
+      "release_type": "stable"
     },
     {
+      "id": "fan-target-70c",
       "name": "Fan Target 70C",
       "filename": "fan_target_70c.elf",
       "url": "https://avoidik.github.io/ps5-payloads/files/fan_target_70c.elf",
@@ -169,11 +182,12 @@
       "version": "0.1",
       "category": "Utilities",
       "checksum": "a9ad8502123799d58f8ddd9882d842f524c4ecc3ea6743a73c6dcdffd0bf30e0",
-      "homepage": "https://github.com/drakmor/fan_target",
-      "release_type": "stable",
-      "released": "2026-08-04T17:00:21Z"
+      "source": "https://github.com/drakmor/fan_target",
+      "last_update": "2026-08-04T17:00:21Z",
+      "release_type": "stable"
     },
     {
+      "id": "fan-target-65c",
       "name": "Fan Target 65C",
       "filename": "fan_target_65c.elf",
       "url": "https://avoidik.github.io/ps5-payloads/files/fan_target_65c.elf",
@@ -181,11 +195,12 @@
       "version": "0.1",
       "category": "Utilities",
       "checksum": "0bedeb564947530d09d1dfb27df63c2a09eaa7f51faf3ddcc90b3fb2870e6312",
-      "homepage": "https://github.com/drakmor/fan_target",
-      "release_type": "stable",
-      "released": "2026-08-04T17:00:21Z"
+      "source": "https://github.com/drakmor/fan_target",
+      "last_update": "2026-08-04T17:00:21Z",
+      "release_type": "stable"
     },
     {
+      "id": "ps5x360-helper",
       "name": "PS5X360 Helper",
       "filename": "PS5X360-Helper.elf",
       "url": "https://github.com/BrinooTk/PS5X360/releases/download/v1.0.2/PS5X360-Helper.elf",
@@ -193,9 +208,9 @@
       "version": "v1.0.2",
       "category": "Emulators",
       "checksum": "4a0250329e63b376f620511c4b6e2c6a2eb959e056824abde27947bf53f07b59",
-      "homepage": "https://github.com/BrinooTk/PS5X360",
-      "release_type": "stable",
-      "released": "2026-10-22T23:27:57Z"
+      "source": "https://github.com/BrinooTk/PS5X360",
+      "last_update": "2026-10-22T23:27:57Z",
+      "release_type": "stable"
     },
     {
       "name": "Orbit Store (Beta)",
@@ -205,9 +220,10 @@
       "version": "v1.4.0",
       "category": "Utilities",
       "checksum": "e43c6272b3519fc2ec8b9373a484f2c2adb9669d7652567661149da741ab6d94",
+      "id": "orbit-store.orbit-store-beta",
       "release_type": "stable",
-      "released": "2026-10-22T21:11:50Z",
-      "homepage": "https://github.com/saawant12/orbit-store-ps5",
+      "last_update": "2026-10-22T21:11:50Z",
+      "source": "https://github.com/saawant12/orbit-store-ps5",
       "catalog": "Orbit Store",
       "catalog_url": "https://raw.githubusercontent.com/saawant12/orbit-store-ps5/refs/heads/main/payloads.json"
     }
@@ -218,7 +234,7 @@
       "description": "Native content manager for browsing and downloading supported game files.",
       "category": "Content Managers",
       "requires": "LegacyJB",
-      "homepage": "https://github.com/Phoenixx1202/Spectrum-Library",
+      "source": "https://github.com/Phoenixx1202/Spectrum-Library",
       "release_type": "inactive"
     }
   ],
@@ -231,9 +247,9 @@
       "version": "v1.0.2",
       "category": "Emulators",
       "checksum": "230359c2638f99add3972147e1690e62d8984a37c00181501680bdda7c1096c8",
-      "homepage": "https://github.com/BrinooTk/PS5X360",
-      "release_type": "stable",
-      "released": "2026-10-22T23:27:57Z"
+      "source": "https://github.com/BrinooTk/PS5X360",
+      "last_update": "2026-10-22T23:27:57Z",
+      "release_type": "stable"
     },
     {
       "name": "AMPR Emu",
@@ -243,9 +259,9 @@
       "version": "0.4.2.1",
       "category": "Emulators",
       "checksum": "69e6c4d5e4f5fb83c9e01815db5861c4c75734acbf4595cafa50d4c218116d1a",
-      "homepage": "https://github.com/drakmor/ampr_emu",
-      "release_type": "stable",
-      "released": "2026-09-06T12:12:31Z"
+      "source": "https://github.com/drakmor/ampr_emu",
+      "last_update": "2026-09-06T12:12:31Z",
+      "release_type": "stable"
     },
     {
       "name": "PlayGo Stub",
@@ -255,9 +271,9 @@
       "version": "0.6",
       "category": "Emulators",
       "checksum": "f5fdb0ed6cc7413e6dcac79a62e0efd8cfbae04cca0bf932e7a741aed850d213",
-      "homepage": "https://github.com/drakmor/pgo_stub",
-      "release_type": "stable",
-      "released": "2026-10-10T17:01:35Z"
+      "source": "https://github.com/drakmor/pgo_stub",
+      "last_update": "2026-10-10T17:01:35Z",
+      "release_type": "stable"
     },
     {
       "name": "DLC Emu",
@@ -267,9 +283,9 @@
       "version": "0.3",
       "category": "Emulators",
       "checksum": "c9f353ae4c7951de57ae3b6f5b3be1683f72866e2137121bb548d061d04f265e",
-      "homepage": "https://github.com/drakmor/dlc_emu",
-      "release_type": "stable",
-      "released": "2026-06-28T12:11:32Z"
+      "source": "https://github.com/drakmor/dlc_emu",
+      "last_update": "2026-06-28T12:11:32Z",
+      "release_type": "stable"
     }
   ]
 }
