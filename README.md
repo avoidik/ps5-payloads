@@ -23,14 +23,14 @@ Entries on a self-hosted **Gitea or Forgejo** server use `type: gitea` with the 
 
 The script doesn't write anything if any of these steps fails. Set `GITHUB_TOKEN` to avoid API rate limits.
 
-To leave an entry out temporarily, for example while it's broken upstream, set `enabled: false` on it in `catalog.yaml`. It isn't looked up or downloaded, and Payload Manager no longer offers it. The site still lists it, in a separate "Inactive" section at the bottom, with an **inactive** badge and its upstream link but no download. That entry lives in a separate `inactive` list in `payloads.json`, without a file or URL, so Payload Manager's parser skips it. An enabled entry can't `require` a disabled one.
+To leave an entry out temporarily, for example while it's broken upstream, set `enabled: false` on it in `catalog.yaml`. It isn't looked up or downloaded, and Payload Manager no longer offers it. The site still lists it, on the **Inactive** tab, with an **inactive** badge and its upstream link but no download. That entry lives in a separate `inactive` list in `payloads.json`, without a file or URL, so Payload Manager's parser skips it. An enabled entry can't `require` a disabled one.
 
 ## Archives
 
 Some projects ship their payloads inside a `.zip`. Payload Manager can only download and run a single `.elf`/`.bin`, so:
 
 - **One file from an archive:** set `source.extract` to the file's name. The generator downloads the archive, checks it against GitHub's digest, extracts that file and checks it against the archive's own `SHA256SUMS` if there is one. It then writes the file to `files/` (git-ignored). The workflow publishes `files/` with the site, and the entry's URL points to `<base_url>files/<name>`, so `base_url` must be set at the top of the catalog. Example: the five `fan_target` temperature builds.
-- **A whole archive:** an entry with `kind: download` (and e.g. `extension: .zip`) is a site-only download, such as an app you install by hand. It's checksummed like any other entry and listed in an "Apps" section on the site, linking to the upstream file. It sits in a separate `downloads` list in `payloads.json`, with `file`/`download` instead of `filename`/`url`, so Payload Manager's parser skips it. Example: PS5X360's `PPSA50011.zip`.
+- **A whole archive:** an entry with `kind: download` (and e.g. `extension: .zip`) is a site-only download, such as an app you install by hand. It's checksummed like any other entry and listed on the site's **Apps** tab, linking to the upstream file. It sits in a separate `downloads` list in `payloads.json`, with `file`/`download` instead of `filename`/`url`, so Payload Manager's parser skips it. Example: PS5X360's `PPSA50011.zip`.
 
 ## Dependencies
 
@@ -50,7 +50,7 @@ external:
     url: https://raw.githubusercontent.com/saawant12/orbit-store-ps5/refs/heads/main/payloads.json
 ```
 
-Their payloads are added after ours, tagged with the catalog's `name`, and the site shows them in a separate "From other catalogs" section. Each file is still downloaded and SHA-256 checked, and must match the catalog's own checksum if it gives one. Entries that aren't `.elf`/`.bin`, fail a check, or reuse a filename are skipped with a warning. A catalog that can't be downloaded fails the build.
+Their payloads are added after ours, tagged with the catalog's `name`, and the site shows them on the **Other** tab. Each file is still downloaded and SHA-256 checked, and must match the catalog's own checksum if it gives one. Entries that aren't `.elf`/`.bin`, fail a check, or reuse a filename are skipped with a warning. A catalog that can't be downloaded fails the build.
 
 ## Groups
 
@@ -58,7 +58,7 @@ Variants of one project can share a single card on the site. Define the group on
 
 ## Useful links
 
-`links:` at the top of `catalog.yaml` lists other tools and pages for the site's "Useful links" section. Each link has a `name`, and either a `url` or a GitHub `repo` (`owner/name`), plus an optional `description`. For a `repo` without a description, the generator uses GitHub's own repo description. Links go into a `links` list in `payloads.json` with an `href` key instead of `url`, so Payload Manager ignores them.
+`links:` at the top of `catalog.yaml` lists other tools and pages for the site's **Links** tab. Each link has a `name`, and either a `url` or a GitHub `repo` (`owner/name`), plus an optional `description`. For a `repo` without a description, the generator uses GitHub's own repo description. Links go into a `links` list in `payloads.json` with an `href` key instead of `url`, so Payload Manager ignores them.
 
 ## What the output contains
 
@@ -75,7 +75,7 @@ The site-only `inactive` and `downloads` lists come after `payloads`. Payload Ma
 
 ## Hosting
 
-The workflow publishes `payloads.json` and a small landing page (`site/index.html`, which lists the payloads) to GitHub Pages:
+The workflow publishes `payloads.json` and a small landing page (`site/index.html`) to GitHub Pages. The page has the source URL at the top and five tabs: **Main** (our payloads), **Apps**, **Other** (other catalogs), **Links** and **Inactive**; empty tabs are hidden. The URL hash picks a tab (`#apps`) or a card in one (`#legacyjb`):
 
 - Source URL: `https://avoidik.github.io/ps5-payloads/payloads.json`
 - Landing page: `https://avoidik.github.io/ps5-payloads/`

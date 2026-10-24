@@ -31,6 +31,13 @@
   .btn { padding: .6rem 1rem; border: 0; border-radius: 8px; background: var(--accent); color: #fff; font: inherit; font-weight: 600; cursor: pointer; }
   .status { margin: 0 0 1.5rem; color: var(--muted); font-size: 13px; }
 
+  .tabs { display: flex; gap: .25rem; margin: 1.5rem 0 1.25rem; border-bottom: 1px solid var(--line); overflow-x: auto; }
+  .tabs [role="tab"] { flex: none; padding: .6rem .9rem; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; background: none; color: var(--muted); font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .tabs [role="tab"]:hover { color: var(--fg); }
+  .tabs [role="tab"][aria-selected="true"] { color: var(--fg); border-bottom-color: var(--accent); }
+  .tabs [role="tab"]:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; border-radius: 6px 6px 0 0; }
+  .tabs .count { margin-left: .4rem; padding: 0 .45rem; border-radius: 999px; background: var(--chip); color: var(--muted); font-size: 12px; font-weight: 600; }
+  .tabs .count:empty { display: none; }
   .section-title { margin: 2.5rem 0 .25rem; font-size: 1.25rem; }
   .section-note { margin: 0 0 1rem; color: var(--muted); font-size: 13px; }
   .link-list { display: grid; gap: .5rem; margin: 1rem 0 0; padding: 0; list-style: none; }
@@ -95,26 +102,32 @@
   </div>
   <p id="status" class="status">Loading…</p>
 
-  <section id="list" class="grid"></section>
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button type="button" role="tab" id="tab-main" aria-controls="main" aria-selected="true">Main<span class="count"></span></button>
+    <button type="button" role="tab" id="tab-apps" aria-controls="apps" aria-selected="false" tabindex="-1" hidden>Apps<span class="count"></span></button>
+    <button type="button" role="tab" id="tab-other" aria-controls="other" aria-selected="false" tabindex="-1" hidden>Other<span class="count"></span></button>
+    <button type="button" role="tab" id="tab-links" aria-controls="links" aria-selected="false" tabindex="-1" hidden>Links<span class="count"></span></button>
+    <button type="button" role="tab" id="tab-inactive" aria-controls="inactive" aria-selected="false" tabindex="-1" hidden>Inactive<span class="count"></span></button>
+  </nav>
 
-  <section id="downloads" hidden>
-    <h2 class="section-title">Apps</h2>
+  <section id="main" role="tabpanel" aria-labelledby="tab-main">
+    <div id="list" class="grid"></div>
+  </section>
+
+  <section id="apps" role="tabpanel" aria-labelledby="tab-apps" hidden>
     <p class="section-note">Not payloads, so Payload Manager doesn't offer them. Download and install them by hand, as described.</p>
     <div id="downloads-list" class="grid"></div>
   </section>
 
-  <section id="external" hidden>
-    <h2 class="section-title">From other catalogs</h2>
-    <p class="section-note">Included as their authors publish them. Files are checksummed here, but not reviewed.</p>
+  <section id="other" role="tabpanel" aria-labelledby="tab-other" hidden>
+    <p class="section-note">From other catalogs, included as their authors publish them. Files are checksummed here, but not reviewed.</p>
   </section>
 
-  <section id="links" hidden>
-    <h2 class="section-title">Useful links</h2>
+  <section id="links" role="tabpanel" aria-labelledby="tab-links" hidden>
     <ul id="links-list" class="link-list"></ul>
   </section>
 
-  <section id="inactive" hidden>
-    <h2 class="section-title">Inactive</h2>
+  <section id="inactive" role="tabpanel" aria-labelledby="tab-inactive" hidden>
     <p class="section-note">Temporarily left out until they work again. Payload Manager doesn't offer them.</p>
     <div id="inactive-list" class="grid"></div>
   </section>

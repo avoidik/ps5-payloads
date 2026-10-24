@@ -134,6 +134,58 @@ function card(p) {
   );
 }
 
+// ── Tabs ── the URL hash names the tab (#apps), or a card in it (#legacyjb)
+
+const tabs = () => [...document.querySelectorAll('.tabs [role="tab"]')].filter((t) => !t.hidden);
+
+function showTab(name, { focus = false } = {}) {
+  for (const t of document.querySelectorAll('.tabs [role="tab"]')) {
+    const selected = t.getAttribute('aria-controls') === name;
+    t.setAttribute('aria-selected', String(selected));
+    t.tabIndex = selected ? 0 : -1;
+    document.getElementById(t.getAttribute('aria-controls')).hidden = !selected;
+    if (selected && focus) t.focus();
+  }
+}
+
+// Opens the tab the hash points at; for a card, also scrolls to it
+function followHash() {
+  const target = location.hash.length > 1 ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null;
+  const panel = target?.closest('[role="tabpanel"]');
+  const tab = panel && document.querySelector(`.tabs [aria-controls="${panel.id}"]`);
+  if (!tab || tab.hidden) {
+    showTab('main');
+    return;
+  }
+  showTab(panel.id);
+  if (target !== panel) target.scrollIntoView({ block: 'start' });
+}
+
+function setUpTabs(counts) {
+  for (const [name, n] of Object.entries(counts)) {
+    const tab = document.getElementById(`tab-${name}`);
+    tab.querySelector('.count').textContent = n ? String(n) : '';
+    tab.hidden = name !== 'main' && n === 0;
+    tab.addEventListener('click', () => {
+      history.replaceState(null, '', `#${name}`);
+      showTab(name);
+    });
+  }
+  // Arrow keys, Home and End move between tabs, as in other tab lists
+  document.querySelector('.tabs').addEventListener('keydown', (e) => {
+    const list = tabs();
+    const i = list.indexOf(document.activeElement);
+    const next = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: list.length - 1 }[e.key];
+    if (i < 0 || next === undefined) return;
+    e.preventDefault();
+    const tab = list[(next + list.length) % list.length];
+    history.replaceState(null, '', `#${tab.getAttribute('aria-controls')}`);
+    showTab(tab.getAttribute('aria-controls'), { focus: true });
+  });
+  window.addEventListener('hashchange', followHash);
+  followHash();
+}
+
 fetch('payloads.json', { cache: 'no-cache' })
   .then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); })
   .then((data) => {
@@ -160,17 +212,14 @@ fetch('payloads.json', { cache: 'no-cache' })
 
     // Site-only downloads (apps); they use "file" and "download" so Payload Manager skips them
     const downloads = (data.downloads ?? []).map((d) => ({ ...d, filename: d.file, url: d.download }));
-    document.getElementById('downloads').hidden = downloads.length === 0;
     document.getElementById('downloads-list').append(...downloads.map(card));
 
     const links = data.links ?? [];
-    document.getElementById('links').hidden = links.length === 0;
     document.getElementById('links-list').append(...links.map((l) => el('li', {},
       el('a', { href: l.href, target: '_blank', rel: 'noopener', textContent: `${l.name} ↗` }),
       l.description ? el('p', { textContent: l.description }) : null)));
 
-    // Disabled entries, at the bottom of the page
-    document.getElementById('inactive').hidden = inactive.length === 0;
+    // Disabled entries
     document.getElementById('inactive-list').append(...inactive.map(card));
 
     // Payloads included from other catalogs, one group per catalog
@@ -179,8 +228,7 @@ fetch('payloads.json', { cache: 'no-cache' })
       if (!groups.has(p.catalog)) groups.set(p.catalog, []);
       groups.get(p.catalog).push(p);
     }
-    const external = document.getElementById('external');
-    external.hidden = groups.size === 0;
+    const external = document.getElementById('other');
     for (const [name, items] of groups) {
       external.append(
         el('div', { className: 'group-head' },
@@ -189,5 +237,13 @@ fetch('payloads.json', { cache: 'no-cache' })
         el('div', { className: 'grid' }, ...items.map(card)),
       );
     }
+
+    setUpTabs({
+      main: document.querySelectorAll('#list > .card').length,
+      apps: downloads.length,
+      other: data.payloads.length - own.length,
+      links: links.length,
+      inactive: inactive.length,
+    });
   })
   .catch((err) => { document.getElementById('status').textContent = `Could not load payloads.json (${err.message}).`; });
