@@ -40,10 +40,12 @@
   .tabs .count { margin-left: .4rem; padding: 0 .45rem; border-radius: 999px; background: var(--chip); color: var(--muted); font-size: 12px; font-weight: 600; }
   .tabs .count:empty { display: none; }
   /* Narrow screens: tighter tabs without counts (the status line has the totals) so all of them
-     fit; on the narrowest screens they wrap to a second row rather than scroll */
+     fit, wrapping to a second row only on the narrowest; checksums are left to wider screens */
   @media (max-width: 560px) {
     .tabs [role="tab"] { padding: .55rem .5rem; font-size: 14px; }
     .tabs .count { display: none; }
+    /* The SHA-256 toggle and its fly-out take too much room on phones */
+    details.sha { display: none; }
   }
   .section-title { margin: 2.5rem 0 .25rem; font-size: 1.25rem; }
   .section-note { margin: 0 0 1rem; color: var(--muted); font-size: 13px; }
