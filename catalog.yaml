@@ -344,3 +344,18 @@ payloads:
       type: github
       repo: premohq/PS5-ECAM
       asset: '^PS5-ECAM-v[\d.]+\.zip$'
+
+  - id: ps5lm
+    name: PS5LM
+    kind: download
+    category: Utilities
+    description: >-
+      Runs GGUF language models with llama.cpp on the console's GPU and serves them to your network
+      on port 8081, with OpenAI and Anthropic compatible APIs, a browser chat page and a TV screen.
+      Not a payload: extract the zip and copy the PPSA99575 folder to /data/homebrew/ over FTP.
+      Needs kstuff-lite, etaHEN and ShadowMountPlus; firmware 7.00 to 13.60.
+    extension: .zip
+    source:
+      type: github
+      repo: cobanov/PS5LM
+      asset: '^ps5lm-app-v[\d.]+\.zip$'
