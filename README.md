@@ -19,6 +19,8 @@ For each GitHub entry, the generator:
 2. downloads the asset and computes its SHA-256 checksum;
 3. compares that checksum against GitHub's own `digest` for the asset, and the size against the published size.
 
+Entries on a self-hosted **Gitea or Forgejo** server use `type: gitea` with the server's address in `host:`, plus the same `repo`, `asset`, `tag` and `prerelease` fields. These servers publish no checksum per file, so the generator checks each download against the release's own `SHA256SUMS` (or `<file>.sha256`) when there is one. GitHub releases without a digest get the same fallback.
+
 The script doesn't write anything if any of these steps fails. Set `GITHUB_TOKEN` to avoid API rate limits.
 
 To leave an entry out temporarily, for example while it's broken upstream, set `enabled: false` on it in `catalog.yaml`. It isn't looked up or downloaded, and Payload Manager no longer offers it. The site still lists it, in a separate "Inactive" section at the bottom, with an **inactive** badge and its upstream link but no download. That entry lives in a separate `inactive` list in `payloads.json`, without a file or URL, so Payload Manager's parser skips it. An enabled entry can't `require` a disabled one.

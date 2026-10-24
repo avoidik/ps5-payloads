@@ -29,6 +29,7 @@ const PLDMGR_FIELDS = [
   'last_update', 'source', 'author', 'details_url',
 ];
 const RELEASES_PER_PAGE = 100; // GitHub's maximum
+const GITEA_PAGE = 50; // Gitea/Forgejo's default maximum
 // pldmgr only launches these (is_supported_extension in payload_mgr.c)
 const SUPPORTED_EXTENSIONS = ['.elf', '.bin'];
 // payload: offered in Payload Manager; download: listed on the site only (apps, archives)
@@ -142,7 +143,11 @@ function loadCatalog(file) {
 
     const src = p.source;
     if (!src || typeof src !== 'object') fail(`${where}: "source" is required`);
-    if (src.type === 'github') {
+    if (src.type === 'gitea') {
+      if (typeof src.host !== 'string' || !/^https?:\/\/[^/]+\/?$/.test(src.host)) fail(`${where}: source.host must be the server address, like https://example.org`);
+      src.host = src.host.replace(/\/$/, '');
+    }
+    if (src.type === 'github' || src.type === 'gitea') {
       if (typeof src.repo !== 'string' || !/^[\w.-]+\/[\w.-]+$/.test(src.repo)) fail(`${where}: source.repo must be "owner/name"`);
       if (typeof src.asset !== 'string') fail(`${where}: source.asset (regex) is required`);
       try {
@@ -159,7 +164,7 @@ function loadCatalog(file) {
         fail(`${where}: source.homepage must be an http(s) URL`);
       }
     } else {
-      fail(`${where}: source.type must be "github" or "url"`);
+      fail(`${where}: source.type must be "github", "gitea" or "url"`);
     }
     if (src.extract !== undefined) {
       if (p.kind !== 'payload') fail(`${where}: source.extract only applies to payloads`);
@@ -213,35 +218,76 @@ async function githubGet(url) {
   return res.json();
 }
 
-async function resolveGithub(p) {
-  const { repo, tag, assetRe, prerelease = false } = p.source;
+// Release APIs of the supported forges; Gitea and Forgejo share theirs
+function forgeOf(src) {
+  if (src.type === 'github') {
+    return {
+      label: src.repo,
+      page: `https://github.com/${src.repo}`,
+      list: `https://api.github.com/repos/${src.repo}/releases?per_page=${RELEASES_PER_PAGE}`,
+      byTag: (t) => `https://api.github.com/repos/${src.repo}/releases/tags/${encodeURIComponent(t)}`,
+      get: githubGet,
+    };
+  }
+  return {
+    label: `${src.host}/${src.repo}`,
+    page: `${src.host}/${src.repo}`,
+    list: `${src.host}/api/v1/repos/${src.repo}/releases?limit=${GITEA_PAGE}`,
+    byTag: (t) => `${src.host}/api/v1/repos/${src.repo}/releases/tags/${encodeURIComponent(t)}`,
+    get: forgeGet,
+  };
+}
+
+async function forgeGet(url) {
+  const res = await fetch(url, { headers: { Accept: 'application/json', 'User-Agent': 'ps5-payloads-generator' } });
+  if (!res.ok) fail(`API ${res.status} for ${url}`);
+  return res.json();
+}
+
+// Checksum from the release's own list (SHA256SUMS, or <file>.sha256), for files without a forge digest
+async function digestFromRelease(assets, name) {
+  const list = assets.find((a) => /^sha256sums(\.txt)?$/i.test(a.name)) ?? assets.find((a) => a.name === `${name}.sha256`);
+  if (!list) return null;
+  const res = await fetch(list.browser_download_url, { redirect: 'follow', headers: { 'User-Agent': 'ps5-payloads-generator' } });
+  if (!res.ok) fail(`cannot read ${list.name} (HTTP ${res.status})`);
+  for (const line of (await res.text()).split('\n')) {
+    const [hash, file] = line.trim().split(/\s+\*?/);
+    if (/^[0-9a-f]{64}$/i.test(hash ?? '') && (!file || path.basename(file) === name)) return hash.toLowerCase();
+  }
+  return null;
+}
+
+async function resolveRelease(p) {
+  const { tag, assetRe, prerelease = false } = p.source;
+  const forge = forgeOf(p.source);
   const releases = tag
-    ? [await githubGet(`https://api.github.com/repos/${repo}/releases/tags/${encodeURIComponent(tag)}`)]
-    : (await githubGet(`https://api.github.com/repos/${repo}/releases?per_page=${RELEASES_PER_PAGE}`))
+    ? [await forge.get(forge.byTag(tag))]
+    : (await forge.get(forge.list))
         .filter((rel) => !rel.draft && (prerelease || !rel.prerelease))
         // The API orders releases by creation date, which can differ from when they were published
         .sort((a, b) => Date.parse(b.published_at) - Date.parse(a.published_at));
 
   for (const rel of releases) {
     const matches = rel.assets.filter((a) => assetRe.test(a.name));
-    if (matches.length > 1) fail(`${p.id}: regex matches several assets in ${repo}@${rel.tag_name}: ${matches.map((a) => a.name).join(', ')}`);
+    if (matches.length > 1) fail(`${p.id}: regex matches several assets in ${forge.label}@${rel.tag_name}: ${matches.map((a) => a.name).join(', ')}`);
     if (matches.length === 1) {
       const a = matches[0];
+      const digest = a.digest?.startsWith('sha256:') ? a.digest.slice(7).toLowerCase() : await digestFromRelease(rel.assets, a.name);
       return {
         url: a.browser_download_url,
         filename: a.name,
         version: rel.tag_name,
-        homepage: `https://github.com/${repo}`,
+        homepage: forge.page,
         releaseType: rel.prerelease ? 'pre-release' : 'stable',
         released: rel.published_at,
         size: a.size,
-        digest: a.digest?.startsWith('sha256:') ? a.digest.slice(7).toLowerCase() : null,
+        digest,
       };
     }
   }
   const kinds = prerelease ? 'releases and pre-releases' : 'releases';
-  const scope = tag ? `release ${tag}` : `the last ${RELEASES_PER_PAGE} ${kinds}`;
-  throw new CatalogError(`${p.id}: no asset matching /${p.source.asset}/ in ${scope} of ${repo}`);
+  const scope = tag ? `release ${tag}` : `the last ${p.source.type === 'github' ? RELEASES_PER_PAGE : GITEA_PAGE} ${kinds}`;
+  throw new CatalogError(`${p.id}: no asset matching /${p.source.asset}/ in ${scope} of ${forge.label}`);
 }
 
 function resolveUrl(p) {
@@ -320,12 +366,12 @@ async function githubReleaseOf(url) {
 }
 
 async function resolvePayload(p, baseUrl) {
-  const up = p.source.type === 'github' ? await resolveGithub(p) : resolveUrl(p);
+  const up = p.source.type === 'url' ? resolveUrl(p) : await resolveRelease(p);
   const extract = p.source.extract;
   const { checksum, size, modified, data } = extract ? await downloadBytes(up.url) : await sha256OfUrl(up.url);
   if (size === 0) fail(`${p.id}: downloaded file is empty: ${up.url}`);
   if (up.size != null && size !== up.size) fail(`${p.id}: size mismatch for ${up.url} (expected ${up.size}, got ${size})`);
-  if (up.digest && up.digest !== checksum) fail(`${p.id}: checksum mismatch for ${up.url} (GitHub ${up.digest}, computed ${checksum})`);
+  if (up.digest && up.digest !== checksum) fail(`${p.id}: checksum mismatch for ${up.url} (release lists ${up.digest}, computed ${checksum})`);
   // Direct URLs: use the GitHub release they point at, else the server's Last-Modified
   const rel = up.released ? null : await githubReleaseOf(up.url);
   const resolved = { ...up, ...rel, checksum, size, released: up.released ?? rel?.released ?? modified };
@@ -455,7 +501,7 @@ function buildInactiveEntry(p, nameById) {
   const entry = { name: p.name.trim(), description: (p.description ?? '').trim(), category: p.category ?? 'Uncategorized' };
   if (p.version) entry.version = p.version;
   if (requires.length) entry.requires = requires.join(', ');
-  const homepage = p.source.type === 'github' ? `https://github.com/${p.source.repo}` : p.source.homepage;
+  const homepage = p.source.type === 'url' ? p.source.homepage : forgeOf(p.source).page;
   if (homepage) entry.source = homepage;
   entry.release_type = 'inactive';
   for (const [key, value] of Object.entries(entry)) checkValue(p.id, key, value, LIMITS[key]);

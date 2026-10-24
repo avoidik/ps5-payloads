@@ -47,6 +47,9 @@
 #     extract: (optional, either type) name of one file inside a .zip asset; that file is
 #              extracted, checked against the archive's SHA256SUMS if present, and hosted
 #              with the site (needs base_url)
+#     type: gitea  -> host: server address (Gitea or Forgejo), then the same fields as
+#                     github (repo, asset, tag, prerelease); files are checked against
+#                     the release's SHA256SUMS when the server gives no digest
 #     type: url    -> url: direct download link, version: (optional),
 #                     homepage: (optional) project page linked from the site
 #
@@ -411,3 +414,62 @@ payloads:
       type: github
       repo: gasb07/NeoEnabler
       asset: '^neo-manager\.elf$'
+
+  - id: lz4-compression
+    name: LZ4 Compression Engine
+    category: Utilities
+    description: >-
+      Engine of LZ4 Compression, which shrinks installed PS5 games on the console with LZ4 asset
+      packs and .ffpfsc compression. Serves the LZ4 Compression app and a web page on port 5920.
+      If the app doesn't start it by itself, load it here first, then open the app.
+    extension: .elf
+    source:
+      type: gitea
+      host: https://theghostonline.dev
+      repo: theghostonline/PS5-LZ4-Compression
+      asset: '^lz4-compression\.elf$'
+
+  - id: lz4-compression-app
+    name: LZ4 Compression
+    kind: download
+    category: Utilities
+    description: >-
+      The LZ4 Compression app (PPSA99420), which shrinks installed games on the console. Extract the
+      zip and copy the PPSA99420 folder to /data/homebrew/ over FTP; ShadowMountPlus adds the tile.
+      Needs the LZ4 Compression Engine payload. Updates itself, engine included.
+    extension: .zip
+    source:
+      type: gitea
+      host: https://theghostonline.dev
+      repo: theghostonline/PS5-LZ4-Compression
+      asset: '^LZ4-Compression-PPSA99420\.zip$'
+
+  - id: game-updater
+    name: Game Updater Engine
+    category: Utilities
+    description: >-
+      Engine of Game Updater, which finds and installs the newest official update for installed PS5
+      games, with a backport when an update needs newer firmware. Serves the Game Updater app and a
+      web page on port 7920. If the app doesn't start it by itself, load it here first, then open
+      the app.
+    extension: .elf
+    source:
+      type: gitea
+      host: https://theghostonline.dev
+      repo: theghostonline/PS5-Game-Updater
+      asset: '^game-updater\.elf$'
+
+  - id: game-updater-app
+    name: Game Updater
+    kind: download
+    category: Utilities
+    description: >-
+      The Game Updater app (PPSA99440): update installed PS5 games in a few taps, on the console.
+      Extract the zip and copy the PPSA99440 folder to /data/homebrew/ over FTP. Needs the Game
+      Updater Engine payload.
+    extension: .zip
+    source:
+      type: gitea
+      host: https://theghostonline.dev
+      repo: theghostonline/PS5-Game-Updater
+      asset: '^Game-Updater-PPSA99440\.zip$'
