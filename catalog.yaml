@@ -167,3 +167,17 @@ payloads:
       type: github
       repo: gasb07/ps4mount
       asset: '^ps4mount\.elf$'
+
+  - id: rp-get-pin
+    name: Remote Play PIN
+    category: Utilities
+    description: >-
+      Shows the Remote Play pairing PIN and account id for the logged-in user on an offline activated
+      account, so chiaki, chiaki-ng or the official Remote Play app can pair. Activate the account
+      first (e.g. with PS5 Account Tools or offact), reboot if pairing fails, then load this. Load it
+      again to cancel pairing.
+    extension: .elf
+    source:
+      type: github
+      repo: idlesauce/ps5-remoteplay-get-pin
+      asset: '^rp-get-pin\.elf$'
