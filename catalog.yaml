@@ -329,3 +329,18 @@ payloads:
       type: github
       repo: drakmor/dlc_emu
       asset: '^dlc_emu_[\d.]+\.zip$'
+
+  - id: ps5-ecam
+    name: PS5-ECAM
+    kind: download
+    category: Emulators
+    description: >-
+      Wii U, 3DS, DS and Switch emulation (Cemu, Azahar, melonDS and Eden) in one launcher for the TV
+      and the DualSense. Not a payload: extract the zip, copy the PPSA99360 folder to
+      /data/homebrew/, and let your HEN jailbreak the title (etaHEN app list, OnionHEN
+      exact_title_ids, or an ELF loader on port 9021). Updates itself from then on.
+    extension: .zip
+    source:
+      type: github
+      repo: premohq/PS5-ECAM
+      asset: '^PS5-ECAM-v[\d.]+\.zip$'
