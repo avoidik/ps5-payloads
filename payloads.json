@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-24T15:04:01.359Z",
+  "generated_at": "2026-10-24T15:21:10.769Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
   "groups": {"fan-target":{"name":"Fan Target","description":"Sets the fan controller's target temperature below the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one variant only: lower targets make the fan react earlier and run faster; 85C is a good start."}},
   "payloads": [
@@ -237,6 +237,32 @@
       "release_type": "stable"
     },
     {
+      "id": "lz4-compression",
+      "name": "LZ4 Compression Engine",
+      "filename": "lz4-compression.elf",
+      "url": "https://theghostonline.dev/theghostonline/PS5-LZ4-Compression/releases/download/v1.6.3/lz4-compression.elf",
+      "description": "Engine of LZ4 Compression, which shrinks installed PS5 games on the console with LZ4 asset packs and .ffpfsc compression. Serves the LZ4 Compression app and a web page on port 5920. If the app doesn't start it by itself, load it here first, then open the app.",
+      "version": "v1.6.3",
+      "category": "Utilities",
+      "checksum": "274628746c80d0073f1183a4c4a239394beeacf2328152aac8fe7da6923cbec3",
+      "source": "https://theghostonline.dev/theghostonline/PS5-LZ4-Compression",
+      "last_update": "2026-10-21T20:53:50Z",
+      "release_type": "stable"
+    },
+    {
+      "id": "game-updater",
+      "name": "Game Updater Engine",
+      "filename": "game-updater.elf",
+      "url": "https://theghostonline.dev/theghostonline/PS5-Game-Updater/releases/download/v1.0.2/game-updater.elf",
+      "description": "Engine of Game Updater, which finds and installs the newest official update for installed PS5 games, with a backport when an update needs newer firmware. Serves the Game Updater app and a web page on port 7920. If the app doesn't start it by itself, load it here first, then open the app.",
+      "version": "v1.0.2",
+      "category": "Utilities",
+      "checksum": "80128166318d13717962709e6186eadb7ebc9cccf24a61bdb51f1f42531c60c8",
+      "source": "https://theghostonline.dev/theghostonline/PS5-Game-Updater",
+      "last_update": "2026-10-24T06:49:37Z",
+      "release_type": "stable"
+    },
+    {
       "name": "Orbit Store (Beta)",
       "filename": "orbit_store.elf",
       "url": "https://github.com/saawant12/orbit-store-ps5/releases/download/v1.4.0/orbit_store.elf",
@@ -333,6 +359,30 @@
       "checksum": "7b221d2b754f4d812cd0cb19e62e116f5191de144bb3763b13ead566a6a8b556",
       "source": "https://github.com/cobanov/PS5LM",
       "last_update": "2026-10-20T06:26:24Z",
+      "release_type": "stable"
+    },
+    {
+      "name": "LZ4 Compression",
+      "file": "LZ4-Compression-PPSA99420.zip",
+      "download": "https://theghostonline.dev/theghostonline/PS5-LZ4-Compression/releases/download/v1.6.3/LZ4-Compression-PPSA99420.zip",
+      "description": "The LZ4 Compression app (PPSA99420), which shrinks installed games on the console. Extract the zip and copy the PPSA99420 folder to /data/homebrew/ over FTP; ShadowMountPlus adds the tile. Needs the LZ4 Compression Engine payload. Updates itself, engine included.",
+      "version": "v1.6.3",
+      "category": "Utilities",
+      "checksum": "1dd2c5e3c4dd00a44c78b501fb5571aab29ad95bd5bdf00bd82faed592a957b0",
+      "source": "https://theghostonline.dev/theghostonline/PS5-LZ4-Compression",
+      "last_update": "2026-10-21T20:53:50Z",
+      "release_type": "stable"
+    },
+    {
+      "name": "Game Updater",
+      "file": "Game-Updater-PPSA99440.zip",
+      "download": "https://theghostonline.dev/theghostonline/PS5-Game-Updater/releases/download/v1.0.2/Game-Updater-PPSA99440.zip",
+      "description": "The Game Updater app (PPSA99440): update installed PS5 games in a few taps, on the console. Extract the zip and copy the PPSA99440 folder to /data/homebrew/ over FTP. Needs the Game Updater Engine payload.",
+      "version": "v1.0.2",
+      "category": "Utilities",
+      "checksum": "808f971e117cbf230a376eab58eed84883959adfbc325df8069ec63f9435afee",
+      "source": "https://theghostonline.dev/theghostonline/PS5-Game-Updater",
+      "last_update": "2026-10-24T06:49:37Z",
       "release_type": "stable"
     }
   ],
