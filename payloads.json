@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-24T08:51:55.752Z",
+  "generated_at": "2026-10-24T08:54:17.731Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
   "payloads": [
     {
@@ -285,6 +285,18 @@
       "checksum": "c9f353ae4c7951de57ae3b6f5b3be1683f72866e2137121bb548d061d04f265e",
       "source": "https://github.com/drakmor/dlc_emu",
       "last_update": "2026-06-28T12:11:32Z",
+      "release_type": "stable"
+    },
+    {
+      "name": "PS5-ECAM",
+      "file": "PS5-ECAM-v5.0.1.zip",
+      "download": "https://github.com/premohq/PS5-ECAM/releases/download/v5.0.1/PS5-ECAM-v5.0.1.zip",
+      "description": "Wii U, 3DS, DS and Switch emulation (Cemu, Azahar, melonDS and Eden) in one launcher for the TV and the DualSense. Not a payload: extract the zip, copy the PPSA99360 folder to /data/homebrew/, and let your HEN jailbreak the title (etaHEN app list, OnionHEN exact_title_ids, or an ELF loader on port 9021). Updates itself from then on.",
+      "version": "v5.0.1",
+      "category": "Emulators",
+      "checksum": "733f4d9408a0f6354e6a491614b5fb15bd893780a7191db8bf3d71a82ba4dfdb",
+      "source": "https://github.com/premohq/PS5-ECAM",
+      "last_update": "2026-10-22T17:12:59Z",
       "release_type": "stable"
     }
   ]
