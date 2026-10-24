@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-24T08:54:17.731Z",
+  "generated_at": "2026-10-24T09:00:12.765Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
   "payloads": [
     {
@@ -297,6 +297,18 @@
       "checksum": "733f4d9408a0f6354e6a491614b5fb15bd893780a7191db8bf3d71a82ba4dfdb",
       "source": "https://github.com/premohq/PS5-ECAM",
       "last_update": "2026-10-22T17:12:59Z",
+      "release_type": "stable"
+    },
+    {
+      "name": "PS5LM",
+      "file": "ps5lm-app-v0.9.1.zip",
+      "download": "https://github.com/cobanov/PS5LM/releases/download/v0.9.1/ps5lm-app-v0.9.1.zip",
+      "description": "Runs GGUF language models with llama.cpp on the console's GPU and serves them to your network on port 8081, with OpenAI and Anthropic compatible APIs, a browser chat page and a TV screen. Not a payload: extract the zip and copy the PPSA99575 folder to /data/homebrew/ over FTP. Needs kstuff-lite, etaHEN and ShadowMountPlus; firmware 7.00 to 13.60.",
+      "version": "v0.9.1",
+      "category": "Utilities",
+      "checksum": "7b221d2b754f4d812cd0cb19e62e116f5191de144bb3763b13ead566a6a8b556",
+      "source": "https://github.com/cobanov/PS5LM",
+      "last_update": "2026-10-20T06:26:24Z",
       "release_type": "stable"
     }
   ]
