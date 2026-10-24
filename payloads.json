@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-24T04:36:13.056Z",
+  "generated_at": "2026-10-24T08:14:24.752Z",
   "_pldmgr_parser_guard": {},
   "payloads": [
     {
@@ -78,15 +78,15 @@
     },
     {
       "name": "PS5 Upload Helper",
-      "filename": "ps5upload-7.1.20.elf",
-      "url": "https://github.com/phantomptr/ps5upload/releases/download/v7.1.20/ps5upload-7.1.20.elf",
+      "filename": "ps5upload-7.2.0.elf",
+      "url": "https://github.com/phantomptr/ps5upload/releases/download/v7.2.0/ps5upload-7.2.0.elf",
       "description": "Console-side helper for the PS5 Upload app on PC, Mac, Android or web. Resumable uploads, package installs, file and game management on port 9120. Enter the 6-digit code it shows in the app to pair. Keep the app and helper on the same version.",
-      "version": "v7.1.20",
+      "version": "v7.2.0",
       "category": "Utilities",
-      "checksum": "39fa28f42e9a854549f06543bf5cbb9c383b33a4ad8bfa8557b6aa6f6470d07b",
+      "checksum": "a8a20057b43fae225df7adfdda046911d81886a72fc3223e831c2999db948331",
       "homepage": "https://github.com/phantomptr/ps5upload",
-      "release_type": "pre-release",
-      "released": "2026-10-24T03:24:42Z"
+      "release_type": "stable",
+      "released": "2026-10-24T08:05:52Z"
     },
     {
       "name": "ShadowMountPlus",
@@ -111,6 +111,18 @@
       "homepage": "https://github.com/gasb07/ps4mount",
       "release_type": "stable",
       "released": "2026-10-24T02:07:53Z"
+    },
+    {
+      "name": "Remote Play PIN",
+      "filename": "rp-get-pin.elf",
+      "url": "https://github.com/idlesauce/ps5-remoteplay-get-pin/releases/download/v0.1.1/rp-get-pin.elf",
+      "description": "Shows the Remote Play pairing PIN and account id for the logged-in user on an offline activated account, so chiaki, chiaki-ng or the official Remote Play app can pair. Activate the account first (e.g. with PS5 Account Tools or offact), reboot if pairing fails, then load this. Load it again to cancel pairing.",
+      "version": "v0.1.1",
+      "category": "Utilities",
+      "checksum": "1d611c1856dd2f4b4b6cb42ead1128a7f08a26585788f92de79fa4f67d721472",
+      "homepage": "https://github.com/idlesauce/ps5-remoteplay-get-pin",
+      "release_type": "stable",
+      "released": "2025-03-09T14:25:13Z"
     },
     {
       "name": "Orbit Store (Beta)",
