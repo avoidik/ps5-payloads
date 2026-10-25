@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-25T04:40:47.229Z",
+  "generated_at": "2026-10-25T11:28:25.062Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
   "groups": {"fan-target":{"name":"Fan Target","description":"Sets the fan controller's target temperature below the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one variant only: lower targets make the fan react earlier and run faster; 85C is a good start."}},
   "payloads": [
@@ -86,14 +86,14 @@
     {
       "id": "ps5upload",
       "name": "PS5 Upload Helper",
-      "filename": "ps5upload-7.5.1.elf",
-      "url": "https://github.com/phantomptr/ps5upload/releases/download/v7.5.1/ps5upload-7.5.1.elf",
+      "filename": "ps5upload-7.5.2.elf",
+      "url": "https://github.com/phantomptr/ps5upload/releases/download/v7.5.2/ps5upload-7.5.2.elf",
       "description": "Console-side helper for the PS5 Upload app on PC, Mac, Android or web. Resumable uploads, package installs, file and game management on port 9120. Enter the 6-digit code it shows in the app to pair. Keep the app and helper on the same version.",
-      "version": "v7.5.1",
+      "version": "v7.5.2",
       "category": "Utilities",
-      "checksum": "021c03c15d1b077558f8966ca46f38636f1934c084b930545098167e11abbc7b",
+      "checksum": "6ad5f22acb9dfb1f977b303c59e7e9c30dc61af302650249fe8fb0078feedde4",
       "source": "https://github.com/phantomptr/ps5upload",
-      "last_update": "2026-10-24T21:40:06Z",
+      "last_update": "2026-10-25T07:08:42Z",
       "release_type": "stable"
     },
     {
@@ -253,13 +253,13 @@
       "id": "game-updater",
       "name": "Game Updater Engine",
       "filename": "game-updater.elf",
-      "url": "https://theghostonline.dev/theghostonline/PS5-Game-Updater/releases/download/v1.0.2/game-updater.elf",
+      "url": "https://theghostonline.dev/theghostonline/PS5-Game-Updater/releases/download/v1.1.0/game-updater.elf",
       "description": "Engine of Game Updater, which finds and installs the newest official update for installed PS5 games, with a backport when an update needs newer firmware. Serves the Game Updater app and a web page on port 7920. If the app doesn't start it by itself, load it here first, then open the app.",
-      "version": "v1.0.2",
+      "version": "v1.1.0",
       "category": "Utilities",
-      "checksum": "80128166318d13717962709e6186eadb7ebc9cccf24a61bdb51f1f42531c60c8",
+      "checksum": "d389c14213ab1ed383f025093828bc972cfce703d9f2a232f43cbc7c97ec1941",
       "source": "https://theghostonline.dev/theghostonline/PS5-Game-Updater",
-      "last_update": "2026-10-24T06:49:37Z",
+      "last_update": "2026-10-25T05:55:37Z",
       "release_type": "stable"
     },
     {
@@ -376,13 +376,13 @@
     {
       "name": "Game Updater",
       "file": "Game-Updater-PPSA99440.zip",
-      "download": "https://theghostonline.dev/theghostonline/PS5-Game-Updater/releases/download/v1.0.2/Game-Updater-PPSA99440.zip",
+      "download": "https://theghostonline.dev/theghostonline/PS5-Game-Updater/releases/download/v1.1.0/Game-Updater-PPSA99440.zip",
       "description": "The Game Updater app (PPSA99440): update installed PS5 games in a few taps, on the console. Extract the zip and copy the PPSA99440 folder to /data/homebrew/ over FTP. Needs the Game Updater Engine payload.",
-      "version": "v1.0.2",
+      "version": "v1.1.0",
       "category": "Utilities",
-      "checksum": "808f971e117cbf230a376eab58eed84883959adfbc325df8069ec63f9435afee",
+      "checksum": "eb47c99c7e5a430b08544770cbac9cffbd5698f688b7635f0e0be4eadd633b47",
       "source": "https://theghostonline.dev/theghostonline/PS5-Game-Updater",
-      "last_update": "2026-10-24T06:49:37Z",
+      "last_update": "2026-10-25T05:55:37Z",
       "release_type": "stable"
     }
   ],
