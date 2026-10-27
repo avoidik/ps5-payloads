@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-27T18:07:12.766Z",
+  "generated_at": "2026-10-27T18:15:01.865Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
   "groups": {"fan-target":{"name":"Fan Target","description":"Sets the fan controller's target temperature below the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one variant only: lower targets make the fan react earlier and run faster; 85C is a good start."}},
   "payloads": [
@@ -87,14 +87,14 @@
       "id": "shadowmountplus",
       "name": "ShadowMountPlus",
       "filename": "shadowmountplus.elf",
-      "url": "https://github.com/drakmor/ShadowMountPlus/releases/download/1.7beta8/shadowmountplus.elf",
+      "url": "https://avoidik.github.io/ps5-payloads/files/shadowmountplus.elf",
       "description": "Background auto-mounter that detects, mounts and installs game dumps and images from internal or external storage (UFS, exFAT, PFS). Needs kstuff-lite 1.07 or newer; load at every boot. Settings in /data/shadowmount/config.ini.",
-      "version": "1.7beta8",
+      "version": "1.7beta9",
       "category": "Utilities",
-      "checksum": "7163472217a2390f5bcbe3b61a96963976f7b7bd84d960b8d926f35b9cbecf28",
+      "checksum": "928a5a7e33d2801c1c14a5ed8ad83fcab07957ba3a5daccd382dba67d408b3e2",
       "source": "https://github.com/drakmor/ShadowMountPlus",
-      "last_update": "2026-10-26T00:39:54Z",
-      "release_type": "pre-release"
+      "last_update": "2026-10-27T17:52:54Z",
+      "release_type": "stable"
     },
     {
       "id": "ps4mount",
