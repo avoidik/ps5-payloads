@@ -19,6 +19,8 @@ For each GitHub entry, the generator:
 2. downloads the asset and computes its SHA-256 checksum;
 3. compares that checksum against GitHub's own `digest` for the asset, and the size against the published size.
 
+Large files (over 32 MiB) and site-only app downloads aren't downloaded just to hash them: when the release publishes a SHA-256 (GitHub's digest, or a `SHA256SUMS` file), that value is used as is. A large site-only download without a published checksum is listed without one. Payloads always get a checksum, because Payload Manager verifies every install against it, so they're still downloaded and hashed when nothing is published.
+
 Entries on a self-hosted **Gitea or Forgejo** server use `type: gitea` with the server's address in `host:`, plus the same `repo`, `asset`, `tag` and `prerelease` fields. These servers publish no checksum per file, so the generator checks each download against the release's own `SHA256SUMS` (or `<file>.sha256`) when there is one. GitHub releases without a digest get the same fallback.
 
 The script doesn't write anything if any of these steps fails. Set `GITHUB_TOKEN` to avoid API rate limits.
@@ -30,7 +32,7 @@ To leave an entry out temporarily, for example while it's broken upstream, set `
 Some projects ship their payloads inside a `.zip`. Payload Manager can only download and run a single `.elf`/`.bin`, so:
 
 - **One file from an archive:** set `source.extract` to the file's name. The generator downloads the archive, checks it against GitHub's digest, extracts that file and checks it against the archive's own `SHA256SUMS` if there is one. It then writes the file to `files/` (git-ignored). The workflow publishes `files/` with the site, and the entry's URL points to `<base_url>files/<name>`, so `base_url` must be set at the top of the catalog. Example: the five `fan_target` temperature builds.
-- **A whole archive:** an entry with `kind: download` (and e.g. `extension: .zip`) is a site-only download, such as an app you install by hand. It's checksummed like any other entry and listed on the site's **Apps** tab, linking to the upstream file. It sits in a separate `downloads` list in `payloads.json`, with `file`/`download` instead of `filename`/`url`, so Payload Manager's parser skips it. Example: PS5X360's `PPSA50011.zip`.
+- **A whole archive:** an entry with `kind: download` (and e.g. `extension: .zip` or `.tar.gz`) is a site-only download, such as an app you install by hand. It's checksummed like any other entry and listed on the site's **Apps** tab, linking to the upstream file. It sits in a separate `downloads` list in `payloads.json`, with `file`/`download` instead of `filename`/`url`, so Payload Manager's parser skips it. Example: PS5X360's `PPSA50011.zip`.
 
 ## Dependencies
 
@@ -54,7 +56,7 @@ Their payloads are added after ours, tagged with the catalog's `name`, and the s
 
 ## Groups
 
-Variants of one project can share a single card on the site. Define the group once under `groups:` (`<id>: {name, description}`), then give each member `group: <id>` and a short `variant:` label. The card shows the group's name and description and lists every variant with its own download and checksum. In Payload Manager, the members stay separate payloads with their own names, descriptions and install slots. Example: the five Fan Target temperatures.
+Variants of one project can share a single card on the site, on the Main tab for payloads or the Apps tab for downloads (a group's members must all be one kind). Define the group once under `groups:` (`<id>: {name, description}`), then give each member `group: <id>` and a short `variant:` label. The card shows the group's name and description and lists every variant with its own download and checksum. In Payload Manager, the members stay separate payloads with their own names, descriptions and install slots. Example: the five Fan Target temperatures.
 
 ## Useful links
 

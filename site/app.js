@@ -95,14 +95,30 @@ function groupCard(gid, group, members) {
     group.description ? el('p', { textContent: group.description }) : null,
     el('div', { className: 'foot' },
       el('ul', { className: 'variants' }, ...members.map((m) => el('li', { id: slug(m.name) },
-        el('span', { className: 'variant', textContent: m.variant }),
-        el('span', { className: 'file', textContent: m.filename }),
+        el('span', { className: 'variant' },
+          el('span', { className: 'label', textContent: m.variant }),
+          el('span', { className: 'file', textContent: m.filename, title: m.filename })),
         el('a', { href: m.url, textContent: 'Download' }),
-        shaFlyout(m.checksum, `sum-${slug(m.name)}`)))),
+        m.checksum ? shaFlyout(m.checksum, `sum-${slug(m.name)}`) : el('span')))),
       first.source
         ? el('span', { className: 'links' }, el('a', { href: first.source, target: '_blank', rel: 'noopener', textContent: 'Upstream ↗' }))
         : null),
   );
+}
+
+// Cards for a list of entries; members of a group share one card where the first member would be
+function cards(items, groups) {
+  const out = [];
+  const shown = new Set();
+  for (const p of items) {
+    if (!p.group || !groups[p.group]) {
+      out.push(card(p));
+    } else if (!shown.has(p.group)) {
+      shown.add(p.group);
+      out.push(groupCard(p.group, groups[p.group], items.filter((m) => m.group === p.group)));
+    }
+  }
+  return out;
 }
 
 function card(p) {
@@ -130,7 +146,7 @@ function card(p) {
       el('span', { className: 'links' },
         inactive ? null : el('a', { href: p.url, textContent: 'Download' }),
         p.source ? el('a', { href: p.source, target: '_blank', rel: 'noopener', textContent: 'Upstream ↗' }) : null),
-      inactive ? null : shaFlyout(p.checksum, `sum-${id}`)),
+      inactive || !p.checksum ? null : shaFlyout(p.checksum, `sum-${id}`)),
   );
 }
 
@@ -191,28 +207,21 @@ fetch('payloads.json', { cache: 'no-cache' })
   .then((data) => {
     const when = data.generated_at ? new Date(data.generated_at).toLocaleString() : 'unknown';
     const inactive = data.inactive ?? [];
-    const apps = data.downloads?.length ?? 0;
+    // Apps as listed on the Apps tab: a group of variants counts once
+    const apps = new Set((data.downloads ?? []).map((d) => d.group ?? d.name)).size;
     const extras = [apps && `${apps} app${apps === 1 ? '' : 's'}`, inactive.length && `${inactive.length} inactive`].filter(Boolean);
     const counts = `${data.payloads.length} payloads${extras.length ? ` (+${extras.join(', ')})` : ''}`;
     document.getElementById('status').textContent = `${counts} · updated ${when}`;
 
-    // Group members share one card, placed where the first member would be
     const cardGroups = data.groups ?? {};
     const own = data.payloads.filter((p) => !p.catalog);
-    const shown = new Set();
-    for (const p of own) {
-      if (p.group && cardGroups[p.group]) {
-        if (shown.has(p.group)) continue;
-        shown.add(p.group);
-        document.getElementById('list').append(groupCard(p.group, cardGroups[p.group], own.filter((m) => m.group === p.group)));
-      } else {
-        document.getElementById('list').append(card(p));
-      }
-    }
+    const ownCards = cards(own, cardGroups);
+    document.getElementById('list').append(...ownCards);
 
     // Site-only downloads (apps); they use "file" and "download" so Payload Manager skips them
     const downloads = (data.downloads ?? []).map((d) => ({ ...d, filename: d.file, url: d.download }));
-    document.getElementById('downloads-list').append(...downloads.map(card));
+    const appCards = cards(downloads, cardGroups);
+    document.getElementById('downloads-list').append(...appCards);
 
     const links = data.links ?? [];
     document.getElementById('links-list').append(...links.map((l) => el('li', {},
@@ -239,8 +248,8 @@ fetch('payloads.json', { cache: 'no-cache' })
     }
 
     setUpTabs({
-      main: document.querySelectorAll('#list > .card').length,
-      apps: downloads.length,
+      main: ownCards.length,
+      apps: appCards.length,
       other: data.payloads.length - own.length,
       links: links.length,
       inactive: inactive.length,

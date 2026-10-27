@@ -30,6 +30,8 @@ const PLDMGR_FIELDS = [
 ];
 const RELEASES_PER_PAGE = 100; // GitHub's maximum
 const GITEA_PAGE = 50; // Gitea/Forgejo's default maximum
+// Files above this aren't downloaded just to hash them when a checksum is published
+const LARGE_FILE = 32 * 1024 * 1024;
 // pldmgr only launches these (is_supported_extension in payload_mgr.c)
 const SUPPORTED_EXTENSIONS = ['.elf', '.bin'];
 // payload: offered in Payload Manager; download: listed on the site only (apps, archives)
@@ -122,13 +124,12 @@ function loadCatalog(file) {
     if (p.kind === 'payload' && !SUPPORTED_EXTENSIONS.includes(p.extension)) {
       fail(`${where}: "extension" must be one of ${SUPPORTED_EXTENSIONS.join(', ')}`);
     }
-    if (p.kind === 'download' && !(typeof p.extension === 'string' && /^\.[a-z0-9]+$/i.test(p.extension))) {
-      fail(`${where}: "extension" must be a file extension like .zip`);
+    if (p.kind === 'download' && !(typeof p.extension === 'string' && /^(\.[a-z0-9]+)+$/i.test(p.extension))) {
+      fail(`${where}: "extension" must be a file extension like .zip or .tar.gz`);
     }
     ids.add(p.id);
 
     if (p.group !== undefined) {
-      if (p.kind !== 'payload') fail(`${where}: only payloads can be in a group`);
       if (!Object.hasOwn(doc.groups, p.group)) fail(`${where}: unknown group "${p.group}"`);
       if (typeof p.variant !== 'string' || !p.variant.trim()) fail(`${where}: "variant" is required for group members`);
     } else if (p.variant !== undefined) {
@@ -172,6 +173,12 @@ function loadCatalog(file) {
       if (!doc.base_url) fail(`${where}: source.extract needs a top-level "base_url" to host the extracted file`);
     }
   });
+
+  // A group's card lives on one tab, so its members must all be payloads or all be downloads
+  for (const gid of Object.keys(doc.groups)) {
+    const kinds = new Set(doc.payloads.filter((p) => p.group === gid).map((p) => p.kind));
+    if (kinds.size > 1) fail(`groups.${gid}: members must all be payloads or all be downloads`);
+  }
 
   for (const p of doc.payloads) {
     for (const r of p.requires ?? []) {
@@ -368,6 +375,12 @@ async function githubReleaseOf(url) {
 async function resolvePayload(p, baseUrl) {
   const up = p.source.type === 'url' ? resolveUrl(p) : await resolveRelease(p);
   const extract = p.source.extract;
+  // Use the forge's SHA-256 (digest or SHA256SUMS) instead of downloading a file to hash it:
+  // always for site-only downloads, and for large payloads. A large site-only download without
+  // a published checksum is listed without one; payloads always need one, so they're hashed.
+  const large = up.size != null && up.size > LARGE_FILE;
+  if (!extract && up.digest && (p.kind === 'download' || large)) return { ...up, checksum: up.digest };
+  if (!extract && p.kind === 'download' && large) return { ...up, checksum: null };
   const { checksum, size, modified, data } = extract ? await downloadBytes(up.url) : await sha256OfUrl(up.url);
   if (size === 0) fail(`${p.id}: downloaded file is empty: ${up.url}`);
   if (up.size != null && size !== up.size) fail(`${p.id}: size mismatch for ${up.url} (expected ${up.size}, got ${size})`);
@@ -518,12 +531,13 @@ function buildDownloadEntry(p, up) {
     description: (p.description ?? '').trim(),
     version: p.version ?? up.version,
     category: p.category ?? 'Uncategorized',
-    checksum: up.checksum,
+    ...(up.checksum ? { checksum: up.checksum } : {}),
   };
   if (up.homepage) entry.source = up.homepage;
   if (up.released) entry.last_update = up.released;
   if (up.releaseType) entry.release_type = up.releaseType;
-  if (path.extname(entry.file).toLowerCase() !== p.extension.toLowerCase()) {
+  if (p.group) Object.assign(entry, { group: p.group, variant: p.variant.trim() });
+  if (!entry.file.toLowerCase().endsWith(p.extension.toLowerCase())) {
     fail(`${p.id}: "${entry.file}" does not have the expected ${p.extension} extension`);
   }
   for (const [key, value] of Object.entries(entry)) checkValue(p.id, key, value, LIMITS[key]);
@@ -633,7 +647,7 @@ async function main() {
   const links = await Promise.all(catalog.links.map(resolveLink));
   // Only groups that have a published member
   const groups = {};
-  for (const e of resolved) {
+  for (const e of [...resolved, ...downloads]) {
     if (e.group && !groups[e.group]) {
       const g = catalog.groups[e.group];
       groups[e.group] = { name: g.name.trim(), ...(g.description ? { description: g.description.trim() } : {}) };

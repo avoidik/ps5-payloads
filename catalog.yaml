@@ -67,6 +67,14 @@ groups:
       control left on. Runs in the background and restores the target if a game changes it. Use one
       variant only: lower targets make the fan react earlier and run faster; 85C is a good start.
 
+  ps5-dump-forge-desktop:
+    name: PS5 Dump Forge (desktop)
+    description: >-
+      Desktop app and command-line tool of PS5 Dump Forge: convert and edit PS5 game dumps and
+      images on a computer, transfer games to and from a console running Forge, and install Forge on
+      a PS5 in one click. Nothing to install: unzip and run. Windows 10/11, macOS 11 or later, Linux
+      with glibc 2.35 or later.
+
 links:
   - name: PS5PKGTool
     repo: pearlxcore/PS5PKGTool
@@ -480,3 +488,88 @@ payloads:
       type: github
       repo: pegasus-ps5/pegasus-dl
       asset: '^PPSA99998\.ffpfsc$'
+
+  - id: ps5-dump-forge
+    name: PS5 Dump Forge
+    category: Utilities
+    description: >-
+      Converts and edits PS5 game dumps and images on the console: game folders, exfat, ffpkg,
+      ffpfs, ffpfsc and FPKG, also straight from zip, 7z and rar, with transfers to other Forge
+      instances and NAS shares (SMB, FTP, NFS). Open http://<PS5 IP>:8095 in any browser.
+    extension: .elf
+    source:
+      type: github
+      repo: quer3q/ps5-dump-forge
+      asset: '^ps5-dump-forge-[\d.]+-ps5\.elf$'
+
+  - id: ps5-dump-forge-windows-x86-64
+    name: PS5 Dump Forge for Windows x86-64
+    kind: download
+    group: ps5-dump-forge-desktop
+    variant: Windows x86-64
+    category: Utilities
+    extension: .zip
+    source:
+      type: github
+      repo: quer3q/ps5-dump-forge
+      asset: '^ps5-dump-forge-[\d.]+-windows-x86-64\.zip$'
+
+  - id: ps5-dump-forge-windows-x86-64-webview2
+    name: PS5 Dump Forge for Windows x86-64 (bundled WebView2)
+    kind: download
+    group: ps5-dump-forge-desktop
+    variant: Windows x86-64 (bundled WebView2)
+    category: Utilities
+    extension: .zip
+    source:
+      type: github
+      repo: quer3q/ps5-dump-forge
+      asset: '^ps5-dump-forge-[\d.]+-windows-x86-64-webview2\.zip$'
+
+  - id: ps5-dump-forge-windows-arm64
+    name: PS5 Dump Forge for Windows arm64
+    kind: download
+    group: ps5-dump-forge-desktop
+    variant: Windows arm64
+    category: Utilities
+    extension: .zip
+    source:
+      type: github
+      repo: quer3q/ps5-dump-forge
+      asset: '^ps5-dump-forge-[\d.]+-windows-arm64\.zip$'
+
+  - id: ps5-dump-forge-macos
+    name: PS5 Dump Forge for macOS (universal)
+    kind: download
+    group: ps5-dump-forge-desktop
+    variant: macOS (universal)
+    category: Utilities
+    extension: .zip
+    source:
+      type: github
+      repo: quer3q/ps5-dump-forge
+      asset: '^ps5-dump-forge-[\d.]+-macos-universal\.zip$'
+
+  - id: ps5-dump-forge-linux-x86-64
+    name: PS5 Dump Forge for Linux x86-64
+    kind: download
+    group: ps5-dump-forge-desktop
+    variant: Linux x86-64
+    category: Utilities
+    extension: .tar.gz
+    source:
+      type: github
+      repo: quer3q/ps5-dump-forge
+      asset: '^ps5-dump-forge-[\d.]+-linux-x86-64\.tar\.gz$'
+
+  - id: ps5-dump-forge-linux-arm64
+    name: PS5 Dump Forge for Linux arm64
+    kind: download
+    group: ps5-dump-forge-desktop
+    variant: Linux arm64
+    category: Utilities
+    extension: .tar.gz
+    source:
+      type: github
+      repo: quer3q/ps5-dump-forge
+      asset: '^ps5-dump-forge-[\d.]+-linux-arm64\.tar\.gz$'
