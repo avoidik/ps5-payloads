@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-27T12:11:09.047Z",
+  "generated_at": "2026-10-27T18:07:12.766Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
   "groups": {"fan-target":{"name":"Fan Target","description":"Sets the fan controller's target temperature below the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one variant only: lower targets make the fan react earlier and run faster; 85C is a good start."}},
   "payloads": [
@@ -15,19 +15,6 @@
       "checksum": "7633372f39a7a6e460f3990b02cd07026f4e5591aefd2509f8c6338f03b8440b",
       "source": "https://github.com/Phoenixx1202/LegacyJB",
       "last_update": "2026-09-29T21:35:25Z",
-      "release_type": "stable"
-    },
-    {
-      "id": "pegasus-dl",
-      "name": "Pegasus DL",
-      "filename": "pegasus_dl.elf",
-      "url": "https://github.com/pegasus-ps5/pegasus-dl/releases/download/v1.11.0/pegasus_dl.elf",
-      "description": "Direct package downloading on the PS5 with a web interface on port 6970.",
-      "version": "v1.11.0",
-      "category": "Downloaders",
-      "checksum": "32b69c2089bb545abfabd04d5827444698f9c4f1bc4915d72247cb781e8c23d9",
-      "source": "https://github.com/pegasus-ps5/pegasus-dl",
-      "last_update": "2026-10-09T22:57:31Z",
       "release_type": "stable"
     },
     {
@@ -383,6 +370,18 @@
       "checksum": "b2d55384780f4a6a9792b12e75e1a32697ab6943001a5b0cfc93984499e2b78c",
       "source": "https://theghostonline.dev/theghostonline/PS5-Game-Updater",
       "last_update": "2026-10-26T02:52:48Z",
+      "release_type": "stable"
+    },
+    {
+      "name": "Pegasus DL+",
+      "file": "PPSA99998.ffpfsc",
+      "download": "https://github.com/pegasus-ps5/pegasus-dl/releases/download/native-v2.0.5/PPSA99998.ffpfsc",
+      "description": "Native app (formerly the Pegasus DL payload): browse catalogs, queue downloads, extract archives and install packages on the PS5 with the controller. Copy PPSA99998.ffpfsc into your loader's homebrew folder (ShadowMountPlus mounts it), refresh and launch Pegasus DL+. Updates itself; sends app launch and reliability diagnostics.",
+      "version": "native-v2.0.5",
+      "category": "Downloaders",
+      "checksum": "a533e183cd015249276e8b750ab30b0e734d678e74b0c8324e9776a4aa91be6e",
+      "source": "https://github.com/pegasus-ps5/pegasus-dl",
+      "last_update": "2026-10-26T16:33:06Z",
       "release_type": "stable"
     }
   ],
