@@ -1,8 +1,8 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-27T18:15:01.865Z",
+  "generated_at": "2026-10-27T18:35:18.965Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
-  "groups": {"fan-target":{"name":"Fan Target","description":"Sets the fan controller's target temperature below the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one variant only: lower targets make the fan react earlier and run faster; 85C is a good start."}},
+  "groups": {"fan-target":{"name":"Fan Target","description":"Sets the fan controller's target temperature below the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one variant only: lower targets make the fan react earlier and run faster; 85C is a good start."},"ps5-dump-forge-desktop":{"name":"PS5 Dump Forge (desktop)","description":"Desktop app and command-line tool of PS5 Dump Forge: convert and edit PS5 game dumps and images on a computer, transfer games to and from a console running Forge, and install Forge on a PS5 in one click. Nothing to install: unzip and run. Windows 10/11, macOS 11 or later, Linux with glibc 2.35 or later."}},
   "payloads": [
     {
       "id": "legacyjb",
@@ -250,6 +250,19 @@
       "release_type": "stable"
     },
     {
+      "id": "ps5-dump-forge",
+      "name": "PS5 Dump Forge",
+      "filename": "ps5-dump-forge-0.4.2-ps5.elf",
+      "url": "https://github.com/quer3q/ps5-dump-forge/releases/download/v0.4.2/ps5-dump-forge-0.4.2-ps5.elf",
+      "description": "Converts and edits PS5 game dumps and images on the console: game folders, exfat, ffpkg, ffpfs, ffpfsc and FPKG, also straight from zip, 7z and rar, with transfers to other Forge instances and NAS shares (SMB, FTP, NFS). Open http://<PS5 IP>:8095 in any browser.",
+      "version": "v0.4.2",
+      "category": "Utilities",
+      "checksum": "00ddbaa578f0c044cf445283adc00023c57812e17e9cda324b25557c8ba40453",
+      "source": "https://github.com/quer3q/ps5-dump-forge",
+      "last_update": "2026-10-27T12:46:00Z",
+      "release_type": "stable"
+    },
+    {
       "name": "Orbit Store (Beta)",
       "filename": "orbit_store.elf",
       "url": "https://github.com/saawant12/orbit-store-ps5/releases/download/v1.7.0/orbit_store.elf",
@@ -383,6 +396,90 @@
       "source": "https://github.com/pegasus-ps5/pegasus-dl",
       "last_update": "2026-10-26T16:33:06Z",
       "release_type": "stable"
+    },
+    {
+      "name": "PS5 Dump Forge for Windows x86-64",
+      "file": "ps5-dump-forge-0.4.2-windows-x86-64.zip",
+      "download": "https://github.com/quer3q/ps5-dump-forge/releases/download/v0.4.2/ps5-dump-forge-0.4.2-windows-x86-64.zip",
+      "description": "",
+      "version": "v0.4.2",
+      "category": "Utilities",
+      "checksum": "9b7d1394b10dbcc39001690ccdf09d80fa9048e262d37abaa971ffcb2f5af723",
+      "source": "https://github.com/quer3q/ps5-dump-forge",
+      "last_update": "2026-10-27T12:46:00Z",
+      "release_type": "stable",
+      "group": "ps5-dump-forge-desktop",
+      "variant": "Windows x86-64"
+    },
+    {
+      "name": "PS5 Dump Forge for Windows x86-64 (bundled WebView2)",
+      "file": "ps5-dump-forge-0.4.2-windows-x86-64-webview2.zip",
+      "download": "https://github.com/quer3q/ps5-dump-forge/releases/download/v0.4.2/ps5-dump-forge-0.4.2-windows-x86-64-webview2.zip",
+      "description": "",
+      "version": "v0.4.2",
+      "category": "Utilities",
+      "checksum": "e829af6b9d6d70be0fbb32f9dbfb9c12dae5110373ed238172daaef9e31b4c87",
+      "source": "https://github.com/quer3q/ps5-dump-forge",
+      "last_update": "2026-10-27T12:46:00Z",
+      "release_type": "stable",
+      "group": "ps5-dump-forge-desktop",
+      "variant": "Windows x86-64 (bundled WebView2)"
+    },
+    {
+      "name": "PS5 Dump Forge for Windows arm64",
+      "file": "ps5-dump-forge-0.4.2-windows-arm64.zip",
+      "download": "https://github.com/quer3q/ps5-dump-forge/releases/download/v0.4.2/ps5-dump-forge-0.4.2-windows-arm64.zip",
+      "description": "",
+      "version": "v0.4.2",
+      "category": "Utilities",
+      "checksum": "d3a968ba58e75cb929c3b5b193a695bcc570f3fca43097ae6d815cbef6bfbd42",
+      "source": "https://github.com/quer3q/ps5-dump-forge",
+      "last_update": "2026-10-27T12:46:00Z",
+      "release_type": "stable",
+      "group": "ps5-dump-forge-desktop",
+      "variant": "Windows arm64"
+    },
+    {
+      "name": "PS5 Dump Forge for macOS (universal)",
+      "file": "ps5-dump-forge-0.4.2-macos-universal.zip",
+      "download": "https://github.com/quer3q/ps5-dump-forge/releases/download/v0.4.2/ps5-dump-forge-0.4.2-macos-universal.zip",
+      "description": "",
+      "version": "v0.4.2",
+      "category": "Utilities",
+      "checksum": "d1115cbeae19499c90b5d23764cf667599b6d33a0f98608c2cbb267a55048cee",
+      "source": "https://github.com/quer3q/ps5-dump-forge",
+      "last_update": "2026-10-27T12:46:00Z",
+      "release_type": "stable",
+      "group": "ps5-dump-forge-desktop",
+      "variant": "macOS (universal)"
+    },
+    {
+      "name": "PS5 Dump Forge for Linux x86-64",
+      "file": "ps5-dump-forge-0.4.2-linux-x86-64.tar.gz",
+      "download": "https://github.com/quer3q/ps5-dump-forge/releases/download/v0.4.2/ps5-dump-forge-0.4.2-linux-x86-64.tar.gz",
+      "description": "",
+      "version": "v0.4.2",
+      "category": "Utilities",
+      "checksum": "52c72b3abd1a64279cdd455c2dde801b1f3ff2cb37a648440aeaade869e3cb03",
+      "source": "https://github.com/quer3q/ps5-dump-forge",
+      "last_update": "2026-10-27T12:46:00Z",
+      "release_type": "stable",
+      "group": "ps5-dump-forge-desktop",
+      "variant": "Linux x86-64"
+    },
+    {
+      "name": "PS5 Dump Forge for Linux arm64",
+      "file": "ps5-dump-forge-0.4.2-linux-arm64.tar.gz",
+      "download": "https://github.com/quer3q/ps5-dump-forge/releases/download/v0.4.2/ps5-dump-forge-0.4.2-linux-arm64.tar.gz",
+      "description": "",
+      "version": "v0.4.2",
+      "category": "Utilities",
+      "checksum": "0aa5611e5765d54364c038c47f1c9aed6327bd6748f7c8d6d30c42740607fd15",
+      "source": "https://github.com/quer3q/ps5-dump-forge",
+      "last_update": "2026-10-27T12:46:00Z",
+      "release_type": "stable",
+      "group": "ps5-dump-forge-desktop",
+      "variant": "Linux arm64"
     }
   ],
   "links": [
