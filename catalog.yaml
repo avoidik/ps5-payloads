@@ -105,16 +105,6 @@ payloads:
       repo: Phoenixx1202/Spectrum-Library
       asset: '^SpectrumLibrary_[\d.]+\.elf$'
 
-  - id: pegasus-dl
-    name: Pegasus DL
-    category: Downloaders
-    description: Direct package downloading on the PS5 with a web interface on port 6970.
-    extension: .elf
-    source:
-      type: github
-      repo: pegasus-ps5/pegasus-dl
-      asset: '^pegasus_dl\.elf$'
-
   - id: ps5-account-tools
     name: PS5 Account Tools
     category: Utilities
@@ -473,3 +463,18 @@ payloads:
       host: https://theghostonline.dev
       repo: theghostonline/PS5-Game-Updater
       asset: '^Game-Updater-PPSA99440\.zip$'
+
+  - id: pegasus-dl-plus
+    name: Pegasus DL+
+    kind: download
+    category: Downloaders
+    description: >-
+      Native app (formerly the Pegasus DL payload): browse catalogs, queue downloads, extract
+      archives and install packages on the PS5 with the controller. Copy PPSA99998.ffpfsc into your
+      loader's homebrew folder (ShadowMountPlus mounts it), refresh and launch Pegasus DL+. Updates
+      itself; sends app launch and reliability diagnostics.
+    extension: .ffpfsc
+    source:
+      type: github
+      repo: pegasus-ps5/pegasus-dl
+      asset: '^PPSA99998\.ffpfsc$'
