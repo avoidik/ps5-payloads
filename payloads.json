@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-28T05:41:44.923Z",
+  "generated_at": "2026-10-28T22:34:58.397Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
   "groups": {"fan-target":{"name":"Fan Target","description":"Sets the fan controller's target temperature below the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one variant only: lower targets make the fan react earlier and run faster; 85C is a good start."},"ps5-dump-forge-desktop":{"name":"PS5 Dump Forge (desktop)","description":"Desktop app and command-line tool of PS5 Dump Forge: convert and edit PS5 game dumps and images on a computer, transfer games to and from a console running Forge, and install Forge on a PS5 in one click. Nothing to install: unzip and run. Windows 10/11, macOS 11 or later, Linux with glibc 2.35 or later."}},
   "payloads": [
@@ -73,15 +73,15 @@
     {
       "id": "ps5upload",
       "name": "PS5 Upload Helper",
-      "filename": "ps5upload-8.5.1.elf",
-      "url": "https://github.com/phantomptr/ps5upload/releases/download/v8.5.1/ps5upload-8.5.1.elf",
+      "filename": "ps5upload-8.8.1.elf",
+      "url": "https://github.com/phantomptr/ps5upload/releases/download/v8.8.1/ps5upload-8.8.1.elf",
       "description": "Console-side helper for the PS5 Upload app on PC, Mac, Android or web. Resumable uploads, package installs, file and game management on port 9120. Enter the 6-digit code it shows in the app to pair. Keep the app and helper on the same version.",
-      "version": "v8.5.1",
+      "version": "v8.8.1",
       "category": "Utilities",
-      "checksum": "2039eb340f6c09f7fce6bd726ad526adb68e9e924351b21dba74720025267481",
+      "checksum": "54d9feb2bb8f876d829f3305d4aaf90244d48dff0aa94468b26ddec17a6dda56",
       "source": "https://github.com/phantomptr/ps5upload",
-      "last_update": "2026-10-27T10:08:05Z",
-      "release_type": "stable"
+      "last_update": "2026-10-28T21:39:47Z",
+      "release_type": "pre-release"
     },
     {
       "id": "shadowmountplus",
@@ -89,24 +89,24 @@
       "filename": "shadowmountplus.elf",
       "url": "https://avoidik.github.io/ps5-payloads/files/shadowmountplus.elf",
       "description": "Background auto-mounter that detects, mounts and installs game dumps and images from internal or external storage (UFS, exFAT, PFS). Needs kstuff-lite 1.07 or newer; load at every boot. Settings in /data/shadowmount/config.ini.",
-      "version": "1.7beta9",
+      "version": "1.7beta10",
       "category": "Utilities",
-      "checksum": "928a5a7e33d2801c1c14a5ed8ad83fcab07957ba3a5daccd382dba67d408b3e2",
+      "checksum": "8c6798232ae2a8fbcd209ab97fc4f8d4d47cf23b7eecfaa6349c0bfeb8e4a3d3",
       "source": "https://github.com/drakmor/ShadowMountPlus",
-      "last_update": "2026-10-27T17:52:54Z",
+      "last_update": "2026-10-28T21:54:23Z",
       "release_type": "stable"
     },
     {
       "id": "ps4mount",
       "name": "PS4Mount",
       "filename": "ps4mount.elf",
-      "url": "https://github.com/gasb07/ps4mount/releases/download/v0.7.0/ps4mount.elf",
+      "url": "https://github.com/gasb07/ps4mount/releases/download/v0.7.1/ps4mount.elf",
       "description": "Plays PS4 fake PKGs straight from an exFAT USB drive without installing them. Put the game and update .pkg files in the drive root; it adds them to the home screen. Web panel on port 8770 and in the Media tab. Needs fake PKG support (e.g. etaHEN with kstuff) and kernel log access (klogsrv on port 3232, or no other payload reading /dev/klog). Load after every boot. Tested on firmware 13.20.",
-      "version": "v0.7.0",
+      "version": "v0.7.1",
       "category": "Utilities",
-      "checksum": "9a99fdeb2be8ebee823b14636e0aac5721386feabcfe97e27dc6d5b3e4158bb7",
+      "checksum": "ea931ffc7b8da22b9ff36795388caaae28a926d9d44ecbb259e4c6e40aa72a27",
       "source": "https://github.com/gasb07/ps4mount",
-      "last_update": "2026-10-24T02:07:53Z",
+      "last_update": "2026-10-28T18:25:55Z",
       "release_type": "stable"
     },
     {
@@ -339,14 +339,14 @@
     },
     {
       "name": "PS5-ECAM",
-      "file": "PS5-ECAM-v5.0.1.zip",
-      "download": "https://github.com/premohq/PS5-ECAM/releases/download/v5.0.1/PS5-ECAM-v5.0.1.zip",
+      "file": "PS5-ECAM-v5.1.0.zip",
+      "download": "https://github.com/premohq/PS5-ECAM/releases/download/v5.1.0/PS5-ECAM-v5.1.0.zip",
       "description": "Wii U, 3DS, DS and Switch emulation (Cemu, Azahar, melonDS and Eden) in one launcher for the TV and the DualSense. Not a payload: extract the zip, copy the PPSA99360 folder to /data/homebrew/, and let your HEN jailbreak the title (etaHEN app list, OnionHEN exact_title_ids, or an ELF loader on port 9021). Updates itself from then on.",
-      "version": "v5.0.1",
+      "version": "v5.1.0",
       "category": "Emulators",
-      "checksum": "733f4d9408a0f6354e6a491614b5fb15bd893780a7191db8bf3d71a82ba4dfdb",
+      "checksum": "c6a0c0b50617d923a5e7a5cb37d799c746118342cd850d5bca634c3670a6562f",
       "source": "https://github.com/premohq/PS5-ECAM",
-      "last_update": "2026-10-22T17:12:59Z",
+      "last_update": "2026-10-28T06:08:12Z",
       "release_type": "stable"
     },
     {
