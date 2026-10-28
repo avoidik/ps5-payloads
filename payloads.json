@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-27T18:35:18.965Z",
+  "generated_at": "2026-10-28T05:41:44.923Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
   "groups": {"fan-target":{"name":"Fan Target","description":"Sets the fan controller's target temperature below the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one variant only: lower targets make the fan react earlier and run faster; 85C is a good start."},"ps5-dump-forge-desktop":{"name":"PS5 Dump Forge (desktop)","description":"Desktop app and command-line tool of PS5 Dump Forge: convert and edit PS5 game dumps and images on a computer, transfer games to and from a console running Forge, and install Forge on a PS5 in one click. Nothing to install: unzip and run. Windows 10/11, macOS 11 or later, Linux with glibc 2.35 or later."}},
   "payloads": [
@@ -214,13 +214,13 @@
       "id": "neoenabler",
       "name": "NeoEnabler",
       "filename": "neo-manager.elf",
-      "url": "https://github.com/gasb07/NeoEnabler/releases/download/v0.5.2/neo-manager.elf",
+      "url": "https://github.com/gasb07/NeoEnabler/releases/download/v0.5.3/neo-manager.elf",
       "description": "Starts PS4 games without PS4 Pro support in Pro mode, so game patches can raise them to higher resolutions, up to native 4K; only useful for games that have a NeoEnabler patch. Load ps-patch-system first, then this, after every boot. Pick patches in the panel on port 8765 or in the Media tab.",
-      "version": "v0.5.2",
+      "version": "v0.5.3",
       "category": "Utilities",
-      "checksum": "ea9342b1349ea26b55af4643bdd34308d7880bb09309b632c1dc2c8c95f7be1b",
+      "checksum": "9b37fa14568168a0cb22dad41a912562691286bb39a19211f692cdb332b81a6e",
       "source": "https://github.com/gasb07/NeoEnabler",
-      "last_update": "2026-10-24T22:18:34Z",
+      "last_update": "2026-10-28T01:09:44Z",
       "release_type": "stable"
     },
     {
@@ -240,13 +240,13 @@
       "id": "game-updater",
       "name": "Game Updater Engine",
       "filename": "game-updater.elf",
-      "url": "https://theghostonline.dev/theghostonline/PS5-Game-Updater/releases/download/v1.1.1/game-updater.elf",
+      "url": "https://theghostonline.dev/theghostonline/PS5-Game-Updater/releases/download/v1.1.2/game-updater.elf",
       "description": "Engine of Game Updater, which finds and installs the newest official update for installed PS5 games, with a backport when an update needs newer firmware. Serves the Game Updater app and a web page on port 7920. If the app doesn't start it by itself, load it here first, then open the app.",
-      "version": "v1.1.1",
+      "version": "v1.1.2",
       "category": "Utilities",
-      "checksum": "a4a8385b00813134b785d93ef10987a56fe262851db8e787ce6d4b624d29100d",
+      "checksum": "3a21c41c901c29536e3e1a303861f8d4000c76957f52ea482eff8220d125759c",
       "source": "https://theghostonline.dev/theghostonline/PS5-Game-Updater",
-      "last_update": "2026-10-26T02:52:48Z",
+      "last_update": "2026-10-28T00:13:46Z",
       "release_type": "stable"
     },
     {
@@ -376,13 +376,13 @@
     {
       "name": "Game Updater",
       "file": "Game-Updater-PPSA99440.zip",
-      "download": "https://theghostonline.dev/theghostonline/PS5-Game-Updater/releases/download/v1.1.1/Game-Updater-PPSA99440.zip",
+      "download": "https://theghostonline.dev/theghostonline/PS5-Game-Updater/releases/download/v1.1.2/Game-Updater-PPSA99440.zip",
       "description": "The Game Updater app (PPSA99440): update installed PS5 games in a few taps, on the console. Extract the zip and copy the PPSA99440 folder to /data/homebrew/ over FTP. Needs the Game Updater Engine payload.",
-      "version": "v1.1.1",
+      "version": "v1.1.2",
       "category": "Utilities",
       "checksum": "b2d55384780f4a6a9792b12e75e1a32697ab6943001a5b0cfc93984499e2b78c",
       "source": "https://theghostonline.dev/theghostonline/PS5-Game-Updater",
-      "last_update": "2026-10-26T02:52:48Z",
+      "last_update": "2026-10-28T00:13:46Z",
       "release_type": "stable"
     },
     {
