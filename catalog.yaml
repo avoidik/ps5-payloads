@@ -188,9 +188,7 @@ payloads:
     source:
       type: github
       repo: drakmor/ShadowMountPlus
-      # The zip is in every release; since 1.7beta9 the .elf is no longer attached on its own
-      asset: '^ShadowMountPlus_.+\.zip$'
-      extract: shadowmountplus.elf
+      asset: '^shadowmountplus\.elf$'
       prerelease: true
 
   - id: ps4mount
