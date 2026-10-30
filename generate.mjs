@@ -256,7 +256,7 @@ async function digestFromRelease(assets, name) {
   const list = assets.find((a) => /^sha256sums(\.txt)?$/i.test(a.name)) ?? assets.find((a) => a.name === `${name}.sha256`);
   if (!list) return null;
   const res = await fetch(list.browser_download_url, { redirect: 'follow', headers: { 'User-Agent': 'ps5-payloads-generator' } });
-  if (!res.ok) fail(`cannot read ${list.name} (HTTP ${res.status})`);
+  if (!res.ok) fail(`cannot read ${list.browser_download_url} (HTTP ${res.status})`);
   for (const line of (await res.text()).split('\n')) {
     const [hash, file] = line.trim().split(/\s+\*?/);
     if (/^[0-9a-f]{64}$/i.test(hash ?? '') && (!file || path.basename(file) === name)) return hash.toLowerCase();
@@ -525,6 +525,7 @@ function buildInactiveEntry(p, nameById) {
 // "filename" and "url", so Payload Manager's parser skips them.
 function buildDownloadEntry(p, up) {
   const entry = {
+    id: p.id,
     name: p.name.trim(),
     file: p.filename ?? up.filename,
     download: up.url,
@@ -579,6 +580,38 @@ function render(sourceName, entries, inactive, downloads, links, groups, filesUr
   ].join('\n');
 }
 
+// ── Fallback to the last published version ──────────────────
+
+// Entries of the current output, by id (our own only; external ones come from their catalogs)
+function loadPrevious(outPath) {
+  try {
+    const doc = JSON.parse(fs.readFileSync(outPath, 'utf8'));
+    const own = [...(doc.payloads ?? []), ...(doc.downloads ?? [])].filter((e) => !e.catalog);
+    // Downloads published before they had ids are matched by name
+    return new Map(own.map((e) => [e.id ?? `name:${e.name}`, e]));
+  } catch {
+    return new Map();
+  }
+}
+
+// Resolves an entry; if that fails (upstream down, HTTP error, checksum mismatch, no matching
+// file), its last published version is reused so one unavailable host doesn't block every
+// other update. Returns { up } or { previous }, or null when there's nothing to fall back to.
+async function withFallback(p, previous, resolve) {
+  try {
+    return { up: await resolve() };
+  } catch (e) {
+    const msg = e.message.startsWith(`${p.id}:`) ? e.message : `${p.id}: ${e.message}`;
+    const prev = previous.get(p.id) ?? previous.get(`name:${p.name.trim()}`);
+    if (!prev) {
+      warn(`${msg}; not published before, so it's left out`);
+      return null;
+    }
+    warn(`${msg}; keeping the last published version (${prev.version || 'unversioned'})`);
+    return { previous: { ...prev, id: p.id } };
+  }
+}
+
 // ── Main ────────────────────────────────────────────────────
 
 async function main() {
@@ -596,26 +629,50 @@ async function main() {
     for (const r of p.requires ?? []) if (!activeIds.has(r)) fail(`${p.id}: requires "${r}", which is disabled`);
   }
 
+  const outPath = opts.out
+    ? path.resolve(opts.out)
+    : path.resolve(path.dirname(opts.catalog), catalog.output ?? 'payloads.json');
+  const previous = loadPrevious(outPath);
+
   const ordered = orderByDependencies(active.filter((p) => p.kind === 'payload'));
   const nameById = new Map(catalog.payloads.map((p) => [p.id, p.name.trim()]));
 
   const hosted = [];
-  const resolved = await Promise.all(
+  const resolved = (await Promise.all(
     ordered.map(async (p) => {
-      const up = await resolvePayload(p, catalog.base_url);
+      const r = await withFallback(p, previous, () => resolvePayload(p, catalog.base_url));
+      if (!r) return null;
+      if (r.previous) {
+        // An extracted file is hosted by us: take the published copy back from the site
+        if (p.source.extract) {
+          try {
+            const { data, checksum } = await downloadBytes(r.previous.url);
+            if (checksum !== r.previous.checksum) fail('it no longer matches its checksum');
+            hosted.push({ name: r.previous.filename, data });
+          } catch (e) {
+            warn(`${p.id}: last published file is unavailable (${e.message}), so it's left out`);
+            return null;
+          }
+        }
+        return r.previous;
+      }
+      const { up } = r;
       const from = up.archive ? ` from ${up.archive}` : '';
       console.error(`  ${p.id}: ${up.filename}${from} ${up.version} (${up.size} bytes) sha256=${up.checksum}`);
       if (up.hosted) hosted.push({ name: up.filename, data: up.hosted });
       return buildEntry(p, up, nameById);
     }),
-  );
-  const downloads = await Promise.all(
+  )).filter(Boolean);
+  const downloads = (await Promise.all(
     active.filter((p) => p.kind === 'download').map(async (p) => {
-      const up = await resolvePayload(p);
+      const r = await withFallback(p, previous, () => resolvePayload(p));
+      if (!r) return null;
+      if (r.previous) return r.previous;
+      const { up } = r;
       console.error(`  ${p.id}: ${up.filename} ${up.version} (${up.size} bytes, site download) sha256=${up.checksum}`);
       return buildDownloadEntry(p, up);
     }),
-  );
+  )).filter(Boolean);
 
   const filenames = new Set();
   const ids = new Set(resolved.map((e) => e.id));
@@ -660,9 +717,6 @@ async function main() {
     process.stdout.write(out);
     return;
   }
-  const outPath = opts.out
-    ? path.resolve(opts.out)
-    : path.resolve(path.dirname(opts.catalog), catalog.output ?? 'payloads.json');
   // Extracted files, published with the site; rewritten from scratch so nothing stale remains
   const filesDir = path.join(path.dirname(outPath), 'files');
   fs.rmSync(filesDir, { recursive: true, force: true });
