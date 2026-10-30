@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-30T05:48:30.622Z",
+  "generated_at": "2026-10-30T14:05:58.460Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
   "groups": {"fan-target":{"name":"Fan Target","description":"Sets the fan controller's target temperature below the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one variant only: lower targets make the fan react earlier and run faster; 85C is a good start."},"ps5-dump-forge-desktop":{"name":"PS5 Dump Forge (desktop)","description":"Desktop app and command-line tool of PS5 Dump Forge: convert and edit PS5 game dumps and images on a computer, transfer games to and from a console running Forge, and install Forge on a PS5 in one click. Nothing to install: unzip and run. Windows 10/11, macOS 11 or later, Linux with glibc 2.35 or later."}},
   "payloads": [
@@ -73,14 +73,14 @@
     {
       "id": "ps5upload",
       "name": "PS5 Upload Helper",
-      "filename": "ps5upload-9.4.1.elf",
-      "url": "https://github.com/phantomptr/ps5upload/releases/download/v9.4.1/ps5upload-9.4.1.elf",
+      "filename": "ps5upload-9.5.1.elf",
+      "url": "https://github.com/phantomptr/ps5upload/releases/download/v9.5.1/ps5upload-9.5.1.elf",
       "description": "Console-side helper for the PS5 Upload app on PC, Mac, Android or web. Resumable uploads, package installs, file and game management on port 9120. Enter the 6-digit code it shows in the app to pair. Keep the app and helper on the same version.",
-      "version": "v9.4.1",
+      "version": "v9.5.1",
       "category": "Utilities",
-      "checksum": "b276e08c0b82dd29abbe7bbe7b23ed21adafc5a89737f5deba4787ed2ceccad8",
+      "checksum": "6c113d167d7fe4c4f3e036e8556d044ab3b04e7f45fe53778f8dbea158ede8d7",
       "source": "https://github.com/phantomptr/ps5upload",
-      "last_update": "2026-10-30T03:58:35Z",
+      "last_update": "2026-10-30T10:11:30Z",
       "release_type": "stable"
     },
     {
@@ -290,6 +290,7 @@
   ],
   "downloads": [
     {
+      "id": "ps5x360",
       "name": "PS5X360",
       "file": "PPSA50011.zip",
       "download": "https://github.com/BrinooTk/PS5X360/releases/download/v1.0.2/PPSA50011.zip",
@@ -302,6 +303,7 @@
       "release_type": "stable"
     },
     {
+      "id": "ampr-emu",
       "name": "AMPR Emu",
       "file": "libSceAmpr.sprx",
       "download": "https://github.com/drakmor/ampr_emu/releases/download/0.4.2.1/libSceAmpr.sprx",
@@ -314,6 +316,7 @@
       "release_type": "stable"
     },
     {
+      "id": "playgo-stub",
       "name": "PlayGo Stub",
       "file": "libScePlayGo.sprx",
       "download": "https://github.com/drakmor/pgo_stub/releases/download/0.6/libScePlayGo.sprx",
@@ -326,6 +329,7 @@
       "release_type": "stable"
     },
     {
+      "id": "dlc-emu",
       "name": "DLC Emu",
       "file": "dlc_emu_0.3.zip",
       "download": "https://github.com/drakmor/dlc_emu/releases/download/0.3/dlc_emu_0.3.zip",
@@ -338,6 +342,7 @@
       "release_type": "stable"
     },
     {
+      "id": "ps5-ecam",
       "name": "PS5-ECAM",
       "file": "PS5-ECAM-v5.1.0.zip",
       "download": "https://github.com/premohq/PS5-ECAM/releases/download/v5.1.0/PS5-ECAM-v5.1.0.zip",
@@ -350,6 +355,7 @@
       "release_type": "stable"
     },
     {
+      "id": "ps5lm",
       "name": "PS5LM",
       "file": "ps5lm-app-v0.9.1.zip",
       "download": "https://github.com/cobanov/PS5LM/releases/download/v0.9.1/ps5lm-app-v0.9.1.zip",
@@ -371,7 +377,8 @@
       "checksum": "29ed0b7d2a9f184c2fb3b83ddcf9af685eed784b5be5ac68dfd0cdfb079fd9a6",
       "source": "https://theghostonline.dev/theghostonline/PS5-LZ4-Compression",
       "last_update": "2026-10-26T02:34:12Z",
-      "release_type": "stable"
+      "release_type": "stable",
+      "id": "lz4-compression-app"
     },
     {
       "name": "Game Updater",
@@ -383,9 +390,11 @@
       "checksum": "b2d55384780f4a6a9792b12e75e1a32697ab6943001a5b0cfc93984499e2b78c",
       "source": "https://theghostonline.dev/theghostonline/PS5-Game-Updater",
       "last_update": "2026-10-28T00:13:46Z",
-      "release_type": "stable"
+      "release_type": "stable",
+      "id": "game-updater-app"
     },
     {
+      "id": "pegasus-dl-plus",
       "name": "Pegasus DL+",
       "file": "PPSA99998.ffpfsc",
       "download": "https://github.com/pegasus-ps5/pegasus-dl/releases/download/native-v2.0.5/PPSA99998.ffpfsc",
@@ -398,6 +407,7 @@
       "release_type": "stable"
     },
     {
+      "id": "ps5-dump-forge-windows-x86-64",
       "name": "PS5 Dump Forge for Windows x86-64",
       "file": "ps5-dump-forge-0.5.0-windows-x86-64.zip",
       "download": "https://github.com/quer3q/ps5-dump-forge/releases/download/v0.5.0/ps5-dump-forge-0.5.0-windows-x86-64.zip",
@@ -412,6 +422,7 @@
       "variant": "Windows x86-64"
     },
     {
+      "id": "ps5-dump-forge-windows-x86-64-webview2",
       "name": "PS5 Dump Forge for Windows x86-64 (bundled WebView2)",
       "file": "ps5-dump-forge-0.5.0-windows-x86-64-webview2.zip",
       "download": "https://github.com/quer3q/ps5-dump-forge/releases/download/v0.5.0/ps5-dump-forge-0.5.0-windows-x86-64-webview2.zip",
@@ -426,6 +437,7 @@
       "variant": "Windows x86-64 (bundled WebView2)"
     },
     {
+      "id": "ps5-dump-forge-windows-arm64",
       "name": "PS5 Dump Forge for Windows arm64",
       "file": "ps5-dump-forge-0.5.0-windows-arm64.zip",
       "download": "https://github.com/quer3q/ps5-dump-forge/releases/download/v0.5.0/ps5-dump-forge-0.5.0-windows-arm64.zip",
@@ -440,6 +452,7 @@
       "variant": "Windows arm64"
     },
     {
+      "id": "ps5-dump-forge-macos",
       "name": "PS5 Dump Forge for macOS (universal)",
       "file": "ps5-dump-forge-0.5.0-macos-universal.zip",
       "download": "https://github.com/quer3q/ps5-dump-forge/releases/download/v0.5.0/ps5-dump-forge-0.5.0-macos-universal.zip",
@@ -454,6 +467,7 @@
       "variant": "macOS (universal)"
     },
     {
+      "id": "ps5-dump-forge-linux-x86-64",
       "name": "PS5 Dump Forge for Linux x86-64",
       "file": "ps5-dump-forge-0.5.0-linux-x86-64.tar.gz",
       "download": "https://github.com/quer3q/ps5-dump-forge/releases/download/v0.5.0/ps5-dump-forge-0.5.0-linux-x86-64.tar.gz",
@@ -468,6 +482,7 @@
       "variant": "Linux x86-64"
     },
     {
+      "id": "ps5-dump-forge-linux-arm64",
       "name": "PS5 Dump Forge for Linux arm64",
       "file": "ps5-dump-forge-0.5.0-linux-arm64.tar.gz",
       "download": "https://github.com/quer3q/ps5-dump-forge/releases/download/v0.5.0/ps5-dump-forge-0.5.0-linux-arm64.tar.gz",
