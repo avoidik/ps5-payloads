@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-30T22:19:34.795Z",
+  "generated_at": "2026-10-31T05:40:00.406Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
   "groups": {"fan-target":{"name":"Fan Target","description":"Sets the fan controller's target temperature below the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one variant only: lower targets make the fan react earlier and run faster; 85C is a good start."},"ps5-dump-forge-desktop":{"name":"PS5 Dump Forge (desktop)","description":"Desktop app and command-line tool of PS5 Dump Forge: convert and edit PS5 game dumps and images on a computer, transfer games to and from a console running Forge, and install Forge on a PS5 in one click. Nothing to install: unzip and run. Windows 10/11, macOS 11 or later, Linux with glibc 2.35 or later."}},
   "payloads": [
@@ -73,14 +73,14 @@
     {
       "id": "ps5upload",
       "name": "PS5 Upload Helper",
-      "filename": "ps5upload-9.11.0.elf",
-      "url": "https://github.com/phantomptr/ps5upload/releases/download/v9.11.0/ps5upload-9.11.0.elf",
+      "filename": "ps5upload-10.0.1.elf",
+      "url": "https://github.com/phantomptr/ps5upload/releases/download/v10.0.1/ps5upload-10.0.1.elf",
       "description": "Console-side helper for the PS5 Upload app on PC, Mac, Android or web. Resumable uploads, package installs, file and game management on port 9120. Enter the 6-digit code it shows in the app to pair. Keep the app and helper on the same version.",
-      "version": "v9.11.0",
+      "version": "v10.0.1",
       "category": "Utilities",
-      "checksum": "ea961717fb823398dbf346a215cab21aba8cf7a966fb8be53b9d48e75543bdd9",
+      "checksum": "c5da95b6438a6d68e8c453df8ea84fb0341744f5fc9dae0781371b350450c3cc",
       "source": "https://github.com/phantomptr/ps5upload",
-      "last_update": "2026-10-30T21:13:47Z",
+      "last_update": "2026-10-31T02:49:07Z",
       "release_type": "stable"
     },
     {
@@ -265,14 +265,14 @@
     {
       "name": "Orbit Store (Beta)",
       "filename": "orbit_store.elf",
-      "url": "https://github.com/saawant12/orbit-store-ps5/releases/download/v1.8.0/orbit_store.elf",
+      "url": "https://github.com/saawant12/orbit-store-ps5/releases/download/v1.8.1/orbit_store.elf",
       "description": "A modern PS5 download manager with a native TV app, resumable downloads and phone controls.",
-      "version": "v1.8.0",
+      "version": "v1.8.1",
       "category": "Utilities",
-      "checksum": "53446c09c568468436f5762593618a5063375ece64e73f0532063a2da5c80a07",
+      "checksum": "a9fe33c3b0338af074edb4f7c68bb3806a84efba718e3897f94eba9dc720f914",
       "id": "orbit-store.orbit-store-beta",
       "release_type": "stable",
-      "last_update": "2026-10-30T16:46:33Z",
+      "last_update": "2026-10-30T22:53:23Z",
       "source": "https://github.com/saawant12/orbit-store-ps5",
       "catalog": "Orbit Store",
       "catalog_url": "https://raw.githubusercontent.com/saawant12/orbit-store-ps5/refs/heads/main/payloads.json"
@@ -368,6 +368,7 @@
       "release_type": "stable"
     },
     {
+      "id": "lz4-compression-app",
       "name": "LZ4 Compression",
       "file": "LZ4-Compression-PPSA99420.zip",
       "download": "https://theghostonline.dev/theghostonline/PS5-LZ4-Compression/releases/download/v1.6.4/LZ4-Compression-PPSA99420.zip",
@@ -377,10 +378,10 @@
       "checksum": "29ed0b7d2a9f184c2fb3b83ddcf9af685eed784b5be5ac68dfd0cdfb079fd9a6",
       "source": "https://theghostonline.dev/theghostonline/PS5-LZ4-Compression",
       "last_update": "2026-10-26T02:34:12Z",
-      "release_type": "stable",
-      "id": "lz4-compression-app"
+      "release_type": "stable"
     },
     {
+      "id": "game-updater-app",
       "name": "Game Updater",
       "file": "Game-Updater-PPSA99440.zip",
       "download": "https://theghostonline.dev/theghostonline/PS5-Game-Updater/releases/download/v1.1.2/Game-Updater-PPSA99440.zip",
@@ -390,8 +391,7 @@
       "checksum": "b2d55384780f4a6a9792b12e75e1a32697ab6943001a5b0cfc93984499e2b78c",
       "source": "https://theghostonline.dev/theghostonline/PS5-Game-Updater",
       "last_update": "2026-10-28T00:13:46Z",
-      "release_type": "stable",
-      "id": "game-updater-app"
+      "release_type": "stable"
     },
     {
       "id": "pegasus-dl-plus",
