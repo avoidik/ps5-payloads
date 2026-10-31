@@ -571,3 +571,45 @@ payloads:
       type: github
       repo: quer3q/ps5-dump-forge
       asset: '^ps5-dump-forge-[\d.]+-linux-arm64\.tar\.gz$'
+
+  - id: ampr-emu-ng
+    name: AMPR Emu NG
+    kind: download
+    category: Emulators
+    description: >-
+      Hard fork of the APR Emu library (libSceAmpr.sprx) aimed at performance and stability with
+      zstd and LZ4 converted games. Not a payload: copy libSceAmpr.sprx into the game's fakelib/
+      folder, mount the game with ShadowMountPlus and turn off its fakelib update setting.
+    extension: .sprx
+    source:
+      type: github
+      repo: quer3q/ampr-emu-ng
+      asset: '^libSceAmpr\.sprx$'
+
+  - id: swanstationps5
+    name: SwanStationPS5
+    kind: download
+    category: Emulators
+    description: >-
+      PlayStation 1 emulator app (PPSA98510) based on SwanStation, drawn on the GPU with Vulkan. Not a
+      payload: extract the zip, copy the PPSA98510 folder to /data/homebrew/ over FTP, set its
+      permissions to 777, and restart ShadowMountPlus. Games go in /data/SwanStationPS5/games/, one
+      folder per game. Updates itself.
+    extension: .zip
+    source:
+      type: github
+      repo: darkxex/SwanStationPS5
+      asset: '^PPSA98510\.zip$'
+
+  - id: swanstationps5-disc-daemon
+    name: SwanStationPS5 Disc Daemon
+    category: Emulators
+    description: >-
+      Optional companion of the SwanStationPS5 app: load it once per console start (with the app
+      closed) and a PS1 disc put in a USB CD drive is installed with progress notifications and then
+      started, without opening the app first.
+    extension: .elf
+    source:
+      type: github
+      repo: darkxex/SwanStationPS5
+      asset: '^SwanStationPS5-DiscDaemon\.elf$'
