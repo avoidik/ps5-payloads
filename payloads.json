@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-10-31T12:28:15.680Z",
+  "generated_at": "2026-10-31T19:41:50.121Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
   "groups": {"fan-target":{"name":"Fan Target","description":"Sets the fan controller's target temperature below the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one variant only: lower targets make the fan react earlier and run faster; 85C is a good start."},"ps5-dump-forge-desktop":{"name":"PS5 Dump Forge (desktop)","description":"Desktop app and command-line tool of PS5 Dump Forge: convert and edit PS5 game dumps and images on a computer, transfer games to and from a console running Forge, and install Forge on a PS5 in one click. Nothing to install: unzip and run. Windows 10/11, macOS 11 or later, Linux with glibc 2.35 or later."}},
   "payloads": [
@@ -73,14 +73,14 @@
     {
       "id": "ps5upload",
       "name": "PS5 Upload Helper",
-      "filename": "ps5upload-10.0.2.elf",
-      "url": "https://github.com/phantomptr/ps5upload/releases/download/v10.0.2/ps5upload-10.0.2.elf",
+      "filename": "ps5upload-10.0.3.elf",
+      "url": "https://github.com/phantomptr/ps5upload/releases/download/v10.0.3/ps5upload-10.0.3.elf",
       "description": "Console-side helper for the PS5 Upload app on PC, Mac, Android or web. Resumable uploads, package installs, file and game management on port 9120. Enter the 6-digit code it shows in the app to pair. Keep the app and helper on the same version.",
-      "version": "v10.0.2",
+      "version": "v10.0.3",
       "category": "Utilities",
-      "checksum": "53ad7fe7b446709ccc36bdd9a7109a0f62a38076bb3b8cb9ba5c3c7cce5dc510",
+      "checksum": "5dd0997ae31abe1e095a83ce0166eb92ccefa0ae13189aa29e51365498e872a2",
       "source": "https://github.com/phantomptr/ps5upload",
-      "last_update": "2026-10-31T07:31:59Z",
+      "last_update": "2026-10-31T14:14:44Z",
       "release_type": "stable"
     },
     {
@@ -214,13 +214,13 @@
       "id": "neoenabler",
       "name": "NeoEnabler",
       "filename": "neo-manager.elf",
-      "url": "https://github.com/gasb07/NeoEnabler/releases/download/v0.6.0/neo-manager.elf",
+      "url": "https://github.com/gasb07/NeoEnabler/releases/download/v0.6.1/neo-manager.elf",
       "description": "Starts PS4 games without PS4 Pro support in Pro mode, so game patches can raise them to higher resolutions, up to native 4K; only useful for games that have a NeoEnabler patch. Load ps-patch-system first, then this, after every boot. Pick patches in the panel on port 8765 or in the Media tab.",
-      "version": "v0.6.0",
+      "version": "v0.6.1",
       "category": "Utilities",
-      "checksum": "e1db4f5220a3b99453e422162ec50da6bb44c6b52a6fa125d782d2ab0dffa75b",
+      "checksum": "d785d8a8747b5dbc2c294595f0fb394f653950b5f42b3ee42eb3e56dd80f7044",
       "source": "https://github.com/gasb07/NeoEnabler",
-      "last_update": "2026-10-29T17:39:32Z",
+      "last_update": "2026-10-31T18:29:50Z",
       "release_type": "stable"
     },
     {
@@ -260,6 +260,19 @@
       "checksum": "f0cc32e772318f1ae53f1eccae207cb9aa1efb96d1a2a6249205bb3e0e478986",
       "source": "https://github.com/quer3q/ps5-dump-forge",
       "last_update": "2026-10-29T17:50:57Z",
+      "release_type": "stable"
+    },
+    {
+      "id": "swanstationps5-disc-daemon",
+      "name": "SwanStationPS5 Disc Daemon",
+      "filename": "SwanStationPS5-DiscDaemon.elf",
+      "url": "https://github.com/darkxex/SwanStationPS5/releases/download/1.6.2/SwanStationPS5-DiscDaemon.elf",
+      "description": "Optional companion of the SwanStationPS5 app: load it once per console start (with the app closed) and a PS1 disc put in a USB CD drive is installed with progress notifications and then started, without opening the app first.",
+      "version": "1.6.2",
+      "category": "Emulators",
+      "checksum": "5b63670b14dc3bda305cb6139df655a646a1300f0ae89116c9314473a79dfb19",
+      "source": "https://github.com/darkxex/SwanStationPS5",
+      "last_update": "2026-10-31T06:24:24Z",
       "release_type": "stable"
     },
     {
@@ -495,6 +508,32 @@
       "release_type": "stable",
       "group": "ps5-dump-forge-desktop",
       "variant": "Linux arm64"
+    },
+    {
+      "id": "ampr-emu-ng",
+      "name": "AMPR Emu NG",
+      "file": "libSceAmpr.sprx",
+      "download": "https://github.com/quer3q/ampr-emu-ng/releases/download/v0.1.0/libSceAmpr.sprx",
+      "description": "Hard fork of the APR Emu library (libSceAmpr.sprx) aimed at performance and stability with zstd and LZ4 converted games. Not a payload: copy libSceAmpr.sprx into the game's fakelib/ folder, mount the game with ShadowMountPlus and turn off its fakelib update setting.",
+      "version": "v0.1.0",
+      "category": "Emulators",
+      "checksum": "69ee3b420c6798fa1b5fb5a9fed75479403bc8a64fe382db301477b1bf705956",
+      "source": "https://github.com/quer3q/ampr-emu-ng",
+      "last_update": "2026-10-29T15:21:13Z",
+      "release_type": "stable"
+    },
+    {
+      "id": "swanstationps5",
+      "name": "SwanStationPS5",
+      "file": "PPSA98510.zip",
+      "download": "https://github.com/darkxex/SwanStationPS5/releases/download/1.6.2/PPSA98510.zip",
+      "description": "PlayStation 1 emulator app (PPSA98510) based on SwanStation, drawn on the GPU with Vulkan. Not a payload: extract the zip, copy the PPSA98510 folder to /data/homebrew/ over FTP, set its permissions to 777, and restart ShadowMountPlus. Games go in /data/SwanStationPS5/games/, one folder per game. Updates itself.",
+      "version": "1.6.2",
+      "category": "Emulators",
+      "checksum": "b80cb91527afaff31e5af39ca1df444c7313200735849db84a503c1c7845e510",
+      "source": "https://github.com/darkxex/SwanStationPS5",
+      "last_update": "2026-10-31T06:24:24Z",
+      "release_type": "stable"
     }
   ],
   "links": [
