@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-11-02T06:01:14.879Z",
+  "generated_at": "2026-11-02T15:51:51.986Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
   "groups": {"fan-target":{"name":"Fan Target","description":"Sets the fan controller's target temperature below the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one variant only: lower targets make the fan react earlier and run faster; 85C is a good start."},"ps5-dump-forge-desktop":{"name":"PS5 Dump Forge (desktop)","description":"Desktop app and command-line tool of PS5 Dump Forge: convert and edit PS5 game dumps and images on a computer, transfer games to and from a console running Forge, and install Forge on a PS5 in one click. Nothing to install: unzip and run. Windows 10/11, macOS 11 or later, Linux with glibc 2.35 or later."}},
   "payloads": [
@@ -370,14 +370,14 @@
     {
       "id": "ps5lm",
       "name": "PS5LM",
-      "file": "ps5lm-app-v0.10.0.zip",
-      "download": "https://github.com/cobanov/PS5LM/releases/download/v0.10.0/ps5lm-app-v0.10.0.zip",
+      "file": "ps5lm-app-v0.11.0.zip",
+      "download": "https://github.com/cobanov/PS5LM/releases/download/v0.11.0/ps5lm-app-v0.11.0.zip",
       "description": "Runs GGUF language models with llama.cpp on the console's GPU and serves them to your network on port 8081, with OpenAI and Anthropic compatible APIs, a browser chat page and a TV screen. Not a payload: extract the zip and copy the PPSA99575 folder to /data/homebrew/ over FTP. Needs kstuff-lite, etaHEN and ShadowMountPlus; firmware 7.00 to 13.60.",
-      "version": "v0.10.0",
+      "version": "v0.11.0",
       "category": "Utilities",
-      "checksum": "8def2d656d3b5bfb617d53e19d98b331518536d42d74a19f2262e3feed8926ca",
+      "checksum": "5421748f70080d212dfe99cfedb6bee3bc465eaea7883588497574490df5b42b",
       "source": "https://github.com/cobanov/PS5LM",
-      "last_update": "2026-11-01T11:00:59Z",
+      "last_update": "2026-11-02T15:40:14Z",
       "release_type": "stable"
     },
     {
@@ -513,13 +513,13 @@
       "id": "ampr-emu-ng",
       "name": "AMPR Emu NG",
       "file": "libSceAmpr.sprx",
-      "download": "https://github.com/quer3q/ampr-emu-ng/releases/download/v0.1.0/libSceAmpr.sprx",
+      "download": "https://github.com/quer3q/ampr-emu-ng/releases/download/v0.2.0/libSceAmpr.sprx",
       "description": "Hard fork of the APR Emu library (libSceAmpr.sprx) aimed at performance and stability with zstd and LZ4 converted games. Not a payload: copy libSceAmpr.sprx into the game's fakelib/ folder, mount the game with ShadowMountPlus and turn off its fakelib update setting.",
-      "version": "v0.1.0",
+      "version": "v0.2.0",
       "category": "Emulators",
-      "checksum": "69ee3b420c6798fa1b5fb5a9fed75479403bc8a64fe382db301477b1bf705956",
+      "checksum": "7acb2173d9691b5dfb94ea4007660920b7250111c5fd7a86c6eb91b763ad3d76",
       "source": "https://github.com/quer3q/ampr-emu-ng",
-      "last_update": "2026-10-29T15:21:13Z",
+      "last_update": "2026-11-02T06:40:59Z",
       "release_type": "stable"
     },
     {
