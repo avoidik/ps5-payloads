@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-11-03T14:13:09.860Z",
+  "generated_at": "2026-11-04T06:21:50.575Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
   "groups": {"fan-target":{"name":"Fan Target","description":"Sets the fan controller's target temperature below the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one variant only: lower targets make the fan react earlier and run faster; 85C is a good start."},"ps5-dump-forge-desktop":{"name":"PS5 Dump Forge (desktop)","description":"Desktop app and command-line tool of PS5 Dump Forge: convert and edit PS5 game dumps and images on a computer, transfer games to and from a console running Forge, and install Forge on a PS5 in one click. Nothing to install: unzip and run. Windows 10/11, macOS 11 or later, Linux with glibc 2.35 or later."}},
   "payloads": [
@@ -73,14 +73,14 @@
     {
       "id": "ps5upload",
       "name": "PS5 Upload Helper",
-      "filename": "ps5upload-11.0.0.elf",
-      "url": "https://github.com/phantomptr/ps5upload/releases/download/v11.0.0/ps5upload-11.0.0.elf",
+      "filename": "ps5upload-11.0.5.elf",
+      "url": "https://github.com/phantomptr/ps5upload/releases/download/v11.0.5/ps5upload-11.0.5.elf",
       "description": "Console-side helper for the PS5 Upload app on PC, Mac, Android or web. Resumable uploads, package installs, file and game management on port 9120. Enter the 6-digit code it shows in the app to pair. Keep the app and helper on the same version.",
-      "version": "v11.0.0",
+      "version": "v11.0.5",
       "category": "Utilities",
-      "checksum": "027f62daaf060c90d159da9e2988e44fcc5f128ad866cb1b67d49a77d6485998",
+      "checksum": "7c0b8a6b1243e01892bcc0abde51afb32d621f4a633f1938123e2f7fbc0b7373",
       "source": "https://github.com/phantomptr/ps5upload",
-      "last_update": "2026-11-03T10:59:39Z",
+      "last_update": "2026-11-04T05:59:23Z",
       "release_type": "stable"
     },
     {
@@ -214,13 +214,13 @@
       "id": "neoenabler",
       "name": "NeoEnabler",
       "filename": "neo-manager.elf",
-      "url": "https://github.com/gasb07/NeoEnabler/releases/download/v0.6.1/neo-manager.elf",
+      "url": "https://github.com/gasb07/NeoEnabler/releases/download/v0.6.2/neo-manager.elf",
       "description": "Starts PS4 games without PS4 Pro support in Pro mode, so game patches can raise them to higher resolutions, up to native 4K; only useful for games that have a NeoEnabler patch. Load ps-patch-system first, then this, after every boot. Pick patches in the panel on port 8765 or in the Media tab.",
-      "version": "v0.6.1",
+      "version": "v0.6.2",
       "category": "Utilities",
-      "checksum": "d785d8a8747b5dbc2c294595f0fb394f653950b5f42b3ee42eb3e56dd80f7044",
+      "checksum": "c0506bd055820a199ddae59a475686fdcf6f832f94594870ba41cee9b3fce1be",
       "source": "https://github.com/gasb07/NeoEnabler",
-      "last_update": "2026-10-31T18:29:50Z",
+      "last_update": "2026-11-03T15:17:11Z",
       "release_type": "stable"
     },
     {
