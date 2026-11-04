@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-11-04T06:21:50.575Z",
+  "generated_at": "2026-11-04T19:44:52.394Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
   "groups": {"fan-target":{"name":"Fan Target","description":"Sets the fan controller's target temperature below the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one variant only: lower targets make the fan react earlier and run faster; 85C is a good start."},"ps5-dump-forge-desktop":{"name":"PS5 Dump Forge (desktop)","description":"Desktop app and command-line tool of PS5 Dump Forge: convert and edit PS5 game dumps and images on a computer, transfer games to and from a console running Forge, and install Forge on a PS5 in one click. Nothing to install: unzip and run. Windows 10/11, macOS 11 or later, Linux with glibc 2.35 or later."}},
   "payloads": [
@@ -73,14 +73,14 @@
     {
       "id": "ps5upload",
       "name": "PS5 Upload Helper",
-      "filename": "ps5upload-11.0.5.elf",
-      "url": "https://github.com/phantomptr/ps5upload/releases/download/v11.0.5/ps5upload-11.0.5.elf",
+      "filename": "ps5upload-11.0.8.elf",
+      "url": "https://github.com/phantomptr/ps5upload/releases/download/v11.0.8/ps5upload-11.0.8.elf",
       "description": "Console-side helper for the PS5 Upload app on PC, Mac, Android or web. Resumable uploads, package installs, file and game management on port 9120. Enter the 6-digit code it shows in the app to pair. Keep the app and helper on the same version.",
-      "version": "v11.0.5",
+      "version": "v11.0.8",
       "category": "Utilities",
-      "checksum": "7c0b8a6b1243e01892bcc0abde51afb32d621f4a633f1938123e2f7fbc0b7373",
+      "checksum": "f315f5645d7be6cc0736ec3183cfa67ec9d7ec689321295fb222f5b699b2542e",
       "source": "https://github.com/phantomptr/ps5upload",
-      "last_update": "2026-11-04T05:59:23Z",
+      "last_update": "2026-11-04T08:30:48Z",
       "release_type": "stable"
     },
     {
@@ -278,14 +278,14 @@
     {
       "name": "Orbit Store (Beta)",
       "filename": "orbit_store.elf",
-      "url": "https://github.com/saawant12/orbit-store-ps5/releases/download/v1.8.4/orbit_store.elf",
+      "url": "https://github.com/saawant12/orbit-store-ps5/releases/download/v1.8.5/orbit_store.elf",
       "description": "A modern PS5 download manager with a native TV app, resumable downloads and phone controls.",
-      "version": "v1.8.4",
+      "version": "v1.8.5",
       "category": "Utilities",
-      "checksum": "a2ece507fdc835d72671820a6da30c3e2f92391a85da10e5f14130b5dbc2c596",
+      "checksum": "935f81956acd3acba876977057c2ce77ded6a7fc72a98fd821cba2d1765e1f77",
       "id": "orbit-store.orbit-store-beta",
       "release_type": "stable",
-      "last_update": "2026-11-02T17:22:04Z",
+      "last_update": "2026-11-04T17:35:29Z",
       "source": "https://github.com/saawant12/orbit-store-ps5",
       "catalog": "Orbit Store",
       "catalog_url": "https://raw.githubusercontent.com/saawant12/orbit-store-ps5/refs/heads/main/payloads.json"
@@ -358,7 +358,7 @@
       "id": "ps5-ecam",
       "name": "PS5-ECAM",
       "file": "PS5-ECAM-v5.1.0.zip",
-      "download": "https://github.com/premohq/PS5-ECAM/releases/download/v5.1.0/PS5-ECAM-v5.1.0.zip",
+      "download": "https://github.com/premohq/PlayTendoh/releases/download/v5.1.0/PS5-ECAM-v5.1.0.zip",
       "description": "Wii U, 3DS, DS and Switch emulation (Cemu, Azahar, melonDS and Eden) in one launcher for the TV and the DualSense. Not a payload: extract the zip, copy the PPSA99360 folder to /data/homebrew/, and let your HEN jailbreak the title (etaHEN app list, OnionHEN exact_title_ids, or an ELF loader on port 9021). Updates itself from then on.",
       "version": "v5.1.0",
       "category": "Emulators",
@@ -513,13 +513,13 @@
       "id": "ampr-emu-ng",
       "name": "AMPR Emu NG",
       "file": "libSceAmpr.sprx",
-      "download": "https://github.com/quer3q/ampr-emu-ng/releases/download/v0.2.0/libSceAmpr.sprx",
+      "download": "https://github.com/quer3q/ampr-emu-ng/releases/download/v0.3.0/libSceAmpr.sprx",
       "description": "Hard fork of the APR Emu library (libSceAmpr.sprx) aimed at performance and stability with zstd and LZ4 converted games. Not a payload: copy libSceAmpr.sprx into the game's fakelib/ folder, mount the game with ShadowMountPlus and turn off its fakelib update setting.",
-      "version": "v0.2.0",
+      "version": "v0.3.0",
       "category": "Emulators",
-      "checksum": "7acb2173d9691b5dfb94ea4007660920b7250111c5fd7a86c6eb91b763ad3d76",
+      "checksum": "5f39ca8ebe169aa15d8a8ba8ec2f9cd4195f509d55daaf4b4edbfa80b145035c",
       "source": "https://github.com/quer3q/ampr-emu-ng",
-      "last_update": "2026-11-02T06:40:59Z",
+      "last_update": "2026-11-04T17:17:28Z",
       "release_type": "stable"
     },
     {
