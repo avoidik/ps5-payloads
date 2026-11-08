@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-11-08T05:59:44.524Z",
+  "generated_at": "2026-11-08T22:04:29.042Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
   "groups": {"fan-target":{"name":"Fan Target","description":"Sets the fan controller's target temperature below the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one variant only: lower targets make the fan react earlier and run faster; 85C is a good start."},"ps5-dump-forge-desktop":{"name":"PS5 Dump Forge (desktop)","description":"Desktop app and command-line tool of PS5 Dump Forge: convert and edit PS5 game dumps and images on a computer, transfer games to and from a console running Forge, and install Forge on a PS5 in one click. Nothing to install: unzip and run. Windows 10/11, macOS 11 or later, Linux with glibc 2.35 or later."}},
   "payloads": [
@@ -73,28 +73,28 @@
     {
       "id": "ps5upload",
       "name": "PS5 Upload Helper",
-      "filename": "ps5upload-11.6.0.elf",
-      "url": "https://github.com/phantomptr/ps5upload/releases/download/v11.6.0/ps5upload-11.6.0.elf",
+      "filename": "ps5upload-12.0.0.elf",
+      "url": "https://github.com/phantomptr/ps5upload/releases/download/v12.0.0/ps5upload-12.0.0.elf",
       "description": "Console-side helper for the PS5 Upload app on PC, Mac, Android or web. Resumable uploads, package installs, file and game management on port 9120. Enter the 6-digit code it shows in the app to pair. Keep the app and helper on the same version.",
-      "version": "v11.6.0",
+      "version": "v12.0.0",
       "category": "Utilities",
-      "checksum": "13dca53b2216d920ad94b9564cba68fd085d4ea0f1f0193be5b5299c9872e67e",
+      "checksum": "ec3da9d9a20a9141e722bc1101ade6e6264cbd147566e866f3f823143e9b28a3",
       "source": "https://github.com/phantomptr/ps5upload",
-      "last_update": "2026-11-08T04:40:36Z",
-      "release_type": "stable"
+      "last_update": "2026-11-08T19:11:48Z",
+      "release_type": "pre-release"
     },
     {
       "id": "shadowmountplus",
       "name": "ShadowMountPlus",
       "filename": "shadowmountplus.elf",
-      "url": "https://github.com/drakmor/ShadowMountPlus/releases/download/1.7beta11/shadowmountplus.elf",
+      "url": "https://github.com/drakmor/ShadowMountPlus/releases/download/1.7beta12/shadowmountplus.elf",
       "description": "Background auto-mounter that detects, mounts and installs game dumps and images from internal or external storage (UFS, exFAT, PFS). Needs kstuff-lite 1.07 or newer; load at every boot. Settings in /data/shadowmount/config.ini.",
-      "version": "1.7beta11",
+      "version": "1.7beta12",
       "category": "Utilities",
-      "checksum": "08c843018750bef013fe3a4de5f80c5c9738c6c2dafa2406e6b6e68d7585f3da",
+      "checksum": "8755172ec9bef1bff5453ea75606e0caf7c41b5963f94f5a1087e7e8c6d9b1bd",
       "source": "https://github.com/drakmor/ShadowMountPlus",
-      "last_update": "2026-10-29T21:22:45Z",
-      "release_type": "stable"
+      "last_update": "2026-11-08T20:02:14Z",
+      "release_type": "pre-release"
     },
     {
       "id": "ps4mount",
