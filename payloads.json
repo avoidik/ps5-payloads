@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-11-11T06:18:54.402Z",
+  "generated_at": "2026-11-11T19:35:27.600Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
   "groups": {"fan-target":{"name":"Fan Target","description":"Sets the fan controller's target temperature below the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one variant only: lower targets make the fan react earlier and run faster; 85C is a good start."},"ps5-dump-forge-desktop":{"name":"PS5 Dump Forge (desktop)","description":"Desktop app and command-line tool of PS5 Dump Forge: convert and edit PS5 game dumps and images on a computer, transfer games to and from a console running Forge, and install Forge on a PS5 in one click. Nothing to install: unzip and run. Windows 10/11, macOS 11 or later, Linux with glibc 2.35 or later."}},
   "payloads": [
@@ -73,14 +73,14 @@
     {
       "id": "ps5upload",
       "name": "PS5 Upload Helper",
-      "filename": "ps5upload-12.4.7.elf",
-      "url": "https://github.com/phantomptr/ps5upload/releases/download/v12.4.7/ps5upload-12.4.7.elf",
+      "filename": "ps5upload-12.4.9.elf",
+      "url": "https://github.com/phantomptr/ps5upload/releases/download/v12.4.9/ps5upload-12.4.9.elf",
       "description": "Console-side helper for the PS5 Upload app on PC, Mac, Android or web. Resumable uploads, package installs, file and game management on port 9120. Enter the 6-digit code it shows in the app to pair. Keep the app and helper on the same version.",
-      "version": "v12.4.7",
+      "version": "v12.4.9",
       "category": "Utilities",
-      "checksum": "721d9dbca1e05c73aa58bdf4fe5093b4caf35f775a1d8702b080920ecb2111ab",
+      "checksum": "58b8686c04ee703a1cb0a3c00b945caae1f9ec8bbf1a8f42f19947c274983596",
       "source": "https://github.com/phantomptr/ps5upload",
-      "last_update": "2026-11-11T01:03:09Z",
+      "last_update": "2026-11-11T19:10:50Z",
       "release_type": "stable"
     },
     {
@@ -513,13 +513,13 @@
       "id": "ampr-emu-ng",
       "name": "AMPR Emu NG",
       "file": "libSceAmpr.sprx",
-      "download": "https://github.com/quer3q/ampr-emu-ng/releases/download/v0.3.4/libSceAmpr.sprx",
+      "download": "https://github.com/quer3q/ampr-emu-ng/releases/download/v0.3.5/libSceAmpr.sprx",
       "description": "Hard fork of the APR Emu library (libSceAmpr.sprx) aimed at performance and stability with zstd and LZ4 converted games. Not a payload: copy libSceAmpr.sprx into the game's fakelib/ folder, mount the game with ShadowMountPlus and turn off its fakelib update setting.",
-      "version": "v0.3.4",
+      "version": "v0.3.5",
       "category": "Emulators",
-      "checksum": "7d1bb260f954b755ed687733e52ccfa38c31440a9b88a6fbba5b3b75e08bfa26",
+      "checksum": "998f2029b250d954725f864b57f2eee72aefbfb88054a3f1c3df550d4d6c8261",
       "source": "https://github.com/quer3q/ampr-emu-ng",
-      "last_update": "2026-11-09T19:14:41Z",
+      "last_update": "2026-11-11T09:35:19Z",
       "release_type": "stable"
     },
     {
