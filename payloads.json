@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-11-13T06:44:41.042Z",
+  "generated_at": "2026-11-13T18:45:05.551Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
   "groups": {"fan-target":{"name":"Fan Target","description":"Sets the fan controller's target temperature below the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one variant only: lower targets make the fan react earlier and run faster; 85C is a good start."},"ps5-dump-forge-desktop":{"name":"PS5 Dump Forge (desktop)","description":"Desktop app and command-line tool of PS5 Dump Forge: convert and edit PS5 game dumps and images on a computer, transfer games to and from a console running Forge, and install Forge on a PS5 in one click. Nothing to install: unzip and run. Windows 10/11, macOS 11 or later, Linux with glibc 2.35 or later."}},
   "payloads": [
@@ -73,14 +73,14 @@
     {
       "id": "ps5upload",
       "name": "PS5 Upload Helper",
-      "filename": "ps5upload-12.4.14.elf",
-      "url": "https://github.com/phantomptr/ps5upload/releases/download/v12.4.14/ps5upload-12.4.14.elf",
+      "filename": "ps5upload-12.4.16.elf",
+      "url": "https://github.com/phantomptr/ps5upload/releases/download/v12.4.16/ps5upload-12.4.16.elf",
       "description": "Console-side helper for the PS5 Upload app on PC, Mac, Android or web. Resumable uploads, package installs, file and game management on port 9120. Enter the 6-digit code it shows in the app to pair. Keep the app and helper on the same version.",
-      "version": "v12.4.14",
+      "version": "v12.4.16",
       "category": "Utilities",
-      "checksum": "17dc0827d3d49701534a8b2f7dca337ec88f213eb825ed028763be5eeec72f7e",
+      "checksum": "e533fae01c1277a5504bc2d74fbb05544f9cc2070c1e7f6aae7a6e03e0e54fc3",
       "source": "https://github.com/phantomptr/ps5upload",
-      "last_update": "2026-11-12T21:47:15Z",
+      "last_update": "2026-11-13T15:28:16Z",
       "release_type": "stable"
     },
     {
@@ -273,6 +273,19 @@
       "checksum": "5b63670b14dc3bda305cb6139df655a646a1300f0ae89116c9314473a79dfb19",
       "source": "https://github.com/darkxex/SwanStationPS5",
       "last_update": "2026-10-31T06:24:24Z",
+      "release_type": "stable"
+    },
+    {
+      "id": "kraken-mount",
+      "name": "Kraken Mount",
+      "filename": "kraken-mount.elf",
+      "url": "https://github.com/quer3q/kraken-mount/releases/download/v0.0.1-beta/kraken-mount.elf",
+      "description": "Minimalist game mounter: finds debug FPKG .pkg files and game folders (plain, or packed with zstd or LZ4) on the internal SSD and USB or extended drives and adds each to the home screen. Bundles ampr-emu-ng. Web panel on port 8097 and its own home-screen tile. Needs elfldr on port 9021.",
+      "version": "v0.0.1-beta",
+      "category": "Utilities",
+      "checksum": "32cdf8e9aee9a8e91a7acd8884ac4701a75a38d96d483ea00bb7cbf4fe11a522",
+      "source": "https://github.com/quer3q/kraken-mount",
+      "last_update": "2026-11-13T10:36:50Z",
       "release_type": "stable"
     },
     {
@@ -513,13 +526,13 @@
       "id": "ampr-emu-ng",
       "name": "AMPR Emu NG",
       "file": "libSceAmpr.sprx",
-      "download": "https://github.com/quer3q/ampr-emu-ng/releases/download/v0.3.5/libSceAmpr.sprx",
+      "download": "https://github.com/quer3q/ampr-emu-ng/releases/download/v0.4.0/libSceAmpr.sprx",
       "description": "Hard fork of the APR Emu library (libSceAmpr.sprx) aimed at performance and stability with zstd and LZ4 converted games. Not a payload: copy libSceAmpr.sprx into the game's fakelib/ folder, mount the game with ShadowMountPlus and turn off its fakelib update setting.",
-      "version": "v0.3.5",
+      "version": "v0.4.0",
       "category": "Emulators",
-      "checksum": "998f2029b250d954725f864b57f2eee72aefbfb88054a3f1c3df550d4d6c8261",
+      "checksum": "8320eb65c16565f42031b9d88b15a447039f0fd7e5694faf5f1cb84cafdba218",
       "source": "https://github.com/quer3q/ampr-emu-ng",
-      "last_update": "2026-11-11T09:35:19Z",
+      "last_update": "2026-11-13T10:26:11Z",
       "release_type": "stable"
     },
     {
