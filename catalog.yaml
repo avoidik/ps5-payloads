@@ -613,3 +613,17 @@ payloads:
       type: github
       repo: darkxex/SwanStationPS5
       asset: '^SwanStationPS5-DiscDaemon\.elf$'
+
+  - id: kraken-mount
+    name: Kraken Mount
+    category: Utilities
+    description: >-
+      Minimalist game mounter: finds debug FPKG .pkg files and game folders (plain, or packed with
+      zstd or LZ4) on the internal SSD and USB or extended drives and adds each to the home screen.
+      Bundles ampr-emu-ng. Web panel on port 8097 and its own home-screen tile. Needs elfldr on port
+      9021.
+    extension: .elf
+    source:
+      type: github
+      repo: quer3q/kraken-mount
+      asset: '^kraken-mount\.elf$'
