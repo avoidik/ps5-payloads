@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-11-16T22:01:23.902Z",
+  "generated_at": "2026-11-17T07:54:13.558Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
   "groups": {"fan-target":{"name":"Fan Target","description":"Sets the fan controller's target temperature below the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one variant only: lower targets make the fan react earlier and run faster; 85C is a good start."},"ps5-dump-forge-desktop":{"name":"PS5 Dump Forge (desktop)","description":"Desktop app and command-line tool of PS5 Dump Forge: convert and edit PS5 game dumps and images on a computer, transfer games to and from a console running Forge, and install Forge on a PS5 in one click. Nothing to install: unzip and run. Windows 10/11, macOS 11 or later, Linux with glibc 2.35 or later."}},
   "payloads": [
@@ -73,14 +73,14 @@
     {
       "id": "ps5upload",
       "name": "PS5 Upload Helper",
-      "filename": "ps5upload-12.6.0.elf",
-      "url": "https://github.com/phantomptr/ps5upload/releases/download/v12.6.0/ps5upload-12.6.0.elf",
+      "filename": "ps5upload-12.6.2.elf",
+      "url": "https://github.com/phantomptr/ps5upload/releases/download/v12.6.2/ps5upload-12.6.2.elf",
       "description": "Console-side helper for the PS5 Upload app on PC, Mac, Android or web. Resumable uploads, package installs, file and game management on port 9120. Enter the 6-digit code it shows in the app to pair. Keep the app and helper on the same version.",
-      "version": "v12.6.0",
+      "version": "v12.6.2",
       "category": "Utilities",
-      "checksum": "a57fe14b5c3ec449208a90b68a798498653fce259a36f691f366376aa2b93df1",
+      "checksum": "85fb68760b16a958ded77becf2cba14581af375f4988594bfddfde5fa1a749ad",
       "source": "https://github.com/phantomptr/ps5upload",
-      "last_update": "2026-11-16T21:11:32Z",
+      "last_update": "2026-11-17T05:56:11Z",
       "release_type": "pre-release"
     },
     {
@@ -266,13 +266,13 @@
       "id": "swanstationps5-disc-daemon",
       "name": "SwanStationPS5 Disc Daemon",
       "filename": "SwanStationPS5-DiscDaemon.elf",
-      "url": "https://github.com/darkxex/SwanStationPS5/releases/download/1.6.5/SwanStationPS5-DiscDaemon.elf",
+      "url": "https://github.com/darkxex/SwanStationPS5/releases/download/1.6.6/SwanStationPS5-DiscDaemon.elf",
       "description": "Optional companion of the SwanStationPS5 app: load it once per console start (with the app closed) and a PS1 disc put in a USB CD drive is installed with progress notifications and then started, without opening the app first.",
-      "version": "1.6.5",
+      "version": "1.6.6",
       "category": "Emulators",
-      "checksum": "4cf014efd4d7b3a01e7d72edd1c7980dc30910de1cbc16245402eb962ba999e5",
+      "checksum": "f91922d10437855f177034aa14d75a58fb6473bfb4840dadf4e8eb91d515f4fd",
       "source": "https://github.com/darkxex/SwanStationPS5",
-      "last_update": "2026-11-16T03:17:25Z",
+      "last_update": "2026-11-17T00:19:29Z",
       "release_type": "stable"
     },
     {
@@ -539,13 +539,13 @@
       "id": "swanstationps5",
       "name": "SwanStationPS5",
       "file": "PPSA98510.zip",
-      "download": "https://github.com/darkxex/SwanStationPS5/releases/download/1.6.5/PPSA98510.zip",
+      "download": "https://github.com/darkxex/SwanStationPS5/releases/download/1.6.6/PPSA98510.zip",
       "description": "PlayStation 1 emulator app (PPSA98510) based on SwanStation, drawn on the GPU with Vulkan. Not a payload: extract the zip, copy the PPSA98510 folder to /data/homebrew/ over FTP, set its permissions to 777, and restart ShadowMountPlus. Games go in /data/SwanStationPS5/games/, one folder per game. Updates itself.",
-      "version": "1.6.5",
+      "version": "1.6.6",
       "category": "Emulators",
-      "checksum": "b864380913d99c2d979deb0608d83d428ef9a403518d5adcc94bdaba6bd41cff",
+      "checksum": "de4d05545858d6bdafb00574ae7598e468a243cc1eff6c20e46162c0514a8ecf",
       "source": "https://github.com/darkxex/SwanStationPS5",
-      "last_update": "2026-11-16T03:17:25Z",
+      "last_update": "2026-11-17T00:19:29Z",
       "release_type": "stable"
     }
   ],
