@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-11-23T23:52:57.333Z",
+  "generated_at": "2026-11-24T09:53:22.738Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
   "groups": {"fan-target":{"name":"Fan Target","description":"Sets the fan controller's target temperature below the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one variant only: lower targets make the fan react earlier and run faster; 85C is a good start."},"ps5-dump-forge-desktop":{"name":"PS5 Dump Forge (desktop)","description":"Desktop app and command-line tool of PS5 Dump Forge: convert and edit PS5 game dumps and images on a computer, transfer games to and from a console running Forge, and install Forge on a PS5 in one click. Nothing to install: unzip and run. Windows 10/11, macOS 11 or later, Linux with glibc 2.35 or later."}},
   "payloads": [
@@ -73,14 +73,14 @@
     {
       "id": "ps5upload",
       "name": "PS5 Upload Helper",
-      "filename": "ps5upload-12.6.25.elf",
-      "url": "https://github.com/phantomptr/ps5upload/releases/download/v12.6.25/ps5upload-12.6.25.elf",
+      "filename": "ps5upload-12.6.26.elf",
+      "url": "https://github.com/phantomptr/ps5upload/releases/download/v12.6.26/ps5upload-12.6.26.elf",
       "description": "Console-side helper for the PS5 Upload app on PC, Mac, Android or web. Resumable uploads, package installs, file and game management on port 9120. Enter the 6-digit code it shows in the app to pair. Keep the app and helper on the same version.",
-      "version": "v12.6.25",
+      "version": "v12.6.26",
       "category": "Utilities",
-      "checksum": "ebf636206c7773a7232801923e321bebafef592c26de611980d9f83c8e8e0343",
+      "checksum": "19da4e310383d9152cb96f078ae63e4207dec42ac8793a81719505605253eb13",
       "source": "https://github.com/phantomptr/ps5upload",
-      "last_update": "2026-11-23T13:59:46Z",
+      "last_update": "2026-11-24T05:14:52Z",
       "release_type": "stable"
     },
     {
@@ -279,13 +279,13 @@
       "id": "kraken-mount",
       "name": "Kraken Mount",
       "filename": "kraken-mount.elf",
-      "url": "https://github.com/quer3q/kraken-mount/releases/download/v0.3.1/kraken-mount.elf",
+      "url": "https://github.com/quer3q/kraken-mount/releases/download/v0.3.2/kraken-mount.elf",
       "description": "Minimalist game mounter: finds debug FPKG .pkg files and game folders (plain, or packed with zstd or LZ4) on the internal SSD and USB or extended drives and adds each to the home screen. Bundles ampr-emu-ng. Web panel on port 8097 and its own home-screen tile. Needs elfldr on port 9021.",
-      "version": "v0.3.1",
+      "version": "v0.3.2",
       "category": "Utilities",
-      "checksum": "3ec636a6b42ceff61ac7aa47e0ed01a41be851da94cfcf3158811995ea868b27",
+      "checksum": "5b72ea22af0b28dd3522be4a4f10cbec9b5423fbe2e4e8990b45b4d1daeabdde",
       "source": "https://github.com/quer3q/kraken-mount",
-      "last_update": "2026-11-20T12:09:22Z",
+      "last_update": "2026-11-24T09:31:10Z",
       "release_type": "stable"
     },
     {
