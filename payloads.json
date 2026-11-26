@@ -1,6 +1,6 @@
 {
   "name": "PS5 Payloads",
-  "generated_at": "2026-11-26T08:16:40.028Z",
+  "generated_at": "2026-11-26T21:31:11.816Z",
   "files_url": "https://avoidik.github.io/ps5-payloads/files/",
   "groups": {"fan-target":{"name":"Fan Target","description":"Sets the fan controller's target temperature below the default 91C, with the automatic fan control left on. Runs in the background and restores the target if a game changes it. Use one variant only: lower targets make the fan react earlier and run faster; 85C is a good start."},"ps5-dump-forge-desktop":{"name":"PS5 Dump Forge (desktop)","description":"Desktop app and command-line tool of PS5 Dump Forge: convert and edit PS5 game dumps and images on a computer, transfer games to and from a console running Forge, and install Forge on a PS5 in one click. Nothing to install: unzip and run. Windows 10/11, macOS 11 or later, Linux with glibc 2.35 or later."}},
   "payloads": [
@@ -73,14 +73,14 @@
     {
       "id": "ps5upload",
       "name": "PS5 Upload Helper",
-      "filename": "ps5upload-12.6.31.elf",
-      "url": "https://github.com/phantomptr/ps5upload/releases/download/v12.6.31/ps5upload-12.6.31.elf",
+      "filename": "ps5upload-12.6.33.elf",
+      "url": "https://github.com/phantomptr/ps5upload/releases/download/v12.6.33/ps5upload-12.6.33.elf",
       "description": "Console-side helper for the PS5 Upload app on PC, Mac, Android or web. Resumable uploads, package installs, file and game management on port 9120. Enter the 6-digit code it shows in the app to pair. Keep the app and helper on the same version.",
-      "version": "v12.6.31",
+      "version": "v12.6.33",
       "category": "Utilities",
-      "checksum": "57bc3a0df33226c7f37c9d870aa21ec549dedb2414c09e8c47e647d14f125e45",
+      "checksum": "2ad3f7ae4d4b5a05346e4eb22ef80df397dbf4165f2c9b9cd5a2565f73cfa539",
       "source": "https://github.com/phantomptr/ps5upload",
-      "last_update": "2026-11-26T04:37:05Z",
+      "last_update": "2026-11-26T20:19:57Z",
       "release_type": "stable"
     },
     {
@@ -252,14 +252,14 @@
     {
       "id": "ps5-dump-forge",
       "name": "PS5 Dump Forge",
-      "filename": "ps5-dump-forge-0.5.7-ps5.elf",
-      "url": "https://github.com/quer3q/ps5-dump-forge/releases/download/v0.5.7/ps5-dump-forge-0.5.7-ps5.elf",
+      "filename": "ps5-dump-forge-0.6.0-ps5.elf",
+      "url": "https://github.com/quer3q/ps5-dump-forge/releases/download/v0.6.0/ps5-dump-forge-0.6.0-ps5.elf",
       "description": "Converts and edits PS5 game dumps and images on the console: game folders, exfat, ffpkg, ffpfs, ffpfsc and FPKG, also straight from zip, 7z and rar, with transfers to other Forge instances and NAS shares (SMB, FTP, NFS). Open http://<PS5 IP>:8095 in any browser.",
-      "version": "v0.5.7",
+      "version": "v0.6.0",
       "category": "Utilities",
-      "checksum": "83a7e82a9070a671953d96e4acfc909697505281e4a023a2c6411316c2c1ce6c",
+      "checksum": "420265c626d517ed433ecf360092dc28e1061fd0ac29346de488c41cde3ac0d2",
       "source": "https://github.com/quer3q/ps5-dump-forge",
-      "last_update": "2026-11-22T17:12:11Z",
+      "last_update": "2026-11-26T16:25:55Z",
       "release_type": "stable"
     },
     {
@@ -279,13 +279,13 @@
       "id": "kraken-mount",
       "name": "Kraken Mount",
       "filename": "kraken-mount.elf",
-      "url": "https://github.com/quer3q/kraken-mount/releases/download/v0.4.0/kraken-mount.elf",
+      "url": "https://github.com/quer3q/kraken-mount/releases/download/v0.4.1/kraken-mount.elf",
       "description": "Minimalist game mounter: finds debug FPKG .pkg files and game folders (plain, or packed with zstd or LZ4) on the internal SSD and USB or extended drives and adds each to the home screen. Bundles ampr-emu-ng. Web panel on port 8097 and its own home-screen tile. Needs elfldr on port 9021.",
-      "version": "v0.4.0",
+      "version": "v0.4.1",
       "category": "Utilities",
-      "checksum": "6c778613b796039230f6690a16e4c04a76069a6b7b6c8030e292f54e904cc401",
+      "checksum": "88d39545728f4202421616a299467545afe7f9b295b636f7bd49b1f2fe1aad1d",
       "source": "https://github.com/quer3q/kraken-mount",
-      "last_update": "2026-11-25T10:21:29Z",
+      "last_update": "2026-11-26T21:01:15Z",
       "release_type": "stable"
     },
     {
